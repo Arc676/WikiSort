@@ -12,18 +12,23 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef MERGE_H
-#define MERGE_H
+#include "bubble.h"
 
-#include "wikisort.h"
-
-/**
- * Sorts the given array using a merge sort algorithm
- * @param array The array to sort
- * @param len The length of the array
- * @param size The size of a single element
- * @param cmp Comparison function that returns if an element is smaller than another
- */
-void mergeSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
-
-#endif
+void bubbleSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+	int sorted;
+	do {
+		sorted = 1;
+		for (int i = 0; i < len - 1; i++) {
+			void** a = adv(array, i * size);
+			void** b = adv(array, (i + 1) * size);
+			if (!cmp(a, b)) {
+				sorted = 0;
+				void** tmp = malloc(size);
+				memcpy(tmp, a, size);
+				memmove(a, b, size);
+				memmove(b, tmp, size);
+				free(tmp);
+			}
+		}
+	} while (!sorted);
+}

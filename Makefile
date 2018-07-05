@@ -6,7 +6,7 @@ OUT=libwikisort.a
 SDIR=src
 ODIR=obj
 
-OBJS=merge.o wikisort.o
+OBJS=wikisort.o merge.o bubble.o
 _OBJS=$(patsubst %, $(ODIR)/%, $(OBJS))
 
 ifdef DEBUG

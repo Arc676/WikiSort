@@ -8,6 +8,7 @@ This table provides links to the Wikipedia pages regarding each sorting algorith
 | Name | Worst | Average | Best |
 | --- | --- | --- | --- |
 | [Merge sort](https://en.wikipedia.org/wiki/Merge_sort) | O(nlogn) | O(nlogn) | O(n)/O(nlogn) |
+| [Bubble sort](https://en.wikipedia.org/wiki/Bubble_sort) | O(n^2) | O(n^2) | O(n) |
 
 ## Implementation
 
