@@ -20,7 +20,8 @@ void insertionSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
 		for (int j = i; j > 0; j--) {
 			void** a = adv(array, j * size);
 			void** b = adv(array, (j - 1) * size);
-			if (!cmp(a, b)) {
+			// stop when the element is greater than the preceding one
+			if (cmp(a, b) == 1) {
 				break;
 			}
 			swapElements(a, b, size);

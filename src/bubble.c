@@ -21,7 +21,8 @@ void bubbleSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
 		for (int i = 0; i < len - 1; i++) {
 			void** a = adv(array, i * size);
 			void** b = adv(array, (i + 1) * size);
-			if (!cmp(a, b)) {
+			// if the earlier element is greater than its successor
+			if (cmp(a, b) == 1) {
 				sorted = 0;
 				swapElements(a, b, size);
 			}

@@ -32,10 +32,10 @@ void mergeSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
 	mergeSort(secondHalf, len2, size, cmp);
 
 	for (int a = 0, b = 0, i = 0; i < len; i++) {
-		if (a >= len1 || (b < len2 && cmp(adv(secondHalf, b * size), adv(firstHalf, a * size)))) {
+		if (a >= len1 || (b < len2 && cmp(adv(secondHalf, b * size), adv(firstHalf, a * size)) <= 0)) {
 			memcpy(adv(array, i * size), adv(secondHalf, b * size), size);
 			b++;
-		} else if (b >= len2 || (a < len1 && cmp(adv(firstHalf, a * size), adv(secondHalf, b * size)))) {
+		} else if (b >= len2 || (a < len1 && cmp(adv(firstHalf, a * size), adv(secondHalf, b * size)) <= 0)) {
 			memcpy(adv(array, i * size), adv(firstHalf, a * size), size);
 			a++;
 		}

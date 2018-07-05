@@ -29,9 +29,25 @@ void swapElements(void** a, void** b, size_t size) {
 }
 
 int cmp_int(void** a, void** b) {
-	return *(int*)a <= *(int*)b;
+	int x = *(int*)a;
+	int y = *(int*)b;
+	if (x > y) {
+		return 1;
+	}
+	if (x < y) {
+		return -1;
+	}
+	return 0;
 }
 
 int cmp_float(void** a, void** b) {
-	return *(float*)a <= *(float*)b;
+	float x = *(float*)a;
+	float y = *(float*)b;
+	if (x > y) {
+		return 1;
+	}
+	if (x < y) {
+		return -1;
+	}
+	return 0;
 }

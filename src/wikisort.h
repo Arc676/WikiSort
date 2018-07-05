@@ -24,7 +24,7 @@
  * by sorting algorithms
  * @param a Pointer to first element
  * @param b Pointer to second element
- * @return Whether a <= b
+ * @return -1, 0, or 1 if a < b, a == b, or a > b, respectively
  */
 typedef int COMP_FUNC(void** a, void** b);
 
@@ -50,7 +50,7 @@ void swapElements(void** a, void** b, size_t size);
  * Comparison function for integers
  * @param a Pointer to first integer
  * @param b Pointer to second integer
- * @return Whether a <= b
+ * @return -1, 0, or 1 if a < b, a == b, or a > b, respectively
  */
 int cmp_int(void** a, void** b);
 
@@ -58,7 +58,7 @@ int cmp_int(void** a, void** b);
  * Comparison function for floats
  * @param a Pointer to first float
  * @param b Pointer to second float
- * @return Whether a <= b
+ * @return -1, 0, or 1 if a < b, a == b, or a > b, respectively
  */
 int cmp_int(void** a, void** b);
 

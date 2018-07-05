@@ -22,7 +22,7 @@ void selectionSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
 		for (int j = i + 1; j < len; j++) {
 			a = adv(array, j * size);
 			b = adv(array, minIndex * size);
-			if (cmp(a, b)) {
+			if (cmp(a, b) <= 0) {
 				minIndex = j;
 			}
 		}
