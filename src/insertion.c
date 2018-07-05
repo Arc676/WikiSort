@@ -1,3 +1,4 @@
+
 //Copyright (C) 2018  Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
@@ -12,7 +13,17 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "merge.h"
-#include "bubble.h"
-#include "selection.h"
 #include "insertion.h"
+
+void insertionSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+	for (int i = 1; i < len; i++) {
+		for (int j = i; j > 0; j--) {
+			void** a = adv(array, j * size);
+			void** b = adv(array, (j - 1) * size);
+			if (!cmp(a, b)) {
+				break;
+			}
+			swapElements(a, b, size);
+		}
+	}
+}

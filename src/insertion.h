@@ -12,7 +12,18 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "merge.h"
-#include "bubble.h"
-#include "selection.h"
-#include "insertion.h"
+#ifndef INSERTION_H
+#define INSERTION_H
+
+#include "wikisort.h"
+
+/**
+ * Sorts the given array using a insertion sort algorithm
+ * @param array The array to sort
+ * @param len The length of the array
+ * @param size The size of a single element
+ * @param cmp Comparison function that returns if an element is smaller than another
+ */
+void insertionSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
+
+#endif
