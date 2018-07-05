@@ -16,3 +16,4 @@
 #include "bubble.h"
 #include "selection.h"
 #include "insertion.h"
+#include "quick.h"
