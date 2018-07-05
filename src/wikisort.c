@@ -19,3 +19,11 @@ void** adv(void** start, size_t dist) {
 	ptr += dist;
 	return (void**)ptr;
 }
+
+int cmp_int(void** a, void** b) {
+	return *(int*)a <= *(int*)b;
+}
+
+int cmp_float(void** a, void** b) {
+	return *(float*)a <= *(float*)b;
+}

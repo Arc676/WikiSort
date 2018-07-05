@@ -37,4 +37,20 @@ typedef int COMP_FUNC(void** a, void** b);
  */
 void** adv(void** start, size_t dist);
 
+/**
+ * Comparison function for integers
+ * @param a Pointer to first integer
+ * @param b Pointer to second integer
+ * @return Whether a <= b
+ */
+int cmp_int(void** a, void** b);
+
+/**
+ * Comparison function for floats
+ * @param a Pointer to first float
+ * @param b Pointer to second float
+ * @return Whether a <= b
+ */
+int cmp_int(void** a, void** b);
+
 #endif
