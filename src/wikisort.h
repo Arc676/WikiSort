@@ -39,6 +39,14 @@ typedef int COMP_FUNC(void** a, void** b);
 void** adv(void** start, size_t dist);
 
 /**
+ * Utility method for swapping two items in a list
+ * @param a Pointer to first element
+ * @param b Pointer to second element
+ * @param size Size of the elements
+ */
+void swapElements(void** a, void** b, size_t size);
+
+/**
  * Comparison function for integers
  * @param a Pointer to first integer
  * @param b Pointer to second integer

@@ -12,19 +12,18 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "bubble.h"
+#ifndef SELECTION_H
+#define SELECTION_H
 
-void bubbleSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
-	int sorted;
-	do {
-		sorted = 1;
-		for (int i = 0; i < len - 1; i++) {
-			void** a = adv(array, i * size);
-			void** b = adv(array, (i + 1) * size);
-			if (!cmp(a, b)) {
-				sorted = 0;
-				swapElements(a, b, size);
-			}
-		}
-	} while (!sorted);
-}
+#include "wikisort.h"
+
+/**
+ * Sorts the given array using a selection sort algorithm
+ * @param array The array to sort
+ * @param len The length of the array
+ * @param size The size of a single element
+ * @param cmp Comparison function that returns if an element is smaller than another
+ */
+void selectionSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
+
+#endif

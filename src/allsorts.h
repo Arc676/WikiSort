@@ -12,19 +12,6 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "merge.h"
 #include "bubble.h"
-
-void bubbleSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
-	int sorted;
-	do {
-		sorted = 1;
-		for (int i = 0; i < len - 1; i++) {
-			void** a = adv(array, i * size);
-			void** b = adv(array, (i + 1) * size);
-			if (!cmp(a, b)) {
-				sorted = 0;
-				swapElements(a, b, size);
-			}
-		}
-	} while (!sorted);
-}
+#include "selection.h"

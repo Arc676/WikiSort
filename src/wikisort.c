@@ -20,6 +20,14 @@ void** adv(void** start, size_t dist) {
 	return (void**)ptr;
 }
 
+void swapElements(void** a, void** b, size_t size) {
+	void** tmp = malloc(size);
+	memcpy(tmp, a, size);
+	memmove(a, b, size);
+	memmove(b, tmp, size);
+	free(tmp);
+}
+
 int cmp_int(void** a, void** b) {
 	return *(int*)a <= *(int*)b;
 }

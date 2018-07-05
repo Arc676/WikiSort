@@ -12,19 +12,24 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "bubble.h"
+#include "selection.h"
 
-void bubbleSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
-	int sorted;
-	do {
-		sorted = 1;
-		for (int i = 0; i < len - 1; i++) {
-			void** a = adv(array, i * size);
-			void** b = adv(array, (i + 1) * size);
-			if (!cmp(a, b)) {
-				sorted = 0;
-				swapElements(a, b, size);
+void selectionSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+	for (int i = 0; i < len - 1; i++) {
+		void** a;
+		void** b;
+		int minIndex = i;
+		for (int j = i + 1; j < len; j++) {
+			a = adv(array, j * size);
+			b = adv(array, minIndex * size);
+			if (cmp(a, b)) {
+				minIndex = j;
 			}
 		}
-	} while (!sorted);
+		if (minIndex != i) {
+			a = adv(array, i * size);
+			b = adv(array, minIndex * size);
+			swapElements(a, b, size);
+		}
+	}
 }

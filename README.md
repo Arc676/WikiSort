@@ -5,10 +5,13 @@ A GPL C library of sorting algorithms found on Wikipedia
 
 This table provides links to the Wikipedia pages regarding each sorting algorithm as well as the time complexity of the algorithm.
 
+When two cases have the same time complexity, this is indicated with `=[case]`.
+
 | Name | Worst | Average | Best |
 | --- | --- | --- | --- |
-| [Merge sort](https://en.wikipedia.org/wiki/Merge_sort) | O(nlogn) | O(nlogn) | O(n)/O(nlogn) |
-| [Bubble sort](https://en.wikipedia.org/wiki/Bubble_sort) | O(n^2) | O(n^2) | O(n) |
+| [Merge sort](https://en.wikipedia.org/wiki/Merge_sort) | =Average | O(nlogn) | O(n)/O(nlogn) |
+| [Bubble sort](https://en.wikipedia.org/wiki/Bubble_sort) | =Average | O(n^2) | O(n) |
+| [Selection sort](https://en.wikipedia.org/wiki/Selection_sort) | =Best | =Best | O(n^2) comparisons, O(n) swaps |
 
 ## Implementation
 
@@ -17,3 +20,5 @@ A `void` pointer can't be dereferenced in C and the language doesn't allow array
 ## Licensing
 
 Project available under GPLv3. See `LICENSE` for full license text.
+
+Text obtained from Wikipedia (algorithm time complexities) available under [Creative Commons Attribution-ShareAlike 3.0](https://en.wikipedia.org/wiki/Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License) license.
