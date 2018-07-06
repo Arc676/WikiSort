@@ -34,6 +34,27 @@ GAP_GEN *gapSeqs[GAP_COUNT] = {
 };
 
 void shellSort(void** array, size_t len, size_t size, COMP_FUNC cmp, GapSequence seq) {
+	int gapCount = 0;
+	int* gaps = gapSeqs[seq](len, &gapCount);
+	for (int i = 0; i < gapCount; i++) {
+		int gap = gaps[i];
+		for (int j = gap; j < len; j++) {
+			void** toInsert = malloc(size);
+			memcpy(toInsert, adv(array, j * size), size);
+			void** dst;
+			int k;
+			for (k = j; k >= gap; k -= gap) {
+				dst = adv(array, k * size);
+				void** src = adv(array, (k - gap) * size);
+				if (cmp(src, toInsert) != 1) {
+					break;
+				}
+				memcpy(dst, src, size);
+			}
+			dst = adv(array, k * size);
+			memcpy(dst, toInsert, size);
+		}
+	}
 }
 
 // Shell, 1959
@@ -51,12 +72,37 @@ int* gFrank_Lazarus(int len, int* count) {
 	return 0;
 }
 
+// Hibbard, 1963
 int* gA168604(int len, int* count) {
-	return 0;
+	int gapCount = (int)log2f((float)len + 1);
+	// omit last gap if length is one less than a power of 2
+	if ((int)pow(2, gapCount) - 1 >= len) {
+		gapCount--;
+	}
+	int* gaps = malloc(gapCount * sizeof(int));
+	for (int k = gapCount; k > 0; k--) {
+		gaps[k - 1] = (int)pow(2, gapCount - k + 1) - 1;
+	}
+	*count = gapCount;
+	return gaps;
 }
 
+// Papernov and Stasevich, 1965
 int* gA083318(int len, int* count) {
-	return 0;
+	int gapCount = (int)log2f((float)len - 1);
+	// omit last gap if length is one more than a power of 2
+	if ((int)pow(2, gapCount) + 1 >= len) {
+		gapCount--;
+	}
+	// add one for the prefixed 1
+	gapCount++;
+	int* gaps = malloc(gapCount * sizeof(int));
+	gaps[gapCount - 1] = 1;
+	for (int k = gapCount - 1; k > 0; k--) {
+		gaps[k - 1] = (int)pow(2, gapCount - k) + 1;
+	}
+	*count = gapCount;
+	return gaps;
 }
 
 int* gA003586(int len, int* count) {

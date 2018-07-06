@@ -17,3 +17,4 @@
 #include "selection.h"
 #include "insertion.h"
 #include "quick.h"
+#include "shell.h"
