@@ -15,6 +15,8 @@
 #ifndef SHELL_H
 #define SHELL_H
 
+#include <math.h>
+
 #include "wikisort.h"
 
 typedef enum GapSequence {
@@ -27,11 +29,13 @@ typedef enum GapSequence {
 	A036569,
 	A036562,
 	A033622,
-	Gonnet_Baeza-Yates_1991,
+	Gonnet_BaezaYates_1991,
 	A108870,
 	A102549,
 	GAP_COUNT
 } GapSequence;
+
+const int ciuraSequence[8];
 
 /**
  * Typedef for gap sequence generating functions
@@ -41,7 +45,7 @@ typedef enum GapSequence {
  */
 typedef int* GAP_GEN(int len, int* count);
 
-GAP_GEN *gaps[GAP_COUNT];
+GAP_GEN *gapSeqs[GAP_COUNT];
 
 /**
  * Sorts the given array using a shellsort algorithm
@@ -49,8 +53,9 @@ GAP_GEN *gaps[GAP_COUNT];
  * @param len The length of the array
  * @param size The size of a single element
  * @param cmp Comparison function that returns if an element is smaller than another
+ * @param seq Desired gap sequence
  */
-void shellSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
+void shellSort(void** array, size_t len, size_t size, COMP_FUNC cmp, GapSequence seq);
 
 /**
  * Generate the gap sequence described by Shell in 1959;
@@ -78,7 +83,7 @@ int* gFrank_Lazarus(int len, int* count);
  * @param count Pointer to integer in which to store number of gaps generated
  * @return Pointer to array containing the gap sequence
  */
-int* A168604(int len, int* count);
+int* gA168604(int len, int* count);
 
 /**
  * Generate the gap sequence described by Papernov and
@@ -88,7 +93,7 @@ int* A168604(int len, int* count);
  * @param count Pointer to integer in which to store number of gaps generated
  * @return Pointer to array containing the gap sequence
  */
-int* A083318(int len, int* count);
+int* gA083318(int len, int* count);
 
 /**
  * Generate the gap sequence described by Pratt in 1971;
@@ -98,7 +103,7 @@ int* A083318(int len, int* count);
  * @param count Pointer to integer in which to store number of gaps generated
  * @return Pointer to array containing the gap sequence
  */
-int* A003586(int len, int* count);
+int* gA003586(int len, int* count);
 
 /**
  * Generate the gap sequence described by Pratt in 1971;
@@ -108,7 +113,7 @@ int* A003586(int len, int* count);
  * @param count Pointer to integer in which to store number of gaps generated
  * @return Pointer to array containing the gap sequence
  */
-int* A003462(int len, int* count);
+int* gA003462(int len, int* count);
 
 /**
  * Generate the gap sequence described by Incerpi and
@@ -118,7 +123,7 @@ int* A003462(int len, int* count);
  * @param count Pointer to integer in which to store number of gaps generated
  * @return Pointer to array containing the gap sequence
  */
-int* A036569(int len, int* count);
+int* gA036569(int len, int* count);
 
 /**
  * Generate the gap sequence described by Sedgewick in
@@ -128,7 +133,7 @@ int* A036569(int len, int* count);
  * @param count Pointer to integer in which to store number of gaps generated
  * @return Pointer to array containing the gap sequence
  */
-int* A036562(int len, int* count);
+int* gA036562(int len, int* count);
 
 /**
  * Generate the gap sequence described by Sedgewick in
@@ -139,7 +144,7 @@ int* A036562(int len, int* count);
  * @param count Pointer to integer in which to store number of gaps generated
  * @return Pointer to array containing the gap sequence
  */
-int* A033622(int len, int* count);
+int* gA033622(int len, int* count);
 
 /**
  * Generate the gap sequence described by Gonnet and
@@ -150,7 +155,7 @@ int* A033622(int len, int* count);
  * @param count Pointer to integer in which to store number of gaps generated
  * @return Pointer to array containing the gap sequence
  */
-int* gGonnet_Baeza-Yates(int len, int* count);
+int* gGonnet_BaezaYates(int len, int* count);
 
 /**
  * Generate the gap sequence described by Tokuda in 1992;
@@ -159,7 +164,7 @@ int* gGonnet_Baeza-Yates(int len, int* count);
  * @param count Pointer to integer in which to store number of gaps generated
  * @return Pointer to array containing the gap sequence
  */
-int* A108870(int len, int* count);
+int* gA108870(int len, int* count);
 
 /**
  * Generate the gap sequence described by Ciura in 2001;
@@ -168,6 +173,6 @@ int* A108870(int len, int* count);
  * @param count Pointer to integer in which to store number of gaps generated
  * @return Pointer to array containing the gap sequence
  */
-int* A102549(int len, int* count);
+int* gA102549(int len, int* count);
 
 #endif

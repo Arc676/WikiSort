@@ -14,54 +14,96 @@
 
 #include "shell.h"
 
-void shellSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+const int ciuraSequence[8] = {
+	701, 301, 132, 57, 23, 10, 4, 1
+};
+
+GAP_GEN *gapSeqs[GAP_COUNT] = {
+	gShell,
+	gFrank_Lazarus,
+	gA168604,
+	gA083318,
+	gA003586,
+	gA003462,
+	gA036569,
+	gA036562,
+	gA033622,
+	gGonnet_BaezaYates,
+	gA108870,
+	gA102549,
+};
+
+void shellSort(void** array, size_t len, size_t size, COMP_FUNC cmp, GapSequence seq) {
 }
 
+// Shell, 1959
 int* gShell(int len, int* count) {
-	return 0;
+	int gapCount = (int)log2f((float)len);
+	int* gaps = malloc(gapCount * sizeof(int));
+	for (int k = 1; k <= gapCount; k++) {
+		gaps[k - 1] = (int)floor(len / pow(2, (double)k));
+	}
+	*count = gapCount;
+	return gaps;
 }
 
 int* gFrank_Lazarus(int len, int* count) {
 	return 0;
 }
 
-int* A168604(int len, int* count) {
+int* gA168604(int len, int* count) {
 	return 0;
 }
 
-int* A083318(int len, int* count) {
+int* gA083318(int len, int* count) {
 	return 0;
 }
 
-int* A003586(int len, int* count) {
+int* gA003586(int len, int* count) {
 	return 0;
 }
 
-int* A003462(int len, int* count) {
+int* gA003462(int len, int* count) {
 	return 0;
 }
 
-int* A036569(int len, int* count) {
+int* gA036569(int len, int* count) {
 	return 0;
 }
 
-int* A036562(int len, int* count) {
+int* gA036562(int len, int* count) {
 	return 0;
 }
 
-int* A033622(int len, int* count) {
+int* gA033622(int len, int* count) {
 	return 0;
 }
 
-int* gGonnet_Baeza-Yates(int len, int* count) {
+// Gonnet and Baeza-Yates, 1991
+int* gGonnet_BaezaYates(int len, int* count) {
+	int gapCount = (int)(logf((float)len) / logf(11.0/5));
+	int* gaps = malloc(gapCount * sizeof(int));
+	gaps[0] = len * 5 / 11;
+	int i = 1;
+	for (; i < gapCount; i++) {
+		gaps[i] = gaps[i - 1] * 5 / 11;
+		if (gaps[i] == 1) {
+			break;
+		}
+	}
+	*count = i + 1;
+	return gaps;
+}
+
+int* gA108870(int len, int* count) {
 	return 0;
 }
 
-int* A108870(int len, int* count) {
-	return 0;
-}
-
-int* A102549(int len, int* count) {
-	return 0;
+// Ciura, 2001
+int* gA102549(int len, int* count) {
+	*count = 8;
+	int* gaps = malloc(8 * sizeof(int));
+	memcpy(gaps, ciuraSequence, 8 * sizeof(int));
+	return gaps;
 }
 
