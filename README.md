@@ -19,6 +19,7 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 | [Comb sort](https://en.wikipedia.org/wiki/Comb_sort) | O(n^2) | Θ(nlogn) | Ω(n^2/2^p) where p is the number of increments |
 | [Cocktail sort](https://en.wikipedia.org/wiki/Cocktail_shaker_sort) | =Average | O(n^2) | O(n) |
 | [Gnome sort](https://en.wikipedia.org/wiki/Gnome_sort) | =Average | O(n^2) | Ω(n) |
+| [Stooge sort](https://en.wikipedia.org/wiki/Stooge_sort) | =Best | =Best | O(n^log3/log1.5) = O(n^2.7095) |
 
 ## Implementation
 

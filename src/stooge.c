@@ -12,14 +12,22 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "merge.h"
-#include "bubble.h"
-#include "selection.h"
-#include "insertion.h"
-#include "quick.h"
-#include "shell.h"
-#include "oddeven.h"
-#include "comb.h"
-#include "cocktail.h"
-#include "gnome.h"
 #include "stooge.h"
+
+void stoogeSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+	void** b = adv(array, (len - 1) * size);
+	if (cmp(array, b) == 1) {
+		swapElements(array, b, size);
+	}
+	if (len > 2) {
+		// obtain 1/3 the length of the list
+		size_t _13len = len / 3;
+		// obtain 2/3 the length of the list
+		size_t _23len = len - _13len;
+
+		void** second2_3 = adv(array, _13len * size);
+		stoogeSort(array, _23len, size, cmp);
+		stoogeSort(second2_3, _23len, size, cmp);
+		stoogeSort(array, _23len, size, cmp);
+	}
+}
