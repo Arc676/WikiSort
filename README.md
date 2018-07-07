@@ -17,6 +17,7 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 | [Shellsort](https://en.wikipedia.org/wiki/Shellsort) | O(n^2) worst known gaps, O(nlog^2n) best known gaps | depends on gaps | O(nlogn)
 | [Odd-even sort](https://en.wikipedia.org/wiki/Odd%E2%80%93even_sort) | =Average | O(n^2) | O(n) |
 | [Comb sort](https://en.wikipedia.org/wiki/Comb_sort) | O(n^2) | Θ(nlogn) | Ω(n^2/2^p) where p is the number of increments |
+| [Cocktail sort](https://en.wikipedia.org/wiki/Cocktail_shaker_sort) | =Average | O(n^2) | O(n) |
 
 ## Implementation
 

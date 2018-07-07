@@ -12,20 +12,34 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "bubble.h"
+#include "cocktail.h"
 
-void bubbleSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void cocktailSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
 	int sorted;
+	int passes = 0;
+	void** a;
+	void** b;
 	do {
 		sorted = 1;
-		for (int i = 0; i < len - 2 - i; i++) {
-			void** a = adv(array, i * size);
-			void** b = adv(array, (i + 1) * size);
-			// if the earlier element is greater than its successor
+		for (int i = passes; i < len - 2 - passes; i++) {
+			a = adv(array, i * size);
+			b = adv(array, (i + 1) * size);
 			if (cmp(a, b) == 1) {
-				sorted = 0;
 				swapElements(a, b, size);
+				sorted = 0;
 			}
 		}
+		if (sorted) {
+			break;
+		}
+		for (int i = len - 2 - passes; i >= passes; i--) {
+			a = adv(array, i * size);
+			b = adv(array, (i + 1) * size);
+			if (cmp(a, b) == 1) {
+				swapElements(a, b, size);
+				sorted = 0;
+			}
+		}
+		passes++;
 	} while (!sorted);
 }
