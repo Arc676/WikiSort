@@ -109,8 +109,18 @@ int* gA003586(int len, int* count) {
 	return 0;
 }
 
+// Pratt, 1971
+// Using (3^k - 1) / 2
 int* gA003462(int len, int* count) {
-	return 0;
+	int gapCount = (int)(logf(2 * ceil(len / 3) + 1) / logf(3));
+	int* gaps = malloc(gapCount * sizeof(int));
+	int pow3 = 1;
+	for (int i = 0; i < gapCount; i++) {
+		pow3 *= 3;
+		gaps[i] = (pow3 - 1) / 2;
+	}
+	*count = gapCount;
+	return gaps;
 }
 
 int* gA036569(int len, int* count) {
@@ -133,16 +143,40 @@ int* gGonnet_BaezaYates(int len, int* count) {
 	int i = 1;
 	for (; i < gapCount; i++) {
 		gaps[i] = gaps[i - 1] * 5 / 11;
-		if (gaps[i] == 1) {
+		if (gaps[i] <= 1) {
+			gaps[i] = 1;
 			break;
 		}
 	}
-	*count = i + 1;
+	if (i + 1 < gapCount) {
+		gapCount = i + 1;
+	}
+	*count = gapCount;
 	return gaps;
 }
 
+// Tokuda, 1992
+// sequence generation implemented using a simplified formula
+// also listed on Wikipedia; sequence length determined with general formula
+// h_k = ceil(h'_k); h'_k = 2.25h'_k-1 + 1; h'_1 = 1
 int* gA108870(int len, int* count) {
-	return 0;
+	int gapCount = (int)ceil(logf((5.0 * len + 4) / 9) / logf(9.0 / 4));
+	int* gaps = malloc(gapCount * sizeof(int));
+	float hprime = 1;
+	gaps[gapCount - 1] = 1;
+	for (int i = gapCount - 2; i >= 0; i--) {
+		hprime = 2.25 * hprime + 1;
+		gaps[i] = (int)ceil(hprime);
+	}
+	if (gaps[0] >= len) {
+		gapCount--;
+		int* newGaps = malloc(gapCount * sizeof(int));
+		memcpy(newGaps, &gaps[1], gapCount * sizeof(int));
+		free(gaps);
+		gaps = newGaps;
+	}
+	*count = gapCount;
+	return gaps;
 }
 
 // Ciura, 2001
