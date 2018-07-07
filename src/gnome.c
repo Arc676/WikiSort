@@ -12,13 +12,24 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "merge.h"
-#include "bubble.h"
-#include "selection.h"
-#include "insertion.h"
-#include "quick.h"
-#include "shell.h"
-#include "oddeven.h"
-#include "comb.h"
-#include "cocktail.h"
 #include "gnome.h"
+
+void gnomeSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+	int pos = 0;
+	void** a;
+	void** b;
+	while (pos < len) {
+		if (pos == 0) {
+			pos++;
+		} else {
+			a = adv(array, pos * size);
+			b = adv(array, (pos - 1) * size);
+			if (cmp(a, b) == -1) {
+				swapElements(a, b, size);
+				pos--;
+			} else {
+				pos++;
+			}
+		}
+	}
+}
