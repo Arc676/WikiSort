@@ -15,6 +15,7 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 | [Insertion sort](https://en.wikipedia.org/wiki/Insertion_sort) | =Average | O(n^2) comparisons and swaps | O(n) comparisons, O(1) swaps |
 | [Quicksort](https://en.wikipedia.org/wiki/Quicksort) | O(n^2) | O(nlogn) | O(n)/O(nlogn) |
 | [Shellsort](https://en.wikipedia.org/wiki/Shellsort) | O(n^2) worst known gaps, O(nlog^2n) best known gaps | depends on gaps | O(nlogn)
+| [Odd-even sort](https://en.wikipedia.org/wiki/Odd%E2%80%93even_sort) | =Average | O(n^2) | O(n) |
 
 ## Implementation
 

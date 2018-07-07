@@ -12,10 +12,28 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "merge.h"
-#include "bubble.h"
-#include "selection.h"
-#include "insertion.h"
-#include "quick.h"
-#include "shell.h"
 #include "oddeven.h"
+
+void oddEvenSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+	int sorted = 0;
+	while (!sorted) {
+		sorted = 1;
+		for (int i = 1; i < len - 1; i += 2) {
+			void** a = adv(array, i * size);
+			void** b = adv(array, (i + 1) * size);
+			if (cmp(a, b) == 1) {
+				swapElements(a, b, size);
+				sorted = 0;
+			}
+		}
+		for (int i = 0; i < len - 1; i += 2) {
+			void** a = adv(array, i * size);
+			void** b = adv(array, (i + 1) * size);
+			if (cmp(a, b) == 1) {
+				swapElements(a, b, size);
+				sorted = 0;
+			}
+		}
+
+	}
+}

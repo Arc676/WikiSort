@@ -12,10 +12,18 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "merge.h"
-#include "bubble.h"
-#include "selection.h"
-#include "insertion.h"
-#include "quick.h"
-#include "shell.h"
-#include "oddeven.h"
+#ifndef ODDEVEN_H
+#define ODDEVEN_H
+
+#include "wikisort.h"
+
+/**
+ * Sorts the given array using a odd-even sort algorithm
+ * @param array The array to sort
+ * @param len The length of the array
+ * @param size The size of a single element
+ * @param cmp Comparison function that returns if an element is smaller than another
+ */
+void oddEvenSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
+
+#endif

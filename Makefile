@@ -6,7 +6,8 @@ OUT=libwikisort.a
 SDIR=src
 ODIR=obj
 
-OBJS=wikisort.o merge.o bubble.o selection.o insertion.o quick.o shell.o
+OBJS=wikisort.o merge.o bubble.o selection.o insertion.o quick.o shell.o \
+	oddeven.o
 _OBJS=$(patsubst %, $(ODIR)/%, $(OBJS))
 
 ifdef DEBUG
