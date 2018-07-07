@@ -57,15 +57,22 @@ void shellSort(void** array, size_t len, size_t size, COMP_FUNC cmp, GapSequence
 	}
 }
 
-// Shell, 1959
-int* gShell(int len, int* count) {
+// generic shrink factor gap sequence
+int* gShrinkFactor(int len, int* count, float shrink) {
 	int gapCount = (int)log2f((float)len);
 	int* gaps = malloc(gapCount * sizeof(int));
+	float scale = 1;
 	for (int k = 1; k <= gapCount; k++) {
-		gaps[k - 1] = (int)floor(len / pow(2, (double)k));
+		scale *= shrink;
+		gaps[k - 1] = len / scale;
 	}
 	*count = gapCount;
 	return gaps;
+}
+
+// Shell, 1959
+int* gShell(int len, int* count) {
+	return gShrinkFactor(len, count, 2);
 }
 
 int* gFrank_Lazarus(int len, int* count) {

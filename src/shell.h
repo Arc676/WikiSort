@@ -58,6 +58,16 @@ GAP_GEN *gapSeqs[GAP_COUNT];
 void shellSort(void** array, size_t len, size_t size, COMP_FUNC cmp, GapSequence seq);
 
 /**
+ * Generate a gap sequence formed by using a shrink factor on the size
+ * of the input
+ * @param len Length of the array
+ * @param count Pointer to integer in which to store number of gaps generated
+ * @param shrink Desired shrink factor
+ * @return Pointer to array containing the gap sequence
+ */
+int* gShrinkFactor(int len, int* count, float shrink);
+
+/**
  * Generate the gap sequence described by Shell in 1959;
  * worst time complexity Θ(N^2); given by floor(N/2^k)
  * @param len Length of the array

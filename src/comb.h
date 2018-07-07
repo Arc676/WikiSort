@@ -12,11 +12,19 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "merge.h"
-#include "bubble.h"
-#include "selection.h"
-#include "insertion.h"
-#include "quick.h"
+#ifndef COMB_H
+#define COMB_H
+
 #include "shell.h"
-#include "oddeven.h"
-#include "comb.h"
+
+/**
+ * Sorts the given array using a comb sort algorithm
+ * @param array The array to sort
+ * @param len The length of the array
+ * @param size The size of a single element
+ * @param cmp Comparison function that returns if an element is smaller than another
+ * @param shrink Desired shrink factor
+ */
+void combSort(void** array, size_t len, size_t size, COMP_FUNC cmp, float shrink);
+
+#endif
