@@ -23,3 +23,4 @@
 #include "cocktail.h"
 #include "gnome.h"
 #include "stooge.h"
+#include "cycle.h"

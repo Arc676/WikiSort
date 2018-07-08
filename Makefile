@@ -7,7 +7,7 @@ SDIR=src
 ODIR=obj
 
 OBJS=wikisort.o merge.o bubble.o selection.o insertion.o quick.o shell.o \
-	oddeven.o comb.o cocktail.o gnome.o stooge.o
+	oddeven.o comb.o cocktail.o gnome.o stooge.o cycle.o
 _OBJS=$(patsubst %, $(ODIR)/%, $(OBJS))
 
 ifdef DEBUG
