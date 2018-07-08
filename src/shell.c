@@ -55,6 +55,7 @@ void shellSort(void** array, size_t len, size_t size, COMP_FUNC cmp, GapSequence
 			memcpy(dst, toInsert, size);
 		}
 	}
+	free(gaps);
 }
 
 // generic shrink factor gap sequence
@@ -75,8 +76,17 @@ int* gShell(int len, int* count) {
 	return gShrinkFactor(len, count, 2);
 }
 
+// Frank and Lazarus, 1960
 int* gFrank_Lazarus(int len, int* count) {
-	return 0;
+	int gapCount = (int)ceil(log2f((float)len) - 1);
+	int* gaps = malloc(gapCount * sizeof(int));
+	float term = (float)len / 2;
+	for (int i = 0; i < gapCount; i++) {
+		term /= 2;
+		gaps[i] = 2 * floor(term) + 1;
+	}
+	*count = gapCount;
+	return gaps;
 }
 
 // Hibbard, 1963
@@ -134,8 +144,27 @@ int* gA036569(int len, int* count) {
 	return 0;
 }
 
+// Sedgewick, 1986
+// Using 4^k + 3 * 2^k-1 + 1, prefixed with 1
 int* gA036562(int len, int* count) {
-	return 0;
+	int gapCount = (int)log2f((sqrt(16 * len - 7) - 3) / 4);
+	// remove last term if too high
+	if (pow(4, gapCount) + 3 * pow(2, gapCount - 1) + 1 >= len) {
+		gapCount--;
+	}
+	// prefixed 1
+	gapCount++;
+	int pow4 = 1;
+	int pow2 = 1;
+	int* gaps = malloc(gapCount * sizeof(int));
+	gaps[gapCount - 1] = 1;
+	for (int i = gapCount - 2; i >= 0; i--) {
+		pow4 *= 4;
+		pow2 *= 2;
+		gaps[i] = pow4 + 3 * pow2 / 2 + 1;
+	}
+	*count = gapCount;
+	return gaps;
 }
 
 int* gA033622(int len, int* count) {

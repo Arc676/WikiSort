@@ -37,4 +37,5 @@ void combSort(void** array, size_t len, size_t size, COMP_FUNC cmp, float shrink
 			}
 		}
 	}
+	free(gaps);
 }
