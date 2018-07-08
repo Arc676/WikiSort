@@ -7,20 +7,50 @@ This table provides links to the Wikipedia pages regarding each sorting algorith
 
 When two cases have the same time complexity, this is indicated with `=[case]`.
 
+### Exchange sorts
 | Name | Worst | Average | Best |
 | --- | --- | --- | --- |
-| [Merge sort](https://en.wikipedia.org/wiki/Merge_sort) | =Average | O(nlogn) | O(n)/O(nlogn) |
 | [Bubble sort](https://en.wikipedia.org/wiki/Bubble_sort) | =Average | O(n^2) | O(n) |
-| [Selection sort](https://en.wikipedia.org/wiki/Selection_sort) | =Best | =Best | O(n^2) comparisons, O(n) swaps |
-| [Insertion sort](https://en.wikipedia.org/wiki/Insertion_sort) | =Average | O(n^2) comparisons and swaps | O(n) comparisons, O(1) swaps |
 | [Quicksort](https://en.wikipedia.org/wiki/Quicksort) | O(n^2) | O(nlogn) | O(n)/O(nlogn) |
-| [Shellsort](https://en.wikipedia.org/wiki/Shellsort) | O(n^2) worst known gaps, O(nlog^2n) best known gaps | depends on gaps | O(nlogn)
 | [Odd-even sort](https://en.wikipedia.org/wiki/Odd%E2%80%93even_sort) | =Average | O(n^2) | O(n) |
 | [Comb sort](https://en.wikipedia.org/wiki/Comb_sort) | O(n^2) | Θ(nlogn) | Ω(n^2/2^p) where p is the number of increments |
 | [Cocktail sort](https://en.wikipedia.org/wiki/Cocktail_shaker_sort) | =Average | O(n^2) | O(n) |
 | [Gnome sort](https://en.wikipedia.org/wiki/Gnome_sort) | =Average | O(n^2) | Ω(n) |
 | [Stooge sort](https://en.wikipedia.org/wiki/Stooge_sort) | =Best | =Best | O(n^log3/log1.5) = O(n^2.7095) |
+| [Slowsort](https://en.wikipedia.org/wiki/Slowsort) | =Best | =Best | Ω(n^(logn / (2 + ε))) for ε > 0 |
+
+### Selection sorts
+| Name | Worst | Average | Best |
+| --- | --- | --- | --- |
+| [Selection sort](https://en.wikipedia.org/wiki/Selection_sort) | =Best | =Best | O(n^2) comparisons, O(n) swaps |
 | [Cycle sort](https://en.wikipedia.org/wiki/Cycle_sort) | =Best | =Best | Θ(n^2) |
+
+### Insertion sorts
+| Name | Worst | Average | Best |
+| --- | --- | --- | --- |
+| [Insertion sort](https://en.wikipedia.org/wiki/Insertion_sort) | =Average | O(n^2) comparisons and swaps | O(n) comparisons, O(1) swaps |
+| [Shellsort](https://en.wikipedia.org/wiki/Shellsort) | O(n^2) worst known gaps, O(nlog^2n) best known gaps | depends on gaps | O(nlogn)
+
+### Merge sorts
+| Name | Worst | Average | Best |
+| --- | --- | --- | --- |
+| [Merge sort](https://en.wikipedia.org/wiki/Merge_sort) | =Average | O(nlogn) | O(n)/O(nlogn) |
+
+### Distribution sorts
+| Name | Worst | Average | Best |
+| --- | --- | --- | --- |
+
+### Concurrent sorts
+| Name | Worst | Average | Best |
+| --- | --- | --- | --- |
+
+### Hybrid sorts
+| Name | Worst | Average | Best |
+| --- | --- | --- | --- |
+
+### Other
+| Name | Worst | Average | Best |
+| --- | --- | --- | --- |
 
 ## Implementation
 

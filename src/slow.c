@@ -12,16 +12,21 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "merge.h"
-#include "bubble.h"
-#include "selection.h"
-#include "insertion.h"
-#include "quick.h"
-#include "shell.h"
-#include "oddeven.h"
-#include "comb.h"
-#include "cocktail.h"
-#include "gnome.h"
-#include "stooge.h"
-#include "cycle.h"
 #include "slow.h"
+
+void slowSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+	if (len <= 1) {
+		return;
+	}
+	size_t half = len / 2;
+	slowSort(array, half, size, cmp);
+	slowSort(adv(array, half * size), len - half, size, cmp);
+	
+	void** a = adv(array, (half - 1) * size);
+	void** b = adv(array, (len - 1) * size);
+	if (cmp(a, b) == 1) {
+		swapElements(a, b, size);
+	}
+
+	slowSort(array, len - 1, size, cmp);
+}
