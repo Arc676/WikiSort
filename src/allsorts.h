@@ -26,3 +26,4 @@
 #include "cycle.h"
 #include "slow.h"
 #include "bogo.h"
+#include "heap.h"
