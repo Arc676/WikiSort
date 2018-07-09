@@ -49,6 +49,7 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 ### Hybrid sorts
 | Name | Worst | Average | Best |
 | --- | --- | --- | --- |
+| [Introsort](https://en.wikipedia.org/wiki/Introsort) | =Best | =Best | O(nlogn) |
 
 ### Other
 | Name | Worst | Average | Best |
