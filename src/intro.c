@@ -12,19 +12,25 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "merge.h"
-#include "bubble.h"
-#include "selection.h"
-#include "insertion.h"
-#include "quick.h"
-#include "shell.h"
-#include "oddeven.h"
-#include "comb.h"
-#include "cocktail.h"
-#include "gnome.h"
-#include "stooge.h"
-#include "cycle.h"
-#include "slow.h"
-#include "bogo.h"
-#include "heap.h"
 #include "intro.h"
+
+void introSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+	int depth = 2 * (int)log2f(len);
+	introSort_rec(array, len, size, cmp, depth);
+}
+
+void introSort_rec(void** array, size_t len, size_t size, COMP_FUNC cmp, int depth) {
+	if (len < 2) {
+		return;
+	}
+	int equals;
+	int pivot = partition(array, len, size, cmp, &equals);
+	if (depth == 0) {
+		heapSort(array, len, size, cmp);
+	} else {
+		introSort_rec(array, pivot, size, cmp, depth - 1);
+
+		void** right = adv(array, (pivot + equals) * size);
+		introSort_rec(right, len - pivot - equals, size, cmp, depth - 1);
+	}
+}

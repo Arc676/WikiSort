@@ -15,8 +15,6 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-#include <math.h>
-
 #include "wikisort.h"
 
 typedef enum GapSequence {
