@@ -12,17 +12,22 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "merge.h"
-#include "bubble.h"
-#include "selection.h"
-#include "insertion.h"
-#include "quick.h"
-#include "shell.h"
-#include "oddeven.h"
-#include "comb.h"
-#include "cocktail.h"
-#include "gnome.h"
-#include "stooge.h"
-#include "cycle.h"
-#include "slow.h"
 #include "bogo.h"
+
+void fisherYates(void** array, size_t len, size_t size) {
+	for (int i = len - 1; i > 0; i--) {
+		int idx = rand() % (i + 1);
+		void** a = adv(array, i * size);
+		void** b = adv(array, idx * size);
+		swapElements(a, b, size);
+	}
+}
+
+void bogoSort_rand(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+	while (!isSorted(array, len, size, cmp)) {
+		fisherYates(array, len, size);
+	}
+}
+
+void bogoSort_det(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+}

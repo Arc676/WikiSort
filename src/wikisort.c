@@ -28,6 +28,17 @@ void swapElements(void** a, void** b, size_t size) {
 	free(tmp);
 }
 
+int isSorted(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+	for (int i = 0; i < len - 1; i++) {
+		void** a = adv(array, i * size);
+		void** b = adv(array, (i + 1) * size);
+		if (cmp(a, b) == 1) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
 int cmp_int(void** a, void** b) {
 	int x = *(int*)a;
 	int y = *(int*)b;

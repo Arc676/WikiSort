@@ -18,6 +18,7 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 | [Gnome sort](https://en.wikipedia.org/wiki/Gnome_sort) | =Average | O(n^2) | Ω(n) |
 | [Stooge sort](https://en.wikipedia.org/wiki/Stooge_sort) | =Best | =Best | O(n^log3/log1.5) = O(n^2.7095) |
 | [Slowsort](https://en.wikipedia.org/wiki/Slowsort) | =Best | =Best | Ω(n^(logn / (2 + ε))) for ε > 0 |
+| [Bogosort](https://en.wikipedia.org/wiki/Bogosort) | Unbounded (random), =Average (deterministic) | O((n + 1)!) | O(n) |
 
 ### Selection sorts
 | Name | Worst | Average | Best |

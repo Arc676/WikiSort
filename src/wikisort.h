@@ -47,6 +47,16 @@ void** adv(void** start, size_t dist);
 void swapElements(void** a, void** b, size_t size);
 
 /**
+ * Determines if a list is sorted
+ * @param array The array to check
+ * @param len The length of the array
+ * @param size The size of a single element
+ * @param cmp Comparison function for the elements
+ * @return Whether the array is sorted
+ */
+int isSorted(void** array, size_t len, size_t size, COMP_FUNC cmp);
+
+/**
  * Comparison function for integers
  * @param a Pointer to first integer
  * @param b Pointer to second integer
