@@ -54,6 +54,31 @@ Heap* heap_create(size_t count, size_t size, COMP_FUNC cmp);
 Heap* heap_heapify(void** array, size_t count, size_t size, COMP_FUNC cmp);
 
 /**
+ * Merge the contents of two heaps into one new heap (returns null if
+ * heaps do not have the same element size or comparison function)
+ * @param heap1 First heap
+ * @param heap2 Second heap
+ * @return A pointer to the new heap containing the elements of both
+ */
+Heap* heap_merge(Heap* heap1, Heap* heap2);
+
+/**
+ * Meld the contents of two heaps into the first heap and destroy the second
+ * @param heap1 First (destination) heap
+ * @param heap2 Second (to be destroyed) heap
+ */
+void heap_meld(Heap* heap1, Heap* heap2);
+
+/**
+ * Change the amount of memory allocated to a given heap (does nothing if
+ * the new size is equal to the current size or if the new size is insufficient
+ * to store the heap's current contents)
+ * @param heap Heap to resize
+ * @param size New size
+ */
+void heap_resize(Heap* heap, size_t size);
+
+/**
  * Destroy a heap
  * @param heap Heap to destroy
  */
@@ -84,18 +109,33 @@ int heap_getChild(int index, int child);
 void** heap_peek(Heap* heap);
 
 /**
+ * Insert a new value into the heap
+ * @param heap Heap into which to insert the value
+ * @param value Value to insert
+ */
+void heap_push(Heap* heap, void** value);
+
+/**
  * Remove and return the maximum node in the heap
  * @param heap Heap from which to remove root
- * @return Pointer to a copy of the maximum node
+ * @return Pointer to a copy of the maximum node (NULL if heap is empty)
  */
 void** heap_pop(Heap* heap);
 
 /**
- * Insert a new value into the heap
- * @param heap Heap into which to insert the value
- * @param val Value to insert
+ * Replaces the value at the root of the heap
+ * @param heap Heap whose root to replace
+ * @param value Value to put in current root's place
  */
-void heap_insert(Heap* heap, void** value);
+void heap_replace(Heap* heap, void** value);
+
+/**
+ * Deletes a node from the heap (does nothing if the index is greater than that
+ * of the last element in the heap)
+ * @param heap Heap from which to delete node
+ * @param index Index of node to delete
+ */
+void heap_delete(Heap* heap, int index);
 
 /**
  * Sifts a node up the heap to its correct position

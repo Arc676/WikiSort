@@ -28,9 +28,45 @@ Heap* heap_heapify(void** array, size_t count, size_t size, COMP_FUNC cmp) {
 	Heap* heap = heap_create(count, size, cmp);
 	for (int i = 0; i < count; i++) {
 		void** new = adv(array, i * size);
-		heap_insert(heap, new);
+		heap_push(heap, new);
 	}
 	return heap;
+}
+
+Heap* heap_merge(Heap* heap1, Heap* heap2) {
+	if (heap1->size != heap2->size || heap1->cmp != heap2->cmp) {
+		return 0;
+	}
+	size_t total = heap1->count + heap2->count;
+	void** elements = malloc(total * heap1->size);
+	memcpy(elements, heap1->elements, heap1->occupied * heap1->size);
+
+	void** right = adv(elements, heap1->occupied * heap1->size);
+	memcpy(right, heap2->elements, heap2->occupied * heap2->size);
+
+	return heap_heapify(elements, total, heap1->size, heap1->cmp);
+}
+
+void heap_meld(Heap* heap1, Heap* heap2) {
+	Heap* new = heap_merge(heap1, heap2);
+	if (new) {
+		heap_destroy(heap1);
+		heap_destroy(heap2);
+		*heap1 = *new;
+	}
+}
+
+void heap_resize(Heap* heap, size_t size) {
+	if (heap->count == size || heap->occupied > size) {
+		return;
+	}
+	void** new = realloc(heap->elements, size * heap->size);
+	if (new) {
+		heap->count = size;
+		heap->elements = new;
+	} else {
+		perror("Failed to allocate memory");
+	}
 }
 
 void heap_destroy(Heap* heap) {
@@ -50,6 +86,23 @@ void** heap_peek(Heap* heap) {
 	return heap->elements;
 }
 
+void heap_push(Heap* heap, void** value) {
+	// if heap is full, double capacity
+	if (heap->occupied == heap->count) {
+		heap_resize(heap, heap->count * 2);
+	}
+
+	// copy new value into heap
+	void** dst = adv(heap->elements, heap->occupied * heap->size);
+	memcpy(dst, value, heap->size);
+
+	// sift up
+	heap_siftUp(heap, heap->occupied);
+
+	// increase heap node count
+	heap->occupied++;
+}
+
 void** heap_pop(Heap* heap) {
 	// if heap is empty, return null
 	if (!heap->occupied) {
@@ -60,38 +113,28 @@ void** heap_pop(Heap* heap) {
 	void** max = malloc(heap->size);
 	memcpy(max, heap->elements, heap->size);
 
-	// swap root with bottom node and sift down
-	void** end = adv(heap->elements, (heap->occupied - 1) * heap->size);
-	swapElements(heap->elements, end, heap->size);
-	heap->occupied--;
-	heap_siftDown(heap, 0);
+	// delete root
+	heap_delete(heap, 0);
 
 	// return max node
 	return max;
 }
 
-void heap_insert(Heap* heap, void** value) {
-	// if heap is full, allocate new layer of memory
-	if (heap->occupied == heap->count) {
-		size_t expanded = heap->count * 2;
-		void** new = realloc(heap->elements, expanded * heap->size);
-		if (new) {
-			heap->count = expanded;
-			heap->elements = new;
-		} else {
-			perror("Failed to allocate memory");
-		}
+
+void heap_replace(Heap* heap, void** value) {
+	memcpy(heap->elements, value, heap->size);
+	heap_siftDown(heap, 0);
+}
+
+void heap_delete(Heap* heap, int index) {
+	if (index >= heap->occupied) {
+		return;
 	}
-
-	// insert new value in heap
-	void** dst = adv(heap->elements, heap->occupied * heap->size);
-	memcpy(dst, value, heap->size);
-
-	// sift up
-	heap_siftUp(heap, heap->occupied);
-
-	// increase heap node count
-	heap->occupied++;
+	void** end = adv(heap->elements, (heap->occupied - 1) * heap->size);
+	void** toDelete = adv(heap->elements, index * heap->size);
+	swapElements(toDelete, end, heap->size);
+	heap->occupied--;
+	heap_siftDown(heap, index);
 }
 
 void heap_siftUp(Heap* heap, int index) {
