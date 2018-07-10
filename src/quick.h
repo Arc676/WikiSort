@@ -26,4 +26,16 @@
  */
 void quickSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
 
+/**
+ * Partitions the list by moving elements such that elements
+ * are placed relative to a pivot according to size
+ * @param array The array to sort
+ * @param len The length of the array
+ * @param size The size of a single element
+ * @param cmp Comparison function for the elements
+ * @param equals Pointer to which to write the number of elements equal to the pivot
+ * @return The final position of the pivot element
+ */
+int partition(void** array, size_t len, size_t size, COMP_FUNC cmp, int* equals);
+
 #endif

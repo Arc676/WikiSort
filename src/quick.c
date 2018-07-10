@@ -18,49 +18,54 @@ void quickSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
 	if (len < 2) {
 		return;
 	}
-	int pivot = len/2;
-	int less = 0, equal = 1, more = 0;
 
-	void** smaller = malloc(len * size);
-	void** same = malloc(len * size);
-	void** greater = malloc(len * size);
+	// partition the array
+	int equals;
+	int pivot = partition(array, len, size, cmp, &equals);
 
-	void** pivotElement = adv(array, pivot * size);
-	memcpy(same, pivotElement, size);
+	// sort the elements smaller than the pivot
+	quickSort(array, pivot, size, cmp);
 
-	// move elements into new lists
-	for (int i = 0; i < len; i++) {
-		if (i == pivot) {
-			continue;
-		}
+	// sort the elements larger than the pivot
+	void** greater = adv(array, (pivot + equals) * size);
+	quickSort(greater, len - pivot - equals, size, cmp);
+}
+
+int partition(void** array, size_t len, size_t size, COMP_FUNC cmp, int* equals) {
+	int pivotIdx = len / 2;
+	void** pOriginal = adv(array, pivotIdx * size);
+	void** pivot = malloc(size);
+	memcpy(pivot, pOriginal, size);
+
+	int low = 0;
+	int i = 0;
+	int high = len - 1;
+	*equals = 0;
+
+	while (i <= high) {
 		void** element = adv(array, i * size);
-		int res = cmp(element, pivotElement);
-		switch (res) {
+		void** toSwap;
+		switch(cmp(element, pivot)) {
 		case -1:
-			memcpy(adv(smaller, less++ * size), element, size);
-			break;
-		case 0:
-			memcpy(adv(same, equal++ * size), element, size);
+			toSwap = adv(array, low * size);
+			swapElements(toSwap, element, size);
+			i++;
+			low++;
 			break;
 		case 1:
+			toSwap = adv(array, high * size);
+			swapElements(toSwap, element, size);
+			high--;
+			break;
+		case 0:
 		default:
-			memcpy(adv(greater, more++ * size), element, size);
+			(*equals)++;
+			i++;
 			break;
 		}
 	}
 
-	// sort partitions
-	quickSort(smaller, less, size, cmp);
-	quickSort(greater, more, size, cmp);
+	free(pivot);
 
-	// move sorted partitions back into original list
-	uint64_t index = (uint64_t)array;
-
-	memcpy((void**)index, smaller, less * size);
-	index += less * size;
-
-	memcpy((void**)index, same, equal * size);
-	index += equal * size;
-
-	memcpy((void**)index, greater, more * size);
+	return low;
 }
