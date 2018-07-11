@@ -122,8 +122,27 @@ int* gA083318(int len, int* count) {
 	return gaps;
 }
 
+// Pratt, 1971
+// Using 3-smooth numbers (2^p * 3^q)
 int* gA003586(int len, int* count) {
-	return 0;
+	int lim2 = (int)log2f((float)len);
+	int lim3 = (int)(logf((float)len)/logf(3));
+	int gapCount = (lim2 + 1) * (lim3 + 1);
+	int* gaps = malloc(gapCount * sizeof(int));
+	int pow2 = 1;
+	int i = 0;
+	for (int i2 = 0; i2 <= lim2 && pow2 < len; i2++) {
+		int pow23 = pow2;
+		for (int i3 = 0; i3 <= lim3 && pow23 < len; i3++) {
+			gaps[i++] = pow23;
+			pow23 *= 3;
+		}
+		pow2 *= 2;
+	}
+	shellSort((void**)gaps, i, sizeof(int), cmp_int, A102549);
+	gapCount = i;
+	*count = gapCount;
+	return gaps;
 }
 
 // Pratt, 1971
@@ -147,7 +166,7 @@ int* gA036569(int len, int* count) {
 // Sedgewick, 1986
 // Using 4^k + 3 * 2^k-1 + 1, prefixed with 1
 int* gA036562(int len, int* count) {
-	int gapCount = (int)log2f((sqrt(16 * len - 7) - 3) / 4);
+	int gapCount = (int)log2f((sqrtf(16 * (float)len - 7) - 3) / 4);
 	// remove last term if too high
 	if (pow(4, gapCount) + 3 * pow(2, gapCount - 1) + 1 >= len) {
 		gapCount--;
@@ -167,8 +186,34 @@ int* gA036562(int len, int* count) {
 	return gaps;
 }
 
+// Sedgewick, 1986
+// Using 9(2^k - 2^k/2) + 1 for even k
+// and 8 * 2^k - 6 * 2^(k + 1)/2 + 1 for odd k
 int* gA033622(int len, int* count) {
-	return 0;
+	int gapCount = 2 * (1 + log2f((9 + sqrtf(36 * (float)len + 45)) / 18));
+	if (9 * (pow(2, gapCount - 1) - pow(2, (gapCount - 1.0) / 2)) + 1 >= len) {
+		gapCount--;
+		if (8 * pow(2, gapCount - 1) - 6 * pow(2, (gapCount + 1.0) / 2) + 1 >= len) {
+			gapCount--;
+		}
+	}
+	int* gaps = malloc(gapCount * sizeof(int));
+	int pow2k = 1;
+	int pow2k2 = 1;
+	int pow2k12 = 2;
+	int i = 0;
+	for (; i < gapCount; i++) {
+		if (i % 2) {
+			gaps[gapCount - i - 1] = 8 * pow2k - 6 * pow2k12 + 1;
+			pow2k12 *= 2;
+		} else {
+			gaps[gapCount - i - 1] = 9 * (pow2k - pow2k2) + 1;
+			pow2k2 *= 2;
+		}
+		pow2k *= 2;
+	}
+	*count = gapCount;
+	return gaps;
 }
 
 // Gonnet and Baeza-Yates, 1991
