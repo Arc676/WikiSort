@@ -62,3 +62,15 @@ int cmp_float(void** a, void** b) {
 	}
 	return 0;
 }
+
+int cmp_double(void** a, void** b) {
+	double x = *(double*)a;
+	double y = *(double*)b;
+	if (x > y) {
+		return 1;
+	}
+	if (x < y) {
+		return -1;
+	}
+	return 0;
+}

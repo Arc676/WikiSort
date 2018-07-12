@@ -71,6 +71,14 @@ int cmp_int(void** a, void** b);
  * @param b Pointer to second float
  * @return -1, 0, or 1 if a < b, a == b, or a > b, respectively
  */
-int cmp_int(void** a, void** b);
+int cmp_float(void** a, void** b);
+
+/**
+ * Comparison function for doubles
+ * @param a Pointer to first double
+ * @param b Pointer to second double
+ * @return -1, 0, or 1 if a < b, a == b, or a > b, respectively
+ */
+int cmp_double(void** a, void** b);
 
 #endif

@@ -21,9 +21,9 @@
 // This program generates random lists of increasing lengths and runs
 // all three sorting algorithms on identical lists to compare their runtime.
 
-// The data is outputted to a CSV file.
+// The data is outputted to a file with name set to the first argument.
 
-// You can define additional macros during compilation to customize the test
+// You can define the following macros during compilation to customize the test
 
 // Number of trials to perform for each array length
 #ifndef NUM_TRIALS
@@ -68,6 +68,7 @@ int main(int argc, char* argv[]) {
 		fprintf(stderr, "Usage: ihq outputFile.csv\n");
 		return 1;
 	}
+	srand(time(NULL));
 	FILE* output = fopen(argv[1], "w");
 	if (!output) {
 		fprintf(stderr, "Failed to open output file\n");
