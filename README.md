@@ -50,6 +50,7 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 | Name | Worst | Average | Best |
 | --- | --- | --- | --- |
 | [Introsort](https://en.wikipedia.org/wiki/Introsort) | =Best | =Best | O(nlogn) |
+| [Timsort](https://en.wikipedia.org/wiki/Timsort) | =Average | O(nlogn) | O(n) |
 
 ### Other
 | Name | Worst | Average | Best |
