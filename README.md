@@ -59,6 +59,10 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 
 A `void` pointer can't be dereferenced in C and the language doesn't allow arrays to contain arbitrary information. Instead, this implementation circumvents the problem by making it the responsibility of the caller to specify the relevant data type sizes. Arrays are stored as `void**`. A custom advancing function (`void** adv(void**, size_t)`) is used to access memory locations at any arbitrary distance from the beginning of the given memory location. Element comparison is delegated to a separate function, indicated with a function pointer. This can either be a predefined one from the library or it can be defined in the calling program. Together, these techniques mean that the memory is never accessed directly by the library, so no type information needs to be stored or specified, allowing arrays of any type to be sorted.
 
+## Data
+
+In the `data` folder in the repository's root, there are programs and spreadsheets that generate and contain data regarding the runtimes of sorting algorithms, respectively. This information is available for use under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). The source code of those programs is still available under GPLv3. If you would like to have data regarding the runtime of sorting algorithms under your own terms, you may compile the test programs using the included Makefile and generate your own data.
+
 ## Licensing
 
 Project available under GPLv3. See `LICENSE` for full license text.
