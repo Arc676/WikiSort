@@ -14,17 +14,45 @@
 
 #include "testprog.h"
 
+int MAX_LEN = 1000, START_LEN = 100, LEN_INC = 100, LIN_GROWTH = 1, NUM_TRIALS = 10;
+
 FILE* initialize(int argc, char* argv[], char* progName, int independents, ...) {
-	if (argc != 2) {
-		fprintf(stderr, "Usage: %s outputFile.csv\n", progName);
+	int flag;
+	FILE* output = NULL;
+	while ((flag = getopt(argc, argv, "m:s:i:et:o:")) != -1) {
+		switch (flag) {
+			case 'm':
+				MAX_LEN = atoi(optarg);
+				break;
+			case 's':
+				START_LEN = atoi(optarg);
+				break;
+			case 'i':
+				LEN_INC = atoi(optarg);
+				break;
+			case 'e':
+				LIN_GROWTH = 0;
+				break;
+			case 't':
+				NUM_TRIALS = atoi(optarg);
+				break;
+			case 'o':
+				if (output) {
+					fprintf(stderr, "Cannot specify more than one output file\n");
+					return NULL;
+				}
+				output = fopen(optarg, "w");
+				break;
+			default:
+				fprintf(stderr, "Unknown flag: %c\n", flag);
+				return NULL;
+		}
+	}
+	if (!output) {
+		fprintf(stderr, "Failed to open output file or none given\n");
 		return NULL;
 	}
 	srand(time(NULL));
-	FILE* output = fopen(argv[1], "w");
-	if (!output) {
-		fprintf(stderr, "Failed to open output file\n");
-		return NULL;
-	}
 	fprintf(output, "Length,");
 	va_list IVs;
 	va_start(IVs, independents);

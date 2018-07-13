@@ -16,40 +16,15 @@
 
 // This header and corresponding C file declare and define methods that encapsulate
 // actions taken to analyze sorting algorithms and output the gathered data
-// to a file, as well as macros that can be used to alter the parameters of the test
-
-// You can define the following macros during compilation to customize the test
-
-// Maximum array length
-#ifndef MAX_LEN
-#define MAX_LEN 600
-#endif
-
-// Starting array length
-#ifndef START_LEN
-#define START_LEN 100
-#endif
-
-// Array length increment
-#ifndef LEN_INC
-#define LEN_INC 100
-#endif
-
-// If set to 1, array length increases by LEN_INC each time. If set to a falsy
-// value, array length is scaled up by LEN_INC each time instead. Defaults to 1.
-#ifndef LIN_GROWTH
-#define LIN_GROWTH 1
-#endif
-
-// Number of trials to perform for each array length
-#ifndef NUM_TRIALS
-#define NUM_TRIALS 10
-#endif
+// to a file.
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <stdarg.h>
+#include <unistd.h>
+
+int MAX_LEN, START_LEN, LEN_INC, LIN_GROWTH, NUM_TRIALS;
 
 /**
  * Typedef for generation functions; should generate data for arrays so
@@ -67,7 +42,7 @@ typedef void GEN_FUNC(int arrlen);
 typedef unsigned long TEST_FUNC(int arrlen);
 
 /**
- * Common initialization code for test programs; handles argument validation
+ * Common initialization code for test programs; parses command line arguments
  * and prints first row to output file
  * @param argc Number of command line arguments passed
  * @param argv Command line arguments
