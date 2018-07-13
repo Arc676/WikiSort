@@ -25,66 +25,20 @@
 
 // Data is outputted to a file with name set to the first argument.
 
-// You can define the following macros during compilation to customize the test
-
-// Maximum array length
-#ifndef MAX_LEN
-#define MAX_LEN 600
-#endif
-
-// Starting array length
-#ifndef START_LEN
-#define START_LEN 100
-#endif
-
-// Array length increment
-#ifndef LEN_INC
-#define LEN_INC 100
-#endif
-
-// 1 for linear growth (add LEN_INC), 0 for exponential growth (multiply by LEN_INC)
-// defaults to exponential
-#ifndef LIN_GROWTH
-#define LIN_GROWTH 0
-#endif
-
-// Number of trials to perform for each array length
-#ifndef MAX_TRIALS
-#define MAX_TRIALS 10
-#endif
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
 #include "shell.h"
+#include "testprog.h"
 
 int main(int argc, char* argv[]) {
-	if (argc != 2) {
-		fprintf(stderr, "Usage: id output.csv\n");
-		return 1;
-	}
-	srand(time(NULL));
-	FILE* output = fopen(argv[1], "w");
+	FILE* output = initialize(argc, argv, "id", 2, "Ints", "Doubles");
 	if (!output) {
-		fprintf(stderr, "Failed to open output file\n");
 		return 1;
 	}
-	fprintf(output, "Length,");
-	for (int i = 0; i < MAX_TRIALS; i++) {
-		fprintf(output, "Ints %d,", i + 1);
-	}
-	fprintf(output, "Ints AVG,");
-	for (int i = 0; i < MAX_TRIALS; i++) {
-		fprintf(output, "Doubles %d,", i + 1);
-	}
-	fprintf(output, "Doubles AVG\n");
 
 	// allocate memory for lists
 	int* ints = malloc(MAX_LEN * sizeof(int));
 	double* doubles = malloc(MAX_LEN * sizeof(double));
 
-	unsigned long data[2][MAX_TRIALS];
+	unsigned long data[2][NUM_TRIALS];
 
 	for (int arrlen = START_LEN; arrlen <= MAX_LEN;) {
 		// generate random data
@@ -96,7 +50,7 @@ int main(int argc, char* argv[]) {
 		fflush(stdout);
 		fprintf(output, "%d,", arrlen);
 
-		for (int trial = 0; trial < MAX_TRIALS; trial++) {
+		for (int trial = 0; trial < NUM_TRIALS; trial++) {
 			clock_t start, end;
 
 			start = clock();
@@ -111,11 +65,11 @@ int main(int argc, char* argv[]) {
 		}
 		for (int sort = 0; sort < 2; sort++) {
 			long double total = 0;
-			for (int trial = 0; trial < MAX_TRIALS; trial++) {
+			for (int trial = 0; trial < NUM_TRIALS; trial++) {
 				total += data[sort][trial];
 				fprintf(output, "%lu,", data[sort][trial]);
 			}
-			fprintf(output, "%Lf,", total / MAX_TRIALS);
+			fprintf(output, "%Lf,", total / NUM_TRIALS);
 		}
 		fprintf(output, "\n");
 		if (LIN_GROWTH) {

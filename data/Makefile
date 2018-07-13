@@ -6,9 +6,10 @@
 # the library automatically
 
 CC=gcc
-FLAGS=-std=c11 -I ../src -L ..
+FLAGS=-std=c11 -I ../src
 LD=-l wikisort
 FILE=
+OBJ=$(patsubst %.c, %.o, $(FILE))
 OUT=$(patsubst %.c, %.test, $(FILE))
 
 # Set this variable (with proper -D syntax) to redefine macros for tests
@@ -18,5 +19,11 @@ ifdef DEBUG
 	FLAGS+=-g -O0
 endif
 
-target:
-	$(CC) $(FLAGS) $(MACROS) -o $(OUT) $(FILE) $(LD)
+target: testprog.o $(OBJ)
+	$(CC) $(FLAGS) $(MACROS) -L .. -o $(OUT) $(OBJ) testprog.o $(LD)
+
+$(OBJ): $(FILE)
+	$(CC) -c $(FLAGS) $(MACROS) $(FILE)
+
+testprog.o: testprog.c
+	$(CC) -c $(FLAGS) $(MACROS) testprog.c
