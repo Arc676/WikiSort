@@ -52,6 +52,21 @@
 #include <stdarg.h>
 
 /**
+ * Typedef for generation functions; should generate data for arrays so
+ * tests can be run
+ * @param arrlen Length of array
+ */
+typedef void GEN_FUNC(int arrlen);
+
+/**
+ * Typedef for test functions; should run the test assuming the array
+ * is of the given length and return the runtime
+ * @param arrlen Array length
+ * @return Test runtime in microseconds
+ */
+typedef unsigned long TEST_FUNC(int arrlen);
+
+/**
  * Common initialization code for test programs; handles argument validation
  * and prints first row to output file
  * @param argc Number of command line arguments passed
@@ -62,3 +77,28 @@
  * @return Output file if initialization successful, NULL otherwise
  */
 FILE* initialize(int argc, char* argv[], char* progName, int independents, ...);
+
+/**
+ * Creates a 2D array for storing data with the given number of rows
+ * @param rows Number of independent variable values
+ * @return A rows by NUM_TRIALS array of unsigned longs
+ */
+unsigned long** makeData(int rows);
+
+/**
+ * Frees the memory allocated to a 2D data array
+ * @param data Table to free
+ * @param rows Nunmber of independent variable values
+ */
+void destroyData(unsigned long** data, int rows);
+
+/**
+ * Runs the tests and records the results
+ * @param output File to which to write results
+ * @param generate Function that generates data for each trial
+ * @param tests Array of functions that run the tests
+ * @param independent Number of independent variable values (or function pointers)
+ * @param data 2D array in which to store data
+ */
+void runTests(FILE* output, GEN_FUNC generate, TEST_FUNC* tests[],
+	int independents, unsigned long** data);

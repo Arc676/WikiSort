@@ -39,3 +39,49 @@ FILE* initialize(int argc, char* argv[], char* progName, int independents, ...) 
 	fprintf(output, "\n");
 	return output;
 }
+
+unsigned long** makeData(int rows) {
+	unsigned long** data = malloc(rows * sizeof(unsigned long*));
+	for (int i = 0; i < rows; i++) {
+		data[i] = malloc(NUM_TRIALS * sizeof(unsigned long));
+	}
+	return data;
+}
+
+void destroyData(unsigned long** data, int rows) {
+	for (int i = 0; i < rows; i++) {
+		free(data[i]);
+	}
+	free(data);
+}
+
+void runTests(FILE* output, GEN_FUNC generate, TEST_FUNC* tests[],
+	int independents, unsigned long** data) {
+	for (int arrlen = START_LEN; arrlen <= MAX_LEN;) {
+		printf("\r\tSorting arrays of length %d...", arrlen);
+		fflush(stdout);
+		fprintf(output, "%d,", arrlen);
+		for (int trial = 0; trial < NUM_TRIALS; trial++) {
+			generate(arrlen);
+			for (int sort = 0; sort < independents; sort++) {
+				data[sort][trial] = tests[sort](arrlen);
+			}
+		}
+		for (int sort = 0; sort < independents; sort++) {
+			long double total = 0;
+			for (int trial = 0; trial < NUM_TRIALS; trial++) {
+				total += data[sort][trial];
+				fprintf(output, "%lu,", data[sort][trial]);
+			}
+			fprintf(output, "%Lf,", total / NUM_TRIALS);
+		}
+		fprintf(output, "\n");
+		if (LIN_GROWTH) {
+			arrlen += LEN_INC;
+		} else {
+			arrlen *= LEN_INC;
+		}
+	}
+	printf("\nProgram terminated\n");
+	fclose(output);
+}

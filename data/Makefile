@@ -27,3 +27,6 @@ $(OBJ): $(FILE)
 
 testprog.o: testprog.c
 	$(CC) -c $(FLAGS) $(MACROS) testprog.c
+
+clean:
+	rm -f *.o *.test

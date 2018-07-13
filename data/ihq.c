@@ -34,6 +34,38 @@
 #include "intro.h"
 #include "testprog.h"
 
+int *nums, *copy;
+
+void generate(int arrlen) {
+	for (int i = 0; i < arrlen; i++) {
+		nums[i] = rand() % BOUND;
+	}
+}
+
+unsigned long introTest(int arrlen) {
+	memcpy(copy, nums, arrlen * sizeof(int));
+	clock_t start = clock();
+	introSort((void**)copy, arrlen, sizeof(int), cmp_int);
+	clock_t end = clock();
+	return end - start;
+}
+
+unsigned long heapTest(int arrlen) {
+	memcpy(copy, nums, arrlen * sizeof(int));
+	clock_t start = clock();
+	heapSort((void**)copy, arrlen, sizeof(int), cmp_int);
+	clock_t end = clock();
+	return end - start;
+}
+
+unsigned long quickTest(int arrlen) {
+	memcpy(copy, nums, arrlen * sizeof(int));
+	clock_t start = clock();
+	quickSort((void**)copy, arrlen, sizeof(int), cmp_int);
+	clock_t end = clock();
+	return end - start;
+}
+
 int main(int argc, char* argv[]) {
 	FILE* output = initialize(argc, argv, "ihq", 3, "Introsort", "Heapsort", "Quicksort");
 	if (!output) {
@@ -41,66 +73,18 @@ int main(int argc, char* argv[]) {
 	}
 
 	// allocate memory for list
-	int* nums = malloc(MAX_LEN * sizeof(int));
-	int* copy = malloc(MAX_LEN * sizeof(int));
+	nums = malloc(MAX_LEN * sizeof(int));
+	copy = malloc(MAX_LEN * sizeof(int));
 
 	// allocate memory for storing times
-	unsigned long data[3][NUM_TRIALS];
+	unsigned long** data = makeData(3);
+	TEST_FUNC *tests[3] = {
+		introTest,
+		heapTest,
+		quickTest
+	};
+	runTests(output, generate, tests, 3, data);
+	destroyData(data, 3);
 
-	for (int arrlen = LEN_START; arrlen <= MAX_LEN;) {
-		for (int trial = 0; trial < NUM_TRIALS; trial++) {
-			// generate random data
-			for (int i = 0; i < arrlen; i++) {
-				nums[i] = rand() % BOUND;
-			}
-			clock_t introStart, introEnd, heapStart, heapEnd, quickStart, quickEnd;
-
-			printf("Sorting random array of length %d...\n", arrlen);
-
-			// time introsort, copying data so it can be reused for
-			// other sorting algorithms
-			printf("Running introsort... ");
-			memcpy(copy, nums, arrlen * sizeof(int));
-			introStart = clock();
-			introSort((void**)copy, arrlen, sizeof(int), cmp_int);
-			introEnd = clock();
-			data[0][trial] = introEnd - introStart;
-
-			// time heapsort
-			printf("Running heapsort... ");
-			memcpy(copy, nums, arrlen * sizeof(int));
-			heapStart = clock();
-			heapSort((void**)copy, arrlen, sizeof(int), cmp_int);
-			heapEnd = clock();
-			data[1][trial] = heapEnd - heapStart;
-
-			// time quicksort
-			printf("Running quicksort...\n");
-			memcpy(copy, nums, arrlen * sizeof(int));
-			quickStart = clock();
-			quickSort((void**)copy, arrlen, sizeof(int), cmp_int);
-			quickEnd = clock();
-			data[2][trial] = quickEnd - quickStart;
-		}
-
-		// log results
-		fprintf(output, "%d,", arrlen);
-		for (int sort = 0; sort < 3; sort++) {
-			long double total = 0;
-			for (int trial = 0; trial < NUM_TRIALS; trial++) {
-				fprintf(output, "%lu,", data[sort][trial]);
-				total += data[sort][trial];
-			}
-			fprintf(output, "%Lf,", total / NUM_TRIALS);
-		}
-		fprintf(output, "\n");
-		if (LIN_GROWTH) {
-			arrlen += LEN_INC;
-		} else {
-			arrlen *= LEN_INC;
-		}
-	}
-	printf("Program terminated\n");
-	fclose(output);
 	return 0;
 }
