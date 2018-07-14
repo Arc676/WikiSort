@@ -14,11 +14,11 @@
 
 #include "slow.h"
 
-void slowSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void slowSort(void** array, int len, int size, COMP_FUNC cmp) {
 	if (len <= 1) {
 		return;
 	}
-	size_t half = len / 2;
+	int half = len / 2;
 	slowSort(array, half, size, cmp);
 	slowSort(adv(array, half * size), len - half, size, cmp);
 	

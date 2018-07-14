@@ -24,24 +24,24 @@
  * @param len The length of the array
  * @param size The size of a single element
  */
-void fisherYates(void** array, size_t len, size_t size);
+void fisherYates(void** array, int len, int size);
 
 /**
  * Sorts the given array using a randomized bogosort algorithm
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Comparison function that returns if an element is smaller than another
+ * @param cmp Element comparison function
  */
-void bogoSort_rand(void** array, size_t len, size_t size, COMP_FUNC cmp);
+void bogoSort_rand(void** array, int len, int size, COMP_FUNC cmp);
 
 /**
  * Sorts the given array using a deterministic bogosort algorithm
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Comparison function that returns if an element is smaller than another
+ * @param cmp Element comparison function
  */
-void bogoSort_det(void** array, size_t len, size_t size, COMP_FUNC cmp);
+void bogoSort_det(void** array, int len, int size, COMP_FUNC cmp);
 
 #endif

@@ -14,7 +14,7 @@
 
 #include "selection.h"
 
-void selectionSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void selectionSort(void** array, int len, int size, COMP_FUNC cmp) {
 	for (int i = 0; i < len - 1; i++) {
 		void** a;
 		void** b;

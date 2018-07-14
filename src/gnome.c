@@ -14,7 +14,7 @@
 
 #include "gnome.h"
 
-void gnomeSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void gnomeSort(void** array, int len, int size, COMP_FUNC cmp) {
 	int pos = 0;
 	void** a;
 	void** b;

@@ -23,18 +23,18 @@
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Comparison function that returns if an element is smaller than another
+ * @param cmp Element comparison function
  */
-void introSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
+void introSort(void** array, int len, int size, COMP_FUNC cmp);
 
 /**
  * Recursive body of introsort algorithm
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Comparison function that returns if an element is smaller than another
+ * @param cmp Element comparison function
  * @param depth Max recursion depth before switching to heapsort
  */
-void introSort_rec(void** array, size_t len, size_t size, COMP_FUNC cmp, int depth);
+void introSort_rec(void** array, int len, int size, COMP_FUNC cmp, int depth);
 
 #endif

@@ -22,9 +22,9 @@
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Comparison function that returns if an element is smaller than another
+ * @param cmp Element comparison function
  */
-void cycleSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
+void cycleSort(void** array, int len, int size, COMP_FUNC cmp);
 
 /**
  * Utility function for performing the cycle sort algorithm's repeated
@@ -32,10 +32,10 @@ void cycleSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Comparison function that returns if an element is smaller than another
+ * @param cmp Element comparison function
  * @param item The item currently being moved
  * @param pos Pointer to position in array currently being checked
  */
-void performCycle(void** array, size_t len, size_t size, COMP_FUNC cmp, void** item, int* pos);
+void performCycle(void** array, int len, int size, COMP_FUNC cmp, void** item, int* pos);
 
 #endif

@@ -22,9 +22,9 @@
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Comparison function that returns if an element is smaller than another
+ * @param cmp Element comparison function
  */
-void quickSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
+void quickSort(void** array, int len, int size, COMP_FUNC cmp);
 
 /**
  * Partitions the list by moving elements such that elements
@@ -32,10 +32,10 @@ void quickSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Comparison function for the elements
+ * @param cmp Element comparison function
  * @param equals Pointer to which to write the number of elements equal to the pivot
  * @return The final position of the pivot element
  */
-int partition(void** array, size_t len, size_t size, COMP_FUNC cmp, int* equals);
+int partition(void** array, int len, int size, COMP_FUNC cmp, int* equals);
 
 #endif

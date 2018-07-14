@@ -48,7 +48,7 @@ void reverse(void** array, int len, int size);
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Comparison function that returns if an element is smaller than another
+ * @param cmp Element comparison function
  */
 void timSort(void** array, int len, int size, COMP_FUNC cmp);
 

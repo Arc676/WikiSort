@@ -14,7 +14,7 @@
 
 #include "heap.h"
 
-Heap* heap_create(size_t count, size_t size, COMP_FUNC cmp) {
+Heap* heap_create(int count, int size, COMP_FUNC cmp) {
 	Heap* heap = malloc(sizeof(Heap));
 	heap->elements = malloc(count * size);
 	heap->count = count;
@@ -24,7 +24,7 @@ Heap* heap_create(size_t count, size_t size, COMP_FUNC cmp) {
 	return heap;
 }
 
-Heap* heap_heapify(void** array, size_t count, size_t size, COMP_FUNC cmp) {
+Heap* heap_heapify(void** array, int count, int size, COMP_FUNC cmp) {
 	Heap* heap = heap_create(count, size, cmp);
 	for (int i = 0; i < count; i++) {
 		void** new = adv(array, i * size);
@@ -37,7 +37,7 @@ Heap* heap_merge(Heap* heap1, Heap* heap2) {
 	if (heap1->size != heap2->size || heap1->cmp != heap2->cmp) {
 		return 0;
 	}
-	size_t total = heap1->count + heap2->count;
+	int total = heap1->count + heap2->count;
 	void** elements = malloc(total * heap1->size);
 	memcpy(elements, heap1->elements, heap1->occupied * heap1->size);
 
@@ -56,7 +56,7 @@ void heap_meld(Heap* heap1, Heap* heap2) {
 	}
 }
 
-void heap_resize(Heap* heap, size_t size) {
+void heap_resize(Heap* heap, int size) {
 	if (heap->count == size || heap->occupied > size) {
 		return;
 	}
@@ -189,7 +189,7 @@ void heap_siftDown(Heap* heap, int index) {
 	}
 }
 
-void heapSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void heapSort(void** array, int len, int size, COMP_FUNC cmp) {
 	Heap* heap = heap_heapify(array, len, size, cmp);
 	for (int i = len - 1; i >= 0; i--) {
 		void** obj = heap_pop(heap);

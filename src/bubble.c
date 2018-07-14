@@ -14,7 +14,7 @@
 
 #include "bubble.h"
 
-void bubbleSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void bubbleSort(void** array, int len, int size, COMP_FUNC cmp) {
 	int sorted;
 	do {
 		sorted = 1;

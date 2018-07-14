@@ -14,7 +14,7 @@
 
 #include "oddeven.h"
 
-void oddEvenSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void oddEvenSort(void** array, int len, int size, COMP_FUNC cmp) {
 	int sorted = 0;
 	while (!sorted) {
 		sorted = 1;

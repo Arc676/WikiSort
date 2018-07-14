@@ -22,9 +22,9 @@
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Comparison function that returns if an element is smaller than another
+ * @param cmp Element comparison function
  */
-void mergeSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
+void mergeSort(void** array, int len, int size, COMP_FUNC cmp);
 
 /**
  * Merges two arrays into a third array, sorting the elements
@@ -35,8 +35,8 @@ void mergeSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
  * @param arr2 Second array to copy
  * @param len2 Length of second array
  * @param size Element size for the arrays
- * @param cmp Comparison function
+ * @param cmp Element comparison function
  */
-void mergeArrays(void** dst, size_t len, void** arr1, size_t len1, void** arr2, size_t len2, size_t size, COMP_FUNC cmp);
+void mergeArrays(void** dst, int len, void** arr1, int len1, void** arr2, int len2, int size, COMP_FUNC cmp);
 
 #endif

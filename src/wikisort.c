@@ -14,13 +14,13 @@
 
 #include "wikisort.h"
 
-void** adv(void** start, size_t dist) {
+void** adv(void** start, int dist) {
 	uint64_t ptr = (uint64_t)start;
 	ptr += dist;
 	return (void**)ptr;
 }
 
-void swapElements(void** a, void** b, size_t size) {
+void swapElements(void** a, void** b, int size) {
 	void** tmp = malloc(size);
 	memcpy(tmp, a, size);
 	memcpy(a, b, size);
@@ -28,7 +28,7 @@ void swapElements(void** a, void** b, size_t size) {
 	free(tmp);
 }
 
-int isSorted(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+int isSorted(void** array, int len, int size, COMP_FUNC cmp) {
 	for (int i = 0; i < len - 1; i++) {
 		void** a = adv(array, i * size);
 		void** b = adv(array, (i + 1) * size);

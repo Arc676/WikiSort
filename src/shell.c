@@ -33,7 +33,7 @@ GAP_GEN *gapSeqs[GAP_COUNT] = {
 	gA102549,
 };
 
-void shellSort(void** array, size_t len, size_t size, COMP_FUNC cmp, GapSequence seq) {
+void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq) {
 	int gapCount = 0;
 	int* gaps = gapSeqs[seq](len, &gapCount);
 	for (int i = 0; i < gapCount; i++) {

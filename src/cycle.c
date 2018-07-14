@@ -14,7 +14,7 @@
 
 #include "cycle.h"
 
-void cycleSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void cycleSort(void** array, int len, int size, COMP_FUNC cmp) {
 	for (int i = 0; i < len - 1; i++) {
 		void** item = adv(array, i * size);
 		int pos = i;
@@ -26,7 +26,7 @@ void cycleSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
 	}
 }
 
-void performCycle(void** array, size_t len, size_t size, COMP_FUNC cmp, void** item, int* pos) {
+void performCycle(void** array, int len, int size, COMP_FUNC cmp, void** item, int* pos) {
 	int start = *pos;
 	for (int j = start + 1; j < len; j++) {
 		void** b = adv(array, j * size);

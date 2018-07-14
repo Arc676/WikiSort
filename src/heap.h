@@ -28,9 +28,9 @@
  */
 typedef struct Heap {
 	void** elements;
-	size_t count;
+	int count;
 	int occupied;
-	size_t size;
+	int size;
 	COMP_FUNC* cmp;
 } Heap;
 
@@ -38,20 +38,20 @@ typedef struct Heap {
  * Create a new heap object
  * @param count Number of items to be stored in the heap
  * @param size Size of a single element
- * @param cmp Comparison function for the heap
+ * @param cmp Element comparison function
  * @return A pointer to the newly created heap
  */
-Heap* heap_create(size_t count, size_t size, COMP_FUNC cmp);
+Heap* heap_create(int count, int size, COMP_FUNC cmp);
 
 /**
  * Create a heap containing the objects in an array
  * @param array The array to heapify
  * @param count Number of objects in the array
  * @param size Size of a single element
- * @param cmp Comparison function for the heap
+ * @param cmp Element comparison function
  * @return A pointer to the newly craeted heap
  */
-Heap* heap_heapify(void** array, size_t count, size_t size, COMP_FUNC cmp);
+Heap* heap_heapify(void** array, int count, int size, COMP_FUNC cmp);
 
 /**
  * Merge the contents of two heaps into one new heap (returns null if
@@ -76,7 +76,7 @@ void heap_meld(Heap* heap1, Heap* heap2);
  * @param heap Heap to resize
  * @param size New size
  */
-void heap_resize(Heap* heap, size_t size);
+void heap_resize(Heap* heap, int size);
 
 /**
  * Destroy a heap
@@ -156,8 +156,8 @@ void heap_siftDown(Heap* heap, int index);
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Comparison function that returns if an element is smaller than another
+ * @param cmp Element comparison function
  */
-void heapSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
+void heapSort(void** array, int len, int size, COMP_FUNC cmp);
 
 #endif
