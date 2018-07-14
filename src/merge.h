@@ -26,4 +26,17 @@
  */
 void mergeSort(void** array, size_t len, size_t size, COMP_FUNC cmp);
 
+/**
+ * Merges two arrays into a third array, sorting the elements
+ * @param dst Array into which to copy the elements
+ * @param len Length of destination array
+ * @param arr1 First array to copy
+ * @param len1 Length of first array
+ * @param arr2 Second array to copy
+ * @param len2 Length of second array
+ * @param size Element size for the arrays
+ * @param cmp Comparison function
+ */
+void mergeArrays(void** dst, size_t len, void** arr1, size_t len1, void** arr2, size_t len2, size_t size, COMP_FUNC cmp);
+
 #endif
