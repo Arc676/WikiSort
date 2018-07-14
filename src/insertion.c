@@ -15,7 +15,7 @@
 
 #include "insertion.h"
 
-void insertionSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void insertionSort(void** array, int len, int size, COMP_FUNC cmp) {
 	for (int i = 1; i < len; i++) {
 		for (int j = i; j > 0; j--) {
 			void** a = adv(array, j * size);

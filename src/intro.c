@@ -14,12 +14,12 @@
 
 #include "intro.h"
 
-void introSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void introSort(void** array, int len, int size, COMP_FUNC cmp) {
 	int depth = 2 * (int)log2f(len);
 	introSort_rec(array, len, size, cmp, depth);
 }
 
-void introSort_rec(void** array, size_t len, size_t size, COMP_FUNC cmp, int depth) {
+void introSort_rec(void** array, int len, int size, COMP_FUNC cmp, int depth) {
 	if (len < 2) {
 		return;
 	}

@@ -37,7 +37,7 @@ typedef int COMP_FUNC(void** a, void** b);
  * @param dist Desired distance from start in bytes
  * @return Address of location at that distance
  */
-void** adv(void** start, size_t dist);
+void** adv(void** start, int dist);
 
 /**
  * Utility method for swapping two items in a list
@@ -45,17 +45,17 @@ void** adv(void** start, size_t dist);
  * @param b Pointer to second element
  * @param size Size of the elements
  */
-void swapElements(void** a, void** b, size_t size);
+void swapElements(void** a, void** b, int size);
 
 /**
  * Determines if a list is sorted
  * @param array The array to check
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Comparison function for the elements
+ * @param cmp Element comparison function
  * @return Whether the array is sorted
  */
-int isSorted(void** array, size_t len, size_t size, COMP_FUNC cmp);
+int isSorted(void** array, int len, int size, COMP_FUNC cmp);
 
 /**
  * Comparison function for integers

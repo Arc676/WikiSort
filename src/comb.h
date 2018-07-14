@@ -22,9 +22,9 @@
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Comparison function that returns if an element is smaller than another
+ * @param cmp Element comparison function
  * @param shrink Desired shrink factor
  */
-void combSort(void** array, size_t len, size_t size, COMP_FUNC cmp, float shrink);
+void combSort(void** array, int len, int size, COMP_FUNC cmp, float shrink);
 
 #endif

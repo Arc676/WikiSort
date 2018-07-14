@@ -14,7 +14,7 @@
 
 #include "cocktail.h"
 
-void cocktailSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void cocktailSort(void** array, int len, int size, COMP_FUNC cmp) {
 	int sorted;
 	int passes = 0;
 	void** a;

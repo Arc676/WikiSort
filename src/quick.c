@@ -14,7 +14,7 @@
 
 #include "quick.h"
 
-void quickSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void quickSort(void** array, int len, int size, COMP_FUNC cmp) {
 	if (len < 2) {
 		return;
 	}
@@ -31,7 +31,7 @@ void quickSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
 	quickSort(greater, len - pivot - equals, size, cmp);
 }
 
-int partition(void** array, size_t len, size_t size, COMP_FUNC cmp, int* equals) {
+int partition(void** array, int len, int size, COMP_FUNC cmp, int* equals) {
 	int pivotIdx = len / 2;
 	void** pOriginal = adv(array, pivotIdx * size);
 	void** pivot = malloc(size);

@@ -14,7 +14,7 @@
 
 #include "comb.h"
 
-void combSort(void** array, size_t len, size_t size, COMP_FUNC cmp, float shrink) {
+void combSort(void** array, int len, int size, COMP_FUNC cmp, float shrink) {
 	int gapCount;
 	int* gaps = gShrinkFactor(len, &gapCount, shrink);
 	int gapIndex = 0;

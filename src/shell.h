@@ -50,10 +50,10 @@ GAP_GEN *gapSeqs[GAP_COUNT];
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Comparison function that returns if an element is smaller than another
+ * @param cmp Element comparison function
  * @param seq Desired gap sequence
  */
-void shellSort(void** array, size_t len, size_t size, COMP_FUNC cmp, GapSequence seq);
+void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq);
 
 /**
  * Generate a gap sequence formed by using a shrink factor on the size

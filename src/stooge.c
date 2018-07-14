@@ -14,16 +14,16 @@
 
 #include "stooge.h"
 
-void stoogeSort(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void stoogeSort(void** array, int len, int size, COMP_FUNC cmp) {
 	void** b = adv(array, (len - 1) * size);
 	if (cmp(array, b) == 1) {
 		swapElements(array, b, size);
 	}
 	if (len > 2) {
 		// obtain 1/3 the length of the list
-		size_t _13len = len / 3;
+		int _13len = len / 3;
 		// obtain 2/3 the length of the list
-		size_t _23len = len - _13len;
+		int _23len = len - _13len;
 
 		void** second2_3 = adv(array, _13len * size);
 		stoogeSort(array, _23len, size, cmp);

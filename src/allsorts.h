@@ -28,3 +28,4 @@
 #include "bogo.h"
 #include "heap.h"
 #include "intro.h"
+#include "tim.h"

@@ -50,6 +50,7 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 | Name | Worst | Average | Best |
 | --- | --- | --- | --- |
 | [Introsort](https://en.wikipedia.org/wiki/Introsort) | =Best | =Best | O(nlogn) |
+| [Timsort](https://en.wikipedia.org/wiki/Timsort) | =Average | O(nlogn) | O(n) |
 
 ### Other
 | Name | Worst | Average | Best |
@@ -57,7 +58,7 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 
 ## Implementation
 
-A `void` pointer can't be dereferenced in C and the language doesn't allow arrays to contain arbitrary information. Instead, this implementation circumvents the problem by making it the responsibility of the caller to specify the relevant data type sizes. Arrays are stored as `void**`. A custom advancing function (`void** adv(void**, size_t)`) is used to access memory locations at any arbitrary distance from the beginning of the given memory location. Element comparison is delegated to a separate function, indicated with a function pointer. This can either be a predefined one from the library or it can be defined in the calling program. Together, these techniques mean that the memory is never accessed directly by the library, so no type information needs to be stored or specified, allowing arrays of any type to be sorted.
+A `void` pointer can't be dereferenced in C and the language doesn't allow arrays to contain arbitrary information. Instead, this implementation circumvents the problem by making it the responsibility of the caller to specify the relevant data type sizes. Arrays are stored as `void**`. A custom advancing function (`void** adv(void**, int)`) is used to access memory locations at any arbitrary distance from the beginning of the given memory location. Element comparison is delegated to a separate function, indicated with a function pointer. This can either be a predefined one from the library or it can be defined in the calling program. Together, these techniques mean that the memory is never accessed directly by the library, so no type information needs to be stored or specified, allowing arrays of any type to be sorted.
 
 ## Data
 

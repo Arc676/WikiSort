@@ -14,7 +14,7 @@
 
 #include "bogo.h"
 
-void fisherYates(void** array, size_t len, size_t size) {
+void fisherYates(void** array, int len, int size) {
 	for (int i = len - 1; i > 0; i--) {
 		int idx = rand() % (i + 1);
 		void** a = adv(array, i * size);
@@ -23,11 +23,11 @@ void fisherYates(void** array, size_t len, size_t size) {
 	}
 }
 
-void bogoSort_rand(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void bogoSort_rand(void** array, int len, int size, COMP_FUNC cmp) {
 	while (!isSorted(array, len, size, cmp)) {
 		fisherYates(array, len, size);
 	}
 }
 
-void bogoSort_det(void** array, size_t len, size_t size, COMP_FUNC cmp) {
+void bogoSort_det(void** array, int len, int size, COMP_FUNC cmp) {
 }
