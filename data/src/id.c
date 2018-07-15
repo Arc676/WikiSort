@@ -23,8 +23,6 @@
 // elements are equal. Only the non-integral portions of the elements differ,
 // as integers have none.
 
-// Data is outputted to a file with name set to the first argument.
-
 // The following macro can be set during compilation to change the
 // gap sequence to be used. Defaults to the single formula sequence
 // described by Sedgewick in 1986.
