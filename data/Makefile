@@ -5,12 +5,16 @@
 # root, this Makefile will compile the given source file and link
 # the library automatically
 
+ODIR=obj
+SDIR=src
+BDIR=bin
+
 CC=gcc
 FLAGS=-std=c11 -I ../src
 LD=-l wikisort
 FILE=
-OBJ=$(patsubst %.c, %.o, $(FILE))
-OUT=$(patsubst %.c, %.test, $(FILE))
+OBJ=$(patsubst %.c, $(ODIR)/%.o, $(FILE))
+OUT=$(patsubst %.c, $(BDIR)/%.test, $(FILE))
 
 # Set this variable (with proper -D syntax) to redefine macros for tests
 MACROS=
@@ -20,13 +24,13 @@ ifdef DEBUG
 endif
 
 target: testprog.o $(OBJ)
-	$(CC) $(FLAGS) $(MACROS) -L .. -o $(OUT) $(OBJ) testprog.o $(LD)
+	$(CC) $(FLAGS) $(MACROS) -L .. -o $(OUT) $(OBJ) $(ODIR)/testprog.o $(LD)
 
-$(OBJ): $(FILE)
-	$(CC) -c $(FLAGS) $(MACROS) $(FILE)
+$(OBJ): $(SDIR)/$(FILE)
+	$(CC) -c $(FLAGS) $(MACROS) -o $(OBJ) $(SDIR)/$(FILE)
 
-testprog.o: testprog.c
-	$(CC) -c $(FLAGS) $(MACROS) testprog.c
+testprog.o: $(SDIR)/testprog.c
+	$(CC) -c $(FLAGS) $(MACROS) -o $(ODIR)/testprog.o $(SDIR)/testprog.c
 
 clean:
-	rm -f *.o *.test
+	rm -f $(ODIR)/*.o $(BDIR)/*.test
