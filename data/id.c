@@ -18,12 +18,20 @@
 
 // This program generates two random lists, one of which contains integers
 // while the other contains doubles. Then the lists are sorted using Shellsort
-// with 3-smooth numbers as the gap sequence. The lists contain pseudorandomly
+// with the value of the GAP macro as the gap sequence. The lists contain
 // generated values between 0 and RAND_MAX/100. The integral portion of the
 // elements are equal. Only the non-integral portions of the elements differ,
 // as integers have none.
 
 // Data is outputted to a file with name set to the first argument.
+
+// The following macro can be set during compilation to change the
+// gap sequence to be used. Defaults to the single formula sequence
+// described by Sedgewick in 1986.
+
+#ifndef SEQ
+#define SEQ 7
+#endif
 
 #include "shell.h"
 #include "testprog.h"
@@ -40,7 +48,7 @@ void generate(int arrlen) {
 
 unsigned long testInts(int arrlen) {
 	clock_t start = clock();
-	shellSort((void**)ints, arrlen, sizeof(int), cmp_int, A003586);
+	shellSort((void**)ints, arrlen, sizeof(int), cmp_int, (GapSequence)SEQ);
 	clock_t end = clock();
 	return end - start;
 }
