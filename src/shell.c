@@ -159,8 +159,71 @@ int* gA003462(int len, int* count) {
 	return gaps;
 }
 
+int gcd(int a, int b) {
+	while (b != 0) {
+		int mod = a % b;
+		a = b;
+		b = mod;
+	}
+	return a;
+}
+
+// Generates the terms of the sequence gA036567
+// used by the gap sequence described by Incerpi and Sedgewick in 1985
+// (the Nth term exceeds 2.5^n and is coprime relative to all other terms)
+int* gA036567(int len) {
+	int* coprimes = malloc(len * sizeof(int));
+	float pow = 2.5;
+	for (int i = 0; i < len; i++) {
+		int term = (int)ceil(pow);
+		// increment term until it's relatively coprime with all
+		// previous terms in the sequence
+		int coprime = 0;
+		while (!coprime) {
+			coprime = 1;
+			for (int j = 0; j < i; j++) {
+				if (gcd(term, coprimes[j]) != 1) {
+					coprime = 0;
+					break;
+				}
+			}
+			if (coprime) {
+				break;
+			}
+			term++;
+		}
+		coprimes[i] = term;
+		pow *= 2.5;
+	}
+	return coprimes;
+}
+
+// Incerpi and Sedgewick, 1985
+// See Wikipedia page for details
 int* gA036569(int len, int* count) {
-	return 0;
+	int gapCount = (int)ceil(1.03 * logf((float)len));
+	int* gaps = malloc(gapCount * sizeof(int));
+	int* coprimes = gA036567(floor(sqrt(2 * gapCount + sqrt(2 * gapCount))));
+	for (int k = 1; k <= gapCount; k++) {
+		int term = 1;
+
+		int r = (int)floor(sqrt(2 * k + sqrt(2 * k)));
+		int* I = malloc(r * sizeof(int));
+		int i = 0;
+		for (int q = 0; q < r; q++) {
+			if (q != (r * r + r) / 2 - k) {
+				I[i++] = q;
+			}
+		}
+		for (int j = 0; j < i; j++) {
+			term *= coprimes[I[j]];
+		}
+		gaps[gapCount - k] = term;
+		free(I);
+	}
+	free(coprimes);
+	*count = gapCount;
+	return gaps;
 }
 
 // Sedgewick, 1986
@@ -261,10 +324,20 @@ int* gA108870(int len, int* count) {
 }
 
 // Ciura, 2001
+// Uses a scale factor of 2.25 if the array is long enough
+// to warrant extending the sequence
 int* gA102549(int len, int* count) {
-	*count = 8;
-	int* gaps = malloc(8 * sizeof(int));
-	memcpy(gaps, ciuraSequence, 8 * sizeof(int));
+	int gapCount = 8;
+	// if length is greater than 2.25 times last term in sequence
+	if (len > 1577) {
+		gapCount += logf((float)len / 701) / logf(2.25);
+	}
+	int* gaps = malloc(gapCount * sizeof(int));
+	memcpy(gaps + gapCount - 8, ciuraSequence, 8 * sizeof(int));
+	for (int i = gapCount - 9; i >= 0; i--) {
+		gaps[i] = gaps[i + 1] * 2.25;
+	}
+	*count = gapCount;
 	return gaps;
 }
 

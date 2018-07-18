@@ -124,6 +124,24 @@ int* gA003586(int len, int* count);
 int* gA003462(int len, int* count);
 
 /**
+ * Returns the greatest common divisor (or factor) of two numbers
+ * @param a First number
+ * @param b Second number
+ * @return GCD/GCF of the numbers
+ */
+int gcd(int a, int b);
+
+/**
+ * Generates the terms of the sequence A036567 on the OEIS
+ * where the Nth term exceeds 2.5^n and is relatively coprime
+ * with all the other terms i.e. gcd(a_n, A) = 1 for all A in the sequence
+ * except for a_n
+ * @param len Number of terms of the sequence to generate
+ * @return Newly allocated list containing the sequence
+ */
+int* gA036567(int len);
+
+/**
  * Generate the gap sequence described by Incerpi and
  * Sedgewick described in 1985 as well as Knuth; see
  * the Wikipedia page for time complexity and general term
