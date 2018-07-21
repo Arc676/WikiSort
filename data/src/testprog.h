@@ -24,7 +24,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 
-int MAX_LEN, START_LEN, LEN_INC, LIN_GROWTH, NUM_TRIALS;
+int MAX_LEN, START_LEN, LEN_INC, LIN_GROWTH, NUM_TRIALS, BOUND;
 
 /**
  * Typedef for generation functions; should generate data for arrays so

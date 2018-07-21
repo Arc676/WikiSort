@@ -14,12 +14,12 @@
 
 #include "testprog.h"
 
-int MAX_LEN = 1000, START_LEN = 100, LEN_INC = 100, LIN_GROWTH = 1, NUM_TRIALS = 10;
+int MAX_LEN = 1000, START_LEN = 100, LEN_INC = 100, LIN_GROWTH = 1, NUM_TRIALS = 10, BOUND = 100;
 
 FILE* initialize(int argc, char* argv[], char* progName, int independents, ...) {
 	int flag;
 	FILE* output = NULL;
-	while ((flag = getopt(argc, argv, "m:s:i:et:o:")) != -1) {
+	while ((flag = getopt(argc, argv, "m:s:i:et:o:b:")) != -1) {
 		switch (flag) {
 			case 'm':
 				MAX_LEN = atoi(optarg);
@@ -42,6 +42,9 @@ FILE* initialize(int argc, char* argv[], char* progName, int independents, ...) 
 					return NULL;
 				}
 				output = fopen(optarg, "w");
+				break;
+			case 'b':
+				BOUND = atoi(optarg);
 				break;
 			default:
 				fprintf(stderr, "Unknown flag: %c\n", flag);
