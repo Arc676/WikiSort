@@ -52,8 +52,10 @@ GAP_GEN *gapSeqs[GAP_COUNT];
  * @param size The size of a single element
  * @param cmp Element comparison function
  * @param seq Desired gap sequence
+ * @param memoized Pointer to memoized sequence length. If memoization shouldn't be employed, pass 0. If the gapSeq is calculated, its new length will be stored here.
+ * @param gapSeq Pointer to gap sequence. If NULL, it will be calculated. If memoization is enabled, the gap sequence will be stored at the given address.
  */
-void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq);
+void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq, int* memoized, int** gapSeq);
 
 /**
  * Generate a gap sequence formed by using a shrink factor on the size

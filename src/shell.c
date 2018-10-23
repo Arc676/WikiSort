@@ -33,9 +33,9 @@ GAP_GEN *gapSeqs[GAP_COUNT] = {
 	gA102549,
 };
 
-void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq) {
-	int gapCount = 0;
-	int* gaps = gapSeqs[seq](len, &gapCount);
+void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq, int* memoized, int** gapSeq) {
+	int gapCount = *memoized;
+	int* gaps = (gapSeq && *gapSeq) ? *gapSeq : gapSeqs[seq](len, &gapCount);
 	for (int i = 0; i < gapCount; i++) {
 		int gap = gaps[i];
 		for (int j = gap; j < len; j++) {
@@ -55,7 +55,10 @@ void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq) 
 			memcpy(dst, toInsert, size);
 		}
 	}
-	free(gaps);
+	if (!gapSeq && memoized) {
+		*gapSeq = gaps;
+		*memoized = gapCount;
+	}
 }
 
 // generic shrink factor gap sequence
@@ -139,7 +142,7 @@ int* gA003586(int len, int* count) {
 		}
 		pow2 *= 2;
 	}
-	shellSort((void**)gaps, i, sizeof(int), cmp_int, A102549);
+	shellSort((void**)gaps, i, sizeof(int), cmp_int, A102549, 0, 0);
 	gapCount = i;
 	*count = gapCount;
 	return gaps;
