@@ -34,8 +34,12 @@ GAP_GEN *gapSeqs[GAP_COUNT] = {
 };
 
 void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq, int* memoized, int** gapSeq) {
-	int gapCount = *memoized;
-	int* gaps = (gapSeq && *gapSeq) ? *gapSeq : gapSeqs[seq](len, &gapCount);
+	// if memoization is enabled, get the gap count from the argument
+	int gapCount = memoized ? *memoized : 0;
+	// if memoization is enabled:
+	//	if the gap sequence is non-null, use those as the gap sequence
+	//	if the gap sequence is null, calculate the gap sequence and memoize it at the end of the function
+	int* gaps = (memoized && (gapSeq && *gapSeq)) ? *gapSeq : gapSeqs[seq](len, &gapCount);
 	for (int i = 0; i < gapCount; i++) {
 		int gap = gaps[i];
 		for (int j = gap; j < len; j++) {
@@ -55,7 +59,10 @@ void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq, 
 			memcpy(dst, toInsert, size);
 		}
 	}
-	if (!gapSeq && memoized) {
+	// if the caller wanted memoization enabled AND
+	// didn't provide pre-calculated gap sequences,
+	// update the gap sequence
+	if (memoized && !gapSeq) {
 		*gapSeq = gaps;
 		*memoized = gapCount;
 	}

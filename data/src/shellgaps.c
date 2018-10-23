@@ -34,7 +34,7 @@ void generate(int arrlen) {
 unsigned long shellTest(int arrlen, GapSequence seq) {
 	memcpy(copy, nums, arrlen * sizeof(int));
 	clock_t start = clock();
-	shellSort((void**)copy, arrlen, sizeof(int), cmp_int, seq);
+	shellSort((void**)copy, arrlen, sizeof(int), cmp_int, seq, 0, 0);
 	clock_t end = clock();
 	return end - start;
 }
