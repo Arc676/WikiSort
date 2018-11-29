@@ -17,16 +17,16 @@
 
 #include "wikisort.h"
 
-typedef int BASE_CMP(int base, void** value);
+typedef int BASE_CMP(int base, int iteration, void** value);
 
-typedef int BASE_DIG(void** value, int base, int basePow);
+typedef int BASE_DIG(void** value, int base, int iteration);
 
 void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE_CMP bCmp, BASE_DIG baseDigit);
 
-void makeBuckets(void** array, int len, void** buckets, int* bucketLengths, int size, int base, BASE_DIG baseDigit, int basePow);
+void makeBuckets(void** array, int len, void** buckets, int* bucketLengths, int size, int base, BASE_DIG baseDigit, int iteration);
 
-int int_base_cmp(int base, void** value);
+int int_base_cmp(int base, int iteration, void** value);
 
-int int_base_dig(void** value, int base, int basePow);
+int int_base_dig(void** value, int base, int iteration);
 
 #endif

@@ -16,7 +16,7 @@
 
 void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE_CMP bCmp, BASE_DIG baseDigit) {
 	void** maxVal = maxValue(array, len, size, cmp);
-	for (int basePow = 1; bCmp(basePow, maxVal); basePow *= base) {
+	for (int iteration = 0; bCmp(base, iteration, maxVal); iteration++) {
 		// allocate bucket memory
 		void** buckets = malloc(base * sizeof(void*));
 		void** bucket = buckets;
@@ -28,7 +28,7 @@ void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE
 		memset(bucketLengths, 0, base * sizeof(int));
 
 		// create buckets from list elements
-		makeBuckets(array, len, buckets, bucketLengths, size, base, baseDigit, basePow);
+		makeBuckets(array, len, buckets, bucketLengths, size, base, baseDigit, iteration);
 
 		// sequentially copy values from buckets back into original list
 		// and free bucket memory
@@ -46,10 +46,10 @@ void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE
 	}
 }
 
-void makeBuckets(void** array, int len, void** buckets, int* bucketLengths, int size, int base, BASE_DIG baseDigit, int basePow) {
+void makeBuckets(void** array, int len, void** buckets, int* bucketLengths, int size, int base, BASE_DIG baseDigit, int iteration) {
 	void** ptr = array;
 	for (int i = 0; i < len; i++) {
-		int digit = baseDigit(ptr, base, basePow);
+		int digit = baseDigit(ptr, base, iteration);
 		int idx = bucketLengths[digit]++;
 
 		void** dstBucket = adv(buckets[digit], idx * size);
@@ -58,12 +58,12 @@ void makeBuckets(void** array, int len, void** buckets, int* bucketLengths, int 
 	}
 }
 
-int int_base_cmp(int base, void** value) {
+int int_base_cmp(int base, int iteration, void** value) {
 	int val = *(int*)value;
-	return base <= val;
+	return (int)pow(base, iteration) <= val;
 }
 
-int int_base_dig(void** value, int base, int basePow) {
+int int_base_dig(void** value, int base, int iteration) {
 	int val = *(int*)value;
-	return (val / basePow) % base;
+	return (val / (int)pow(base, iteration)) % base;
 }
