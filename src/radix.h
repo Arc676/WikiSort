@@ -12,21 +12,21 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "merge.h"
-#include "bubble.h"
-#include "selection.h"
-#include "insertion.h"
-#include "quick.h"
-#include "shell.h"
-#include "oddeven.h"
-#include "comb.h"
-#include "cocktail.h"
-#include "gnome.h"
-#include "stooge.h"
-#include "cycle.h"
-#include "slow.h"
-#include "bogo.h"
-#include "heap.h"
-#include "intro.h"
-#include "tim.h"
-#include "radix.h"
+#ifndef RADIX_H
+#define RADIX_H
+
+#include "wikisort.h"
+
+typedef int BASE_CMP(int base, void** value);
+
+typedef int BASE_DIG(void** value, int base, int basePow);
+
+void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE_CMP bCmp, BASE_DIG baseDigit);
+
+void makeBuckets(void** array, int len, void** buckets, int* bucketLengths, int size, int base, BASE_DIG baseDigit, int basePow);
+
+int int_base_cmp(int base, void** value);
+
+int int_base_dig(void** value, int base, int basePow);
+
+#endif

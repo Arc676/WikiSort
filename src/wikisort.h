@@ -58,6 +58,16 @@ void swapElements(void** a, void** b, int size);
 int isSorted(void** array, int len, int size, COMP_FUNC cmp);
 
 /**
+ * Determines the maximum value in an array (linear search)
+ * @param array The array to search
+ * @param len The length of the array
+ * @param size The size of a single element
+ * @param cmp Comparison function for the elements
+ * @return Pointer to the maximum value as determined by the comparison function
+ */
+void** maxValue(void** array, int len, int size, COMP_FUNC cmp);
+
+/**
  * Comparison function for integers
  * @param a Pointer to first integer
  * @param b Pointer to second integer

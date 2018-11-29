@@ -39,6 +39,18 @@ int isSorted(void** array, int len, int size, COMP_FUNC cmp) {
 	return 1;
 }
 
+void** maxValue(void** array, int len, int size, COMP_FUNC cmp) {
+	void** ptr = adv(array, size);
+	void** max = array;
+	for (int i = 1; i < len; i++) {
+		if (cmp(ptr, max) == 1) {
+			max = ptr;
+		}
+		ptr = adv(ptr, size);
+	}
+	return max;
+}
+
 int cmp_int(void** a, void** b) {
 	int x = *(int*)a;
 	int y = *(int*)b;
