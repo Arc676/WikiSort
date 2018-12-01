@@ -42,6 +42,7 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 | Name | Worst | Average | Best |
 | --- | --- | --- | --- |
 | [Radix sort](https://en.wikipedia.org/wiki/Radix_sort) | =Best | =Best | O(wn) |
+| [Counting sort](https://en.wikipedia.org/wiki/Counting_sort) | =Best | =Best | O(n + k) |
 
 ### Concurrent sorts
 | Name | Worst | Average | Best |

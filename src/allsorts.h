@@ -30,3 +30,4 @@
 #include "intro.h"
 #include "tim.h"
 #include "radix.h"
+#include "counting.h"
