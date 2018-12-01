@@ -41,6 +41,7 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 ### Distribution sorts
 | Name | Worst | Average | Best |
 | --- | --- | --- | --- |
+| [Radix sort](https://en.wikipedia.org/wiki/Radix_sort) | =Best | =Best | O(wn) |
 
 ### Concurrent sorts
 | Name | Worst | Average | Best |

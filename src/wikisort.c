@@ -86,3 +86,16 @@ int cmp_double(void** a, void** b) {
 	}
 	return 0;
 }
+
+int cmp_str(void** a, void** b) {
+	char* s1 = *(char**)a;
+	char* s2 = *(char**)b;
+	int ret = strcmp(s1, s2);
+	if (ret < 0) {
+		return -1;
+	}
+	if (ret > 0) {
+		return 1;
+	}
+	return 0;
+}

@@ -91,4 +91,12 @@ int cmp_float(void** a, void** b);
  */
 int cmp_double(void** a, void** b);
 
+/**
+ * Comparison function for strings
+ * @param a Pointer to first string
+ * @param b Pointer to second string
+ * @return Standard library strcmp on the two strings
+ */
+int cmp_str(void** a, void** b);
+
 #endif
