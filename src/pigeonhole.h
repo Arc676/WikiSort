@@ -12,24 +12,20 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "merge.h"
-#include "bubble.h"
-#include "selection.h"
-#include "insertion.h"
-#include "quick.h"
-#include "shell.h"
-#include "oddeven.h"
-#include "comb.h"
-#include "cocktail.h"
-#include "gnome.h"
-#include "stooge.h"
-#include "cycle.h"
-#include "slow.h"
-#include "bogo.h"
-#include "heap.h"
-#include "intro.h"
-#include "tim.h"
+#ifndef PIGEONHOLE_H
+#define PIGEONHOLE_H
+
+#include "wikisort.h"
 #include "bucket.h"
-#include "radix.h"
-#include "counting.h"
-#include "pigeonhole.h"
+
+/**
+ * Sorts an array using a pigeonhole sorting algorithm
+ * @param array The array to sort
+ * @param len The length of the array
+ * @param size The size of a single element
+ * @param key Key function for the elements
+ * @param keyCount The total number of possible keys
+ */
+void pigeonholeSort(void** array, int len, int size, KEY_FUNC key, int keyCount);
+
+#endif

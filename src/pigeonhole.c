@@ -12,24 +12,24 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "merge.h"
-#include "bubble.h"
-#include "selection.h"
-#include "insertion.h"
-#include "quick.h"
-#include "shell.h"
-#include "oddeven.h"
-#include "comb.h"
-#include "cocktail.h"
-#include "gnome.h"
-#include "stooge.h"
-#include "cycle.h"
-#include "slow.h"
-#include "bogo.h"
-#include "heap.h"
-#include "intro.h"
-#include "tim.h"
-#include "bucket.h"
-#include "radix.h"
-#include "counting.h"
 #include "pigeonhole.h"
+
+void pigeonholeSort(void** array, int len, int size, KEY_FUNC key, int keyCount) {
+	// allocate pigeon holes
+	void** pigeonholes;
+	int* pigeonholeCounts;
+	setupBuckets(&pigeonholes, &pigeonholeCounts, len, size, keyCount);
+
+	// copy elements to pigeon holes
+	void** ptr = array;
+	for (int i = 0; i < len; i++) {
+		int holeIdx = key(ptr);
+		int idx = pigeonholeCounts[holeIdx]++;
+
+		void** dstHole = adv(pigeonholes[holeIdx], idx * size);
+		memcpy(dstHole, ptr, size);
+		ptr = adv(ptr, size);
+	}
+
+	bucketsToList(array, pigeonholes, pigeonholeCounts, size, keyCount);
+}
