@@ -14,39 +14,22 @@
 
 #include "radix.h"
 
-void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE_CMP bCmp, DIGIT_EXT digExt, int offset) {
+void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE_CMP bCmp, KEY_FUNC digExt) {
 	void** maxVal = maxValue(array, len, size, cmp);
 	for (int iteration = 0; bCmp(base, iteration, maxVal); iteration++) {
 		// allocate bucket memory
-		void** buckets = malloc(base * sizeof(void*));
-		void** bucket = buckets;
-		for (int i = 0; i < base; i++) {
-			*bucket = malloc(len * size);
-			bucket++;
-		}
-		int* bucketLengths = malloc(base * sizeof(int));
-		memset(bucketLengths, 0, base * sizeof(int));
+		void** buckets;
+		int* bucketLengths;
+		setupBuckets(&buckets, &bucketLengths, len, size, base);
 
 		// create buckets from list elements
-		makeBuckets(array, len, buckets, bucketLengths, size, base, digExt, iteration, offset);
+		distributeToBuckets(array, len, buckets, bucketLengths, size, digExt, 0, 0, base, iteration);
 
-		// sequentially copy values from buckets back into original list
-		// and free bucket memory
-		void** ptr = array;
-		for (int i = 0; i < base; i++) {
-			for (int j = 0; j < bucketLengths[i]; j++) {
-				void** val = adv(buckets[i], j * size);
-				memcpy(ptr, val, size);
-				ptr = adv(ptr, size);
-			}
-			free(buckets[i]);
-		}
-		free(buckets);
-		free(bucketLengths);
+		bucketsToList(array, buckets, bucketLengths, size, base, 1);
 	}
 }
 
-void radixSortMSDRec(void** array, int len, int size, COMP_FUNC cmp, int base, BASE_CMP bCmp, DIGIT_EXT digExt, int offset, int iteration) {
+void radixSortMSDRec(void** array, int len, int size, COMP_FUNC cmp, int base, BASE_CMP bCmp, KEY_FUNC digExt, int iteration) {
 	if (len < 2) {
 		return;
 	}
@@ -55,53 +38,21 @@ void radixSortMSDRec(void** array, int len, int size, COMP_FUNC cmp, int base, B
 		return;
 	}
 	// allocate bucket memory
-	void** buckets = malloc(base * sizeof(void*));
-	void** bucket = buckets;
-	for (int i = 0; i < base; i++) {
-		*bucket = malloc(len * size);
-		bucket++;
-	}
-	int* bucketLengths = malloc(base * sizeof(int));
-	memset(bucketLengths, 0, base * sizeof(int));
+	void** buckets;
+	int* bucketLengths;
+	setupBuckets(&buckets, &bucketLengths, len, size, base);
 
 	// create buckets from list elements
-	makeBuckets(array, len, buckets, bucketLengths, size, base, digExt, iteration, offset);
+	distributeToBuckets(array, len, buckets, bucketLengths, size, digExt, 0, 0, base, iteration);
 
 	// recursively sort buckets
-	bucket = buckets;
+	void** bucket = buckets;
 	for (int i = 0; i < base; i++) {
-		radixSortMSDRec(*bucket, bucketLengths[i], size, cmp, base, bCmp, digExt, offset, iteration + 1);
+		radixSortMSDRec(*bucket, bucketLengths[i], size, cmp, base, bCmp, digExt, iteration + 1);
 		bucket++;
 	}
 
-	// sequentially copy values from buckets back into original list
-	// and free bucket memory
-	void** ptr = array;
-	for (int i = 0; i < base; i++) {
-		for (int j = 0; j < bucketLengths[i]; j++) {
-			void** val = adv(buckets[i], j * size);
-			memcpy(ptr, val, size);
-			ptr = adv(ptr, size);
-		}
-		free(buckets[i]);
-	}
-	free(buckets);
-	free(bucketLengths);
-}
-
-void makeBuckets(void** array, int len, void** buckets, int* bucketLengths, int size, int base, DIGIT_EXT digExt, int iteration, int offset) {
-	void** ptr = array;
-	for (int i = 0; i < len; i++) {
-		int digit = digExt(ptr, base, iteration);
-		if (digit >= offset) {
-			digit -= offset;
-		}
-		int idx = bucketLengths[digit]++;
-
-		void** dstBucket = adv(buckets[digit], idx * size);
-		memcpy(dstBucket, ptr, size);
-		ptr = adv(ptr, size);
-	}
+	bucketsToList(array, buckets, bucketLengths, size, base, 0);
 }
 
 int int_base_cmp_LSD(int base, int iteration, void** value) {
@@ -109,7 +60,10 @@ int int_base_cmp_LSD(int base, int iteration, void** value) {
 	return (int)pow(base, iteration) <= val;
 }
 
-int int_base_dig_LSD(void** value, int base, int iteration) {
+int int_base_dig_LSD(void** value, void** minVal, void** maxVal, int base, int iteration) {
+	if (base == 0) {
+		return 10;
+	}
 	int val = *(int*)value;
 	return (val / (int)pow(base, iteration)) % base;
 }
@@ -120,13 +74,34 @@ int str_base_cmp_MSD(int base, int iteration, void** value) {
 	return iteration < len;
 }
 
-int str_base_MSD(void** value, int base, int iteration) {
+int str_base_MSD_unaligned(void** value, void** minVal, void** maxVal, int base, int iteration) {
+	if (base == 0) {
+		return 26;
+	}
 	char* s = *(char**)value;
 	int len = strlen(s);
 	if (len <= iteration) {
 		return 0;
 	}
 	return s[iteration];
+}
+
+int str_base_MSD_lowercase(void** value, void** minVal, void** maxVal, int base, int iteration) {
+	return str_base_MSD_unaligned(value, 0, 0, base, iteration) - 'a';
+}
+
+int str_base_MSD_uppercase(void** value, void** minVal, void** maxVal, int base, int iteration) {
+	return str_base_MSD_unaligned(value, 0, 0, base, iteration) - 'A';
+}
+
+int str_base_MSD_ignoreCase(void** value, void** minVal, void** maxVal, int base, int iteration) {
+	int c = str_base_MSD_unaligned(value, 0, 0, base, iteration);
+	if ('a' <= c && c <= 'z') {
+		return c - 'a';
+	} else if ('A' <= c && c <= 'Z') {
+		return c - 'A';
+	}
+	return 0;
 }
 
 int cmp_strlen(void** a, void** b) {

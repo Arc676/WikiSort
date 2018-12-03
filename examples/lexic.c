@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
 		printf("%s ", arr[i]);
 	}
 	printf("\n");
-	radixSortMSDRec((void**)arr, len, sizeof(char*), cmp_strlen, 26, str_base_cmp_MSD, str_base_MSD, 'a', 0);
+	radixSortMSDRec((void**)arr, len, sizeof(char*), cmp_strlen, 26, str_base_cmp_MSD, str_base_MSD_ignoreCase,  0);
 	for (int i = 0; i < len; i++) {
 		printf("%s ", arr[i]);
 	}

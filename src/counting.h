@@ -16,14 +16,7 @@
 #define COUNTING_H
 
 #include "wikisort.h"
-
-/**
- * Type definition for key function for
- * counting sort
- * @param val Value whose key to determine
- * @return Integer key for the given value
- */
-typedef int KEY_FUNC(void** val);
+#include "bucket.h"
 
 /**
  * Sorts an array using a counting sort algorithm

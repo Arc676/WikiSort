@@ -15,9 +15,8 @@
 #ifndef RADIX_H
 #define RADIX_H
 
-#include <string.h>
-
 #include "wikisort.h"
+#include "bucket.h"
 
 /**
  * Type definition for base comparison functions to be
@@ -30,16 +29,6 @@
 typedef int BASE_CMP(int base, int iteration, void** value);
 
 /**
- * Type definition for digit extraction functions to be
- * used when generating buckets for radix sort
- * @param value The value from which to extract the digit
- * @param base The base for the radix sort (number of possible digits)
- * @param iteration The 0-indexed iteration value for this extraction
- * @return The relevant digit in the value for the radix sort, aligned to zero
- */
-typedef int DIGIT_EXT(void** value, int base, int iteration);
-
-/**
  * Sorts an array using a least-significant-digit radix sort
  * @param array The array to sort
  * @param len The length of the array
@@ -48,9 +37,8 @@ typedef int DIGIT_EXT(void** value, int base, int iteration);
  * @param base The base for the radix sort (number of possible digits)
  * @param bCmp Base comparison function
  * @param digExt Digit extraction function
- * @param offset Integer value of the lowest digit
  */
-void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE_CMP bCmp, DIGIT_EXT digExt, int offset);
+void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE_CMP bCmp, KEY_FUNC digExt);
 
 /**
  * Sorts an array using a recursive most-significant-digit radix sort
@@ -61,25 +49,9 @@ void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE
  * @param base The base for the radix sort (number of possible digits)
  * @param bCmp Base comparison function
  * @param digExt Digit extraction function
- * @param offset Integer value of the lowest digit
  * @param iteration Recursion depth
  */
-void radixSortMSDRec(void** array, int len, int size, COMP_FUNC cmp, int base, BASE_CMP bCmp, DIGIT_EXT digExt, int offset, int iteration);
-
-/**
- * Separates the elements of a list into buckets
- * based on the digits
- * @param array The array to separate into buckets
- * @param len The length of the array
- * @param buckets Array in which to store the buckets
- * @param bucketLengths Integer array in which to store how many values ended up in each bucket
- * @param size The size of a single element
- * @param base The base for the radix sort (number of possible digits)
- * @param digExt Digit extraction function
- * @param iteration The 0-indexed iteration value for this bucket generation
- * @param offset Integer value of the lowest digit
- */
-void makeBuckets(void** array, int len, void** buckets, int* bucketLengths, int size, int base, DIGIT_EXT digExt, int iteration, int offset);
+void radixSortMSDRec(void** array, int len, int size, COMP_FUNC cmp, int base, BASE_CMP bCmp, KEY_FUNC digExt, int iteration);
 
 /**
  * Base comparison function for integers
@@ -93,11 +65,13 @@ int int_base_cmp_LSD(int base, int iteration, void** value);
 /**
  * LSD extraction function for integers
  * @param value Value from which to extract digit
+ * @param minVal Minimum value in the array, as specified by comparison (unused)
+ * @param maxVal Maximum value in the array, as specified by comparison (unused)
  * @param base The base for the radix sort (number of possible digits)
  * @param iteration The 0-indexed iteration value for this extraction
  * @return The digit 'iteration' positions from the end of the value as represented in the given base
  */
-int int_base_dig_LSD(void** value, int base, int iteration);
+int int_base_dig_LSD(void** value, void** minVal, void** maxVal, int base, int iteration);
 
 /**
  * Base comparison function for strings
@@ -109,13 +83,53 @@ int int_base_dig_LSD(void** value, int base, int iteration);
 int str_base_cmp_MSD(int base, int iteration, void** value);
 
 /**
- * Last-character extraction function for strings
+ * Last-character extraction function for strings; this function
+ * does not perform any alignment; when sorting, define a new function
+ * with offset or use one of the provided ones
  * @param value Value from which to extract the last character
+ * @param minVal Minimum value in the array, as specified by comparison (unused)
+ * @param maxVal Maximum value in the array, as specified by comparison (unused)
  * @param base The base (number of possible characters) for the strings
  * @param iteration The 0-indexed iteration value for this extraction
  * @return The character 'iteration' positions from the end of the string
  */
-int str_base_MSD(void** value, int base, int iteration);
+int str_base_MSD_unaligned(void** value, void** minVal, void** maxVal, int base, int iteration);
+
+/**
+ * Last-character extraction function for strings, aligned to 'a'
+ * (use when array only contains all lowercase strings)
+ * @param value Value from which to extract the last character
+ * @param minVal Minimum value in the array, as specified by comparison (unused)
+ * @param maxVal Maximum value in the array, as specified by comparison (unused)
+ * @param base The base (number of possible characters) for the strings
+ * @param iteration The 0-indexed iteration value for this extraction
+ * @return The character 'iteration' positions from the end of the string
+ */
+int str_base_MSD_lowercase(void** value, void** minVal, void** maxVal, int base, int iteration);
+
+/**
+ * Last-character extraction function for strings, aligned to 'A'
+ * (use when array only contains all uppercase strings)
+ * @param value Value from which to extract the last character
+ * @param minVal Minimum value in the array, as specified by comparison (unused)
+ * @param maxVal Maximum value in the array, as specified by comparison (unused)
+ * @param base The base (number of possible characters) for the strings
+ * @param iteration The 0-indexed iteration value for this extraction
+ * @return The character 'iteration' positions from the end of the string
+ */
+int str_base_MSD_uppercase(void** value, void** minVal, void** maxVal, int base, int iteration);
+
+/**
+ * Last-character extraction function for strings, case insensitive
+ * (aligns to 'a' or 'A' depending on case)
+ * @param value Value from which to extract the last character
+ * @param minVal Minimum value in the array, as specified by comparison (unused)
+ * @param maxVal Maximum value in the array, as specified by comparison (unused)
+ * @param base The base (number of possible characters) for the strings
+ * @param iteration The 0-indexed iteration value for this extraction
+ * @return The character 'iteration' positions from the end of the string
+ */
+int str_base_MSD_ignoreCase(void** value, void** minVal, void** maxVal, int base, int iteration);
 
 /**
  * Comparison function for string length
