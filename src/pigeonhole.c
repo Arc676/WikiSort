@@ -15,6 +15,9 @@
 #include "pigeonhole.h"
 
 void pigeonholeSort(void** array, int len, int size, KEY_FUNC key, int keyCount) {
+	if (len < 2) {
+		return;
+	}
 	// allocate pigeon holes
 	void** pigeonholes;
 	int* pigeonholeCounts;
@@ -23,7 +26,7 @@ void pigeonholeSort(void** array, int len, int size, KEY_FUNC key, int keyCount)
 	// copy elements to pigeon holes
 	void** ptr = array;
 	for (int i = 0; i < len; i++) {
-		int holeIdx = key(ptr);
+		int holeIdx = key(ptr, 0, 0, 0, 0);
 		int idx = pigeonholeCounts[holeIdx]++;
 
 		void** dstHole = adv(pigeonholes[holeIdx], idx * size);
@@ -31,5 +34,5 @@ void pigeonholeSort(void** array, int len, int size, KEY_FUNC key, int keyCount)
 		ptr = adv(ptr, size);
 	}
 
-	bucketsToList(array, pigeonholes, pigeonholeCounts, size, keyCount);
+	bucketsToList(array, pigeonholes, pigeonholeCounts, size, keyCount, 1);
 }

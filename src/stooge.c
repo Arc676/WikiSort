@@ -15,6 +15,9 @@
 #include "stooge.h"
 
 void stoogeSort(void** array, int len, int size, COMP_FUNC cmp) {
+	if (len < 2) {
+		return;
+	}
 	void** b = adv(array, (len - 1) * size);
 	if (cmp(array, b) == 1) {
 		swapElements(array, b, size);

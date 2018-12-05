@@ -28,19 +28,19 @@ void cycleSort(void** array, int len, int size, COMP_FUNC cmp) {
 
 void performCycle(void** array, int len, int size, COMP_FUNC cmp, void** item, int* pos) {
 	int start = *pos;
+	void** b = adv(array, (start + 1) * size);
 	for (int j = start + 1; j < len; j++) {
-		void** b = adv(array, j * size);
 		if (cmp(b, item) == -1) {
 			(*pos)++;
 		}
+		b = adv(b, size);
 	}
 	// if it needs to be moved
 	if (*pos != start) {
-		void** toSwap;
+		void** toSwap = adv(array, *pos * size);
 		while (1) {
-			toSwap = adv(array, *pos * size);
 			if (!cmp(item, toSwap)) {
-				(*pos)++;
+				toSwap = adv(toSwap, size);
 			} else {
 				break;
 			}

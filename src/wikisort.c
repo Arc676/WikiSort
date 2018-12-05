@@ -29,12 +29,17 @@ void swapElements(void** a, void** b, int size) {
 }
 
 int isSorted(void** array, int len, int size, COMP_FUNC cmp) {
+	if (len < 2) {
+		return 1;
+	}
+	void** a = array;
+	void** b = adv(array, size);
 	for (int i = 0; i < len - 1; i++) {
-		void** a = adv(array, i * size);
-		void** b = adv(array, (i + 1) * size);
 		if (cmp(a, b) == 1) {
 			return 0;
 		}
+		a = b;
+		b = adv(b, size);
 	}
 	return 1;
 }

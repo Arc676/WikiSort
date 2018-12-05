@@ -15,17 +15,22 @@
 #include "bubble.h"
 
 void bubbleSort(void** array, int len, int size, COMP_FUNC cmp) {
+	if (len < 2) {
+		return;
+	}
 	int sorted;
 	do {
 		sorted = 1;
-		for (int i = 0; i < len - 2 - i; i++) {
-			void** a = adv(array, i * size);
-			void** b = adv(array, (i + 1) * size);
+		void** a = array;
+		void** b = adv(array, size);
+		for (int i = 0; i < len - 1; i++) {
 			// if the earlier element is greater than its successor
 			if (cmp(a, b) == 1) {
 				sorted = 0;
 				swapElements(a, b, size);
 			}
+			a = b;
+			b = adv(b, size);
 		}
 	} while (!sorted);
 }

@@ -15,6 +15,9 @@
 #include "comb.h"
 
 void combSort(void** array, int len, int size, COMP_FUNC cmp, float shrink) {
+	if (len < 2) {
+		return;
+	}
 	int gapCount;
 	int* gaps = gShrinkFactor(len, &gapCount, shrink);
 	int gapIndex = 0;
@@ -28,13 +31,15 @@ void combSort(void** array, int len, int size, COMP_FUNC cmp, float shrink) {
 			sorted = 1;
 			gap = 1;
 		}
+		void** a = array;
+		void** b = adv(array, size);
 		for (int i = 0; i + gap < len; i++) {
-			void** a = adv(array, i * size);
-			void** b = adv(array, (i + gap) * size);
 			if (cmp(a, b) == 1) {
 				swapElements(a, b, size);
 				sorted = 0;
 			}
+			a = b;
+			b = adv(b, size);
 		}
 	}
 	free(gaps);

@@ -15,7 +15,7 @@
 #include "merge.h"
 
 void mergeSort(void** array, int len, int size, COMP_FUNC cmp) {
-	if (len == 1) {
+	if (len < 2) {
 		return;
 	}
 
@@ -43,15 +43,17 @@ void mergeSort(void** array, int len, int size, COMP_FUNC cmp) {
 }
 
 void mergeArrays(void** dst, int len, void** arr1, int len1, void** arr2, int len2, int size, COMP_FUNC cmp) {
+	void** A = arr1;
+	void** B = arr2;
 	for (int a = 0, b = 0, i = 0; i < len; i++) {
-		void** A = adv(arr1, a * size);
-		void** B = adv(arr2, b * size);
 		if (a >= len1 || (b < len2 && cmp(B, A) <= 0)) {
 			memcpy(adv(dst, i * size), B, size);
 			b++;
+			B = adv(B, size);
 		} else if (b >= len2 || (a < len1 && cmp(A, B) <= 0)) {
 			memcpy(adv(dst, i * size), A, size);
 			a++;
+			A = adv(A, size);
 		}
 	}
 }

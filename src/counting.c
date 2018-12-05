@@ -15,6 +15,9 @@
 #include "counting.h"
 
 void countingSort(void** array, int len, int size, KEY_FUNC key, int keyCount) {
+	if (len < 2) {
+		return;
+	}
 	// allocate memory for algorithm components
 	int* count = malloc(keyCount * sizeof(int));
 	memset(count, 0, keyCount * sizeof(int));
@@ -25,7 +28,7 @@ void countingSort(void** array, int len, int size, KEY_FUNC key, int keyCount) {
 	// determine key frequencies
 	void** ptr = array;
 	for (int i = 0; i < len; i++) {
-		count[key(ptr)]++;
+		count[key(ptr, 0, 0, 0, 0)]++;
 		ptr = adv(ptr, size);
 	}
 
@@ -39,7 +42,7 @@ void countingSort(void** array, int len, int size, KEY_FUNC key, int keyCount) {
 	// rewrite array in sorted order
 	ptr = arrCopy;
 	for (int i = 0; i < len; i++) {
-		int keyVal = key(ptr);
+		int keyVal = key(ptr, 0, 0, 0, 0);
 		memcpy(adv(array, count[keyVal] * size), ptr, size);
 		count[keyVal]++;
 		ptr = adv(ptr, size);
@@ -50,6 +53,6 @@ void countingSort(void** array, int len, int size, KEY_FUNC key, int keyCount) {
 	free(count);
 }
 
-int key_int(void** val) {
+int key_int(void** val, void** minVal, void** maxVal, int keyCount, int iteration) {
 	return *(int*)val;
 }

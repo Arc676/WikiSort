@@ -15,30 +15,37 @@
 #include "cocktail.h"
 
 void cocktailSort(void** array, int len, int size, COMP_FUNC cmp) {
+	if (len < 2) {
+		return;
+	}
 	int sorted;
 	int passes = 0;
 	void** a;
 	void** b;
 	do {
 		sorted = 1;
+		a = adv(array, passes * size);
+		b = adv(array, (passes + 1) * size);
 		for (int i = passes; i < len - 2 - passes; i++) {
-			a = adv(array, i * size);
-			b = adv(array, (i + 1) * size);
 			if (cmp(a, b) == 1) {
 				swapElements(a, b, size);
 				sorted = 0;
 			}
+			a = b;
+			b = adv(b, size);
 		}
 		if (sorted) {
 			break;
 		}
+		a = adv(array, (len - 2 - passes) * size);
+		b = adv(array, (len - 1 - passes) * size);
 		for (int i = len - 2 - passes; i >= passes; i--) {
-			a = adv(array, i * size);
-			b = adv(array, (i + 1) * size);
 			if (cmp(a, b) == 1) {
 				swapElements(a, b, size);
 				sorted = 0;
 			}
+			b = a;
+			a = adv(a, -size);
 		}
 		passes++;
 	} while (!sorted);

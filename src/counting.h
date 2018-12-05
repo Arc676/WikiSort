@@ -31,8 +31,12 @@ void countingSort(void** array, int len, int size, KEY_FUNC key, int keyCount);
 /**
  * Key function for integers
  * @param val Pointer to the integer
+ * @param minVal Minimum value in the list (unused)
+ * @param maxVal Maximum value in the list (unused)
+ * @param keyCount Number of possible keys (unused)
+ * @param iteration Iteration value (unused)
  * @return The given integer
  */
-int key_int(void** val);
+int key_int(void** val, void** minVal, void** maxVal, int keyCount, int iteration);
 
 #endif

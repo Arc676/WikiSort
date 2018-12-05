@@ -15,6 +15,9 @@
 #include "radix.h"
 
 void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE_CMP bCmp, KEY_FUNC digExt) {
+	if (len < 2) {
+		return;
+	}
 	void** maxVal = maxValue(array, len, size, cmp);
 	for (int iteration = 0; bCmp(base, iteration, maxVal); iteration++) {
 		// allocate bucket memory

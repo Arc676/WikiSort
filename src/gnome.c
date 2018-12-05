@@ -15,6 +15,9 @@
 #include "gnome.h"
 
 void gnomeSort(void** array, int len, int size, COMP_FUNC cmp) {
+	if (len < 2) {
+		return;
+	}
 	int pos = 0;
 	void** a;
 	void** b;

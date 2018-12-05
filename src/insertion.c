@@ -17,14 +17,16 @@
 
 void insertionSort(void** array, int len, int size, COMP_FUNC cmp) {
 	for (int i = 1; i < len; i++) {
+		void** a = adv(array, i * size);
+		void** b = adv(array, (i - 1) * size);
 		for (int j = i; j > 0; j--) {
-			void** a = adv(array, j * size);
-			void** b = adv(array, (j - 1) * size);
 			// stop when the element is greater than the preceding one
 			if (cmp(a, b) == 1) {
 				break;
 			}
 			swapElements(a, b, size);
+			a = b;
+			b = adv(b, -size);
 		}
 	}
 }

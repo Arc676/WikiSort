@@ -15,7 +15,7 @@
 #include "slow.h"
 
 void slowSort(void** array, int len, int size, COMP_FUNC cmp) {
-	if (len <= 1) {
+	if (len < 2) {
 		return;
 	}
 	int half = len / 2;

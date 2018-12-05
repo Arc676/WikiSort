@@ -26,9 +26,10 @@ Heap* heap_create(int count, int size, COMP_FUNC cmp) {
 
 Heap* heap_heapify(void** array, int count, int size, COMP_FUNC cmp) {
 	Heap* heap = heap_create(count, size, cmp);
+	void** new = array;
 	for (int i = 0; i < count; i++) {
-		void** new = adv(array, i * size);
 		heap_push(heap, new);
+		new = adv(new, size);
 	}
 	return heap;
 }
@@ -190,12 +191,15 @@ void heap_siftDown(Heap* heap, int index) {
 }
 
 void heapSort(void** array, int len, int size, COMP_FUNC cmp) {
+	if (len < 2) {
+		return;
+	}
 	Heap* heap = heap_heapify(array, len, size, cmp);
+	void** dst = adv(array, (len - 1) * size);
 	for (int i = len - 1; i >= 0; i--) {
 		void** obj = heap_pop(heap);
-		void** dst = adv(array, i * size);
 		memcpy(dst, obj, size);
+		dst = adv(dst, -size);
 	}
 	heap_destroy(heap);
 }
-

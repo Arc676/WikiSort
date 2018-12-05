@@ -16,19 +16,18 @@
 
 void selectionSort(void** array, int len, int size, COMP_FUNC cmp) {
 	for (int i = 0; i < len - 1; i++) {
-		void** a;
-		void** b;
+		void** a = adv(array, (i + 1) * size);
+		void** b = adv(array, i * size);
 		int minIndex = i;
 		for (int j = i + 1; j < len; j++) {
-			a = adv(array, j * size);
-			b = adv(array, minIndex * size);
 			if (cmp(a, b) <= 0) {
 				minIndex = j;
+				b = a;
 			}
+			a = adv(a, size);
 		}
 		if (minIndex != i) {
 			a = adv(array, i * size);
-			b = adv(array, minIndex * size);
 			swapElements(a, b, size);
 		}
 	}

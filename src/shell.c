@@ -34,6 +34,9 @@ GAP_GEN *gapSeqs[GAP_COUNT] = {
 };
 
 void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq, int* memoized, int** gapSeq) {
+	if (len < 2) {
+		return;
+	}
 	// if memoization is enabled, get the gap count from the argument
 	int gapCount = memoized ? *memoized : 0;
 	// if memoization is enabled:

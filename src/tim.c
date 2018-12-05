@@ -36,6 +36,9 @@ void reverse(void** array, int len, int size) {
 }
 
 void timSort(void** array, int len, int size, COMP_FUNC cmp) {
+	if (len < 2) {
+		return;
+	}
 	// determine minrun length
 	int minrun = computeMinrun(len);
 
@@ -53,10 +56,9 @@ void timSort(void** array, int len, int size, COMP_FUNC cmp) {
 
 	// search for runs
 	int i;
+	void** prev = array;
+	void** current = adv(array, size);
 	for (i = 1; i < len; i++) {
-		void** prev = adv(array, (i - 1) * size);
-		void** current = adv(array, i * size);
-		
 		// compare current element to its predecessor
 		int type = cmp(current, prev) >= 0 ? NONDESCENDING : DESCENDING;
 		
@@ -81,6 +83,8 @@ void timSort(void** array, int len, int size, COMP_FUNC cmp) {
 			state = NONE;
 			runCount++;
 		}
+		prev = current;
+		current = adv(current, size);
 	}
 	// check final run
 	int rlen = i - start;
