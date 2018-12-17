@@ -23,6 +23,10 @@
 #include <time.h>
 #include <stdarg.h>
 #include <unistd.h>
+#include <getopt.h>
+#include <sys/resource.h>
+
+typedef struct timeval TIME;
 
 int MAX_LEN, START_LEN, LEN_INC, LIN_GROWTH, NUM_TRIALS, BOUND;
 
@@ -66,6 +70,10 @@ unsigned long** makeData(int rows);
  * @param rows Nunmber of independent variable values
  */
 void destroyData(unsigned long** data, int rows);
+
+void getClock(TIME* timeval);
+
+unsigned long getDelta(TIME* start, TIME* end);
 
 /**
  * Runs the tests and records the results

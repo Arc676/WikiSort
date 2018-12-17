@@ -51,33 +51,37 @@ void generate(int arrlen) {
 }
 
 unsigned long testRandom(int arrlen) {
-	clock_t start = clock();
+	TIME start, end;
+	getClock(&start);
 	mergeSort((void**)randomGen, arrlen, sizeof(int), cmp_int);
-	clock_t end = clock();
-	return end - start;
+	getClock(&end);
+	return getDelta(&start, &end);;
 }
 
 unsigned long testReversed(int arrlen) {
 	memcpy(reversed, randomGen, arrlen * sizeof(int));
 	reverse((void**)reversed, arrlen, sizeof(int));
-	clock_t start = clock();
+	TIME start, end;
+	getClock(&start);
 	mergeSort((void**)reversed, arrlen, sizeof(int), cmp_int);
-	clock_t end = clock();
-	return end - start;
+	getClock(&end);
+	return getDelta(&start, &end);;
 }
 
 unsigned long testFewUnique(int arrlen) {
-	clock_t start = clock();
+	TIME start, end;
+	getClock(&start);
 	mergeSort((void**)fewunique, arrlen, sizeof(int), cmp_int);
-	clock_t end = clock();
-	return end - start;
+	getClock(&end);
+	return getDelta(&start, &end);;
 }
 
 unsigned long testKindaSorted(int arrlen) {
-	clock_t start = clock();
+	TIME start, end;
+	getClock(&start);
 	mergeSort((void**)kindasorted, arrlen, sizeof(int), cmp_int);
-	clock_t end = clock();
-	return end - start;
+	getClock(&end);
+	return getDelta(&start, &end);;
 }
 
 int main(int argc, char* argv[]) {

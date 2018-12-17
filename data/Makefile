@@ -11,7 +11,7 @@ BDIR=bin
 
 CC=gcc
 FLAGS=-std=c11 -I ../src
-LD=-l wikisort
+LD=-l wikisort -lm
 FILE=
 OBJ=$(patsubst %.c, $(ODIR)/%.o, $(FILE))
 OUT=$(patsubst %.c, $(BDIR)/%.test, $(FILE))

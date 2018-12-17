@@ -86,6 +86,16 @@ void destroyData(unsigned long** data, int rows) {
 	free(data);
 }
 
+void getClock(TIME* timeval) {
+	struct rusage usage;
+	getrusage(RUSAGE_SELF, &usage);
+	*timeval = usage.ru_utime;
+}
+
+unsigned long getDelta(TIME* start, TIME* end) {
+	return 1e6 * (end->tv_sec - start->tv_sec) + (end->tv_usec - start->tv_usec);
+}
+
 void runTests(FILE* output, GEN_FUNC generate, TEST_FUNC* tests[],
 	int independents, unsigned long** data) {
 	for (int arrlen = START_LEN; arrlen <= MAX_LEN;) {

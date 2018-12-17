@@ -29,12 +29,13 @@ void generate(int arrlen) {
 }
 
 unsigned long gapTest(int arrlen, int seq) {
-	clock_t start = clock();
+	TIME start, end;
+	getClock(&start);
 	int count;
 	int* gaps = gapSeqs[seq](arrlen, &count);
 	free(gaps);
-	clock_t end = clock();
-	return end - start;
+	getClock(&end);
+	return getDelta(&start, &end);;
 }
 
 unsigned long g0(int arrlen) {

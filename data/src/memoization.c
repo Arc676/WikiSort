@@ -44,10 +44,11 @@ void generate(int arrlen) {
 
 unsigned long shellTest(int arrlen, GapSequence seq, int* memoized, int** gaps) {
 	memcpy(copy, nums, arrlen * sizeof(int));
-	clock_t start = clock();
+	TIME start, end;
+	getClock(&start);
 	shellSort((void**)copy, arrlen, sizeof(int), cmp_int, seq, memoized, gaps);
-	clock_t end = clock();
-	return end - start;
+	getClock(&end);
+	return getDelta(&start, &end);;
 }
 
 unsigned long shell(int arrlen) {

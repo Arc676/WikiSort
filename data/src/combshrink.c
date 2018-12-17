@@ -36,10 +36,11 @@ void generate(int arrlen) {
 
 unsigned long combTest(int arrlen, float shrink) {
 	memcpy(copy, nums, arrlen * sizeof(int));
-	clock_t start = clock();
+	TIME start, end;
+	getClock(&start);
 	combSort((void**)copy, arrlen, sizeof(int), cmp_int, shrink);
-	clock_t end = clock();
-	return end - start;
+	getClock(&end);
+	return getDelta(&start, &end);
 }
 
 unsigned long g0(int arrlen) {

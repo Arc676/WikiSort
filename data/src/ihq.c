@@ -34,26 +34,29 @@ void generate(int arrlen) {
 
 unsigned long introTest(int arrlen) {
 	memcpy(copy, nums, arrlen * sizeof(int));
-	clock_t start = clock();
+	TIME start, end;
+	getClock(&start);
 	introSort((void**)copy, arrlen, sizeof(int), cmp_int);
-	clock_t end = clock();
-	return end - start;
+	getClock(&end);
+	return getDelta(&start, &end);;
 }
 
 unsigned long heapTest(int arrlen) {
 	memcpy(copy, nums, arrlen * sizeof(int));
-	clock_t start = clock();
+	TIME start, end;
+	getClock(&start);
 	heapSort((void**)copy, arrlen, sizeof(int), cmp_int);
-	clock_t end = clock();
-	return end - start;
+	getClock(&end);
+	return getDelta(&start, &end);;
 }
 
 unsigned long quickTest(int arrlen) {
 	memcpy(copy, nums, arrlen * sizeof(int));
-	clock_t start = clock();
+	TIME start, end;
+	getClock(&start);
 	quickSort((void**)copy, arrlen, sizeof(int), cmp_int);
-	clock_t end = clock();
-	return end - start;
+	getClock(&end);
+	return getDelta(&start, &end);;
 }
 
 int main(int argc, char* argv[]) {

@@ -45,17 +45,19 @@ void generate(int arrlen) {
 }
 
 unsigned long testInts(int arrlen) {
-	clock_t start = clock();
-	shellSort((void**)ints, arrlen, sizeof(int), cmp_int, (GapSequence)SEQ);
-	clock_t end = clock();
-	return end - start;
+	TIME start, end;
+	getClock(&start);
+	shellSort((void**)ints, arrlen, sizeof(double), cmp_double, (GapSequence)SEQ, 0, 0);
+	getClock(&end);
+	return getDelta(&start, &end);
 }
 
 unsigned long testDoubles(int arrlen) {
-	clock_t start = clock();
-	shellSort((void**)doubles, arrlen, sizeof(double), cmp_double, A003586);
-	clock_t end = clock();
-	return end - start;
+	TIME start, end;
+	getClock(&start);
+	shellSort((void**)doubles, arrlen, sizeof(double), cmp_double, (GapSequence)SEQ, 0, 0);
+	getClock(&end);
+	return getDelta(&start, &end);
 }
 
 int main(int argc, char* argv[]) {
