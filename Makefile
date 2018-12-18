@@ -15,6 +15,10 @@ ifdef DEBUG
 	FLAGS+=-g -O0
 endif
 
+ifdef _32BITMODE
+	FLAGS+=-D _32BITMODE
+endif
+
 lib: makedir $(_OBJS)
 	ar rcs $(OUT) $(_OBJS)
 

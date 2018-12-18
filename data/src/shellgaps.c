@@ -119,5 +119,8 @@ int main(int argc, char* argv[]) {
 	runTests(output, generate, tests, GAP_COUNT, data);
 	destroyData(data, GAP_COUNT);
 
+	free(nums);
+	free(copy);
+
 	return 0;
 }

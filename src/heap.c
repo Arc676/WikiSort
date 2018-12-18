@@ -199,6 +199,7 @@ void heapSort(void** array, int len, int size, COMP_FUNC cmp) {
 	for (int i = len - 1; i >= 0; i--) {
 		void** obj = heap_pop(heap);
 		memcpy(dst, obj, size);
+		free(obj);
 		dst = adv(dst, -size);
 	}
 	heap_destroy(heap);

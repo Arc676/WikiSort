@@ -60,14 +60,17 @@ void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq, 
 			}
 			dst = adv(array, k * size);
 			memcpy(dst, toInsert, size);
+			free(toInsert);
 		}
 	}
 	// if the caller wanted memoization enabled AND
 	// didn't provide pre-calculated gap sequences,
 	// update the gap sequence
-	if (memoized && !gapSeq) {
+	if (memoized && !*gapSeq) {
 		*gapSeq = gaps;
 		*memoized = gapCount;
+	} else if (!memoized) {
+		free(gaps);
 	}
 }
 

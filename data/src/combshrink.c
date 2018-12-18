@@ -99,5 +99,8 @@ int main(int argc, char* argv[]) {
 	runTests(output, generate, tests, 9, data);
 	destroyData(data, 9);
 
+	free(nums);
+	free(copy);
+
 	return 0;
 }

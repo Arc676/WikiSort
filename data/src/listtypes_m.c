@@ -107,5 +107,10 @@ int main(int argc, char* argv[]) {
 	runTests(output, generate, tests, 4, data);
 	destroyData(data, 4);
 
+	free(randomGen);
+	free(fewunique);
+	free(reversed);
+	free(kindasorted);
+
 	return 0;
 }

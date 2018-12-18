@@ -82,5 +82,11 @@ int main(int argc, char* argv[]) {
 	runTests(output, generate, tests, 4, data);
 	destroyData(data, 4);
 
+	free(shellGaps);
+	free(prattGaps);
+
+	free(nums);
+	free(copy);
+
 	return 0;
 }

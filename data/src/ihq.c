@@ -79,5 +79,8 @@ int main(int argc, char* argv[]) {
 	runTests(output, generate, tests, 3, data);
 	destroyData(data, 3);
 
+	free(nums);
+	free(copy);
+
 	return 0;
 }

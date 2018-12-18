@@ -47,7 +47,7 @@ void generate(int arrlen) {
 unsigned long testInts(int arrlen) {
 	TIME start, end;
 	getClock(&start);
-	shellSort((void**)ints, arrlen, sizeof(double), cmp_double, (GapSequence)SEQ, 0, 0);
+	shellSort((void**)ints, arrlen, sizeof(int), cmp_int, (GapSequence)SEQ, 0, 0);
 	getClock(&end);
 	return getDelta(&start, &end);
 }
@@ -77,6 +77,9 @@ int main(int argc, char* argv[]) {
 	};
 	runTests(output, generate, tests, 2, data);
 	destroyData(data, 2);
+
+	free(ints);
+	free(doubles);
 
 	return 0;
 }

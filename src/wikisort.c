@@ -15,7 +15,12 @@
 #include "wikisort.h"
 
 void** adv(void** start, int dist) {
+	#ifdef _32BITMODE
+	uint32_t ptr = (uint32_t)start;
+	#else
 	uint64_t ptr = (uint64_t)start;
+	#endif
+
 	ptr += dist;
 	return (void**)ptr;
 }
