@@ -73,6 +73,27 @@ void** maxValue(void** array, int len, int size, COMP_FUNC cmp) {
 	return max;
 }
 
+int binarySearch(void** array, int len, int size, COMP_FUNC cmp, void** search) {
+	int left = 0;
+	int right = len - 1;
+	while (left <= right) {
+		int mid = (left + right) / 2;
+		void** element = adv(array, mid * size);
+		switch (cmp(element, search)) {
+		case -1:
+			left = mid + 1;
+			break;
+		case 1:
+			right = mid - 1;
+			break;
+		case 0:
+		default:
+			return mid;
+		}
+	}
+	return -1;
+}
+
 int cmp_int(void** a, void** b) {
 	int x = *(int*)a;
 	int y = *(int*)b;

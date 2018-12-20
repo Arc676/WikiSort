@@ -78,6 +78,17 @@ void** minValue(void** array, int len, int size, COMP_FUNC cmp);
 void** maxValue(void** array, int len, int size, COMP_FUNC cmp);
 
 /**
+ * Performs a binary search in a list for a given element
+ * @param array The array in which to search
+ * @param len The length of the array
+ * @param size The size of a single element
+ * @param cmp Element comparison function
+ * @param search The element for which to search
+ * @return The index of the searched-for element in the array
+ */
+int binarySearch(void** array, int len, int size, COMP_FUNC cmp, void** search);
+
+/**
  * Comparison function for integers
  * @param a Pointer to first integer
  * @param b Pointer to second integer

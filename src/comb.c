@@ -32,13 +32,13 @@ void combSort(void** array, int len, int size, COMP_FUNC cmp, float shrink) {
 			gap = 1;
 		}
 		void** a = array;
-		void** b = adv(array, size);
+		void** b = adv(array, gap * size);
 		for (int i = 0; i + gap < len; i++) {
 			if (cmp(a, b) == 1) {
 				swapElements(a, b, size);
 				sorted = 0;
 			}
-			a = b;
+			a = adv(a, size);
 			b = adv(b, size);
 		}
 	}
