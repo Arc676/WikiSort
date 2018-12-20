@@ -33,3 +33,4 @@
 #include "radix.h"
 #include "counting.h"
 #include "pigeonhole.h"
+#include "patience.h"

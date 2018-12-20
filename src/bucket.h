@@ -42,6 +42,14 @@ typedef int KEY_FUNC(void** val, void** minVal, void** maxVal, int keyCount, int
 void setupBuckets(void*** buckets, int** bucketLengths, int len, int size, int bucketCount);
 
 /**
+ * Deallocates memory allocated to buckets for distribution sorts
+ * @param buckets Buckets array
+ * @param bucketLengths Array of bucket sizes
+ * @param bucketCount Number of buckets
+ */
+void deallocateBuckets(void** buckets, int* bucketLengths, int bucketCount);
+
+/**
  * Iterates through a set of buckets and moves their elements to a destination
  * array such that the destination array contains the buckets' elements sorted by bucket
  * @param dst Destination array

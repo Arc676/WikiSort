@@ -26,6 +26,16 @@ void setupBuckets(void*** buckets, int** bucketLengths, int len, int size, int b
 	memset(*bucketLengths, 0, bucketCount * sizeof(int));
 }
 
+void deallocateBuckets(void** buckets, int* bucketLengths, int bucketCount) {
+	void** bucket = buckets;
+	for (int i = 0; i < bucketCount; i++) {
+		free(*bucket);
+		bucket++;
+	}
+	free(buckets);
+	free(bucketLengths);
+}
+
 void bucketsToList(void** dst, void** buckets, int* bucketLengths, int size, int bucketCount, int dealloc) {
 	void** ptr = dst;
 	for (int i = 0; i < bucketCount; i++) {

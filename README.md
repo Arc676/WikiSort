@@ -31,7 +31,8 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 | Name | Worst | Average | Best |
 | --- | --- | --- | --- |
 | [Insertion sort](https://en.wikipedia.org/wiki/Insertion_sort) | =Average | O(n^2) comparisons and swaps | O(n) comparisons, O(1) swaps |
-| [Shellsort](https://en.wikipedia.org/wiki/Shellsort) | O(n^2) worst known gaps, O(nlog^2n) best known gaps | depends on gaps | O(nlogn)
+| [Shellsort](https://en.wikipedia.org/wiki/Shellsort) | O(n^2) worst known gaps, O(nlog^2n) best known gaps | depends on gaps | O(nlogn) |
+| [Patience Sorting](https://en.wikipedia.org/wiki/Patience_sorting) | =Average | O(nlogn) | O(n) |
 
 ### Merge sorts
 | Name | Worst | Average | Best |
