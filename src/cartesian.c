@@ -63,15 +63,29 @@ BinaryTreeNode* arrayToCartesianTree(void** array, int len, int size, COMP_FUNC 
 	return tree;
 }
 
-void cartesianTreeSort(void** array, int len, int size, COMP_FUNC cmp) {
-	BinaryTreeNode* cartesianTree = createBinaryTreeNode(array, size, NULL, NULL, NULL);
-	Heap* queue = heap_create(len, size, cmp); // the maximum size of the heap is probably something like len/2 + 1
-	// add children of popped value to queue
+void cartesianTreeSort(void** array, int len, int size, COMP_FUNC cmp, COMP_FUNC binTreeCmp) {
+	BinaryTreeNode* cartesianTree = arrayToCartesianTree(array, len, size, cmp);
+	Heap* queue = heap_create(pow(2, (int)log2(len)), sizeof(BinaryTreeNode), binTreeCmp);
+	heap_push(queue, (void**)cartesianTree);
 	void** ptr = array;
 	for (int i = 0; i < len; i++) {
-		void** next = heap_pop(queue);
-		memcpy(ptr, next, size);
+		BinaryTreeNode* next = (BinaryTreeNode*)heap_pop(queue);
+		memcpy(ptr, next->value, size);
+		if (next->leftChild) {
+			heap_push(queue, (void**)next->leftChild);
+		}
+		if (next->rightChild) {
+			heap_push(queue, (void**)next->rightChild);
+		}
 		free(next);
 		ptr = adv(ptr, size);
 	}
+	heap_destroy(queue);
+	destroyBinaryTree(cartesianTree);
+}
+
+int binTree_cmp_int(void** a, void** b) {
+	BinaryTreeNode* na = (BinaryTreeNode*)a;
+	BinaryTreeNode* nb = (BinaryTreeNode*)b;
+	return -cmp_int(na->value, nb->value);
 }

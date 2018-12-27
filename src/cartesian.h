@@ -49,6 +49,7 @@ void destroyBinaryTree(BinaryTreeNode* root);
 
 /**
  * Creates a Cartesian tree with the contents of a given array
+ * with the minimum value at the root of the tree
  * @param array The array from which to build a Cartesian tree
  * @param len The length of the array
  * @param size The size of a single element
@@ -57,6 +58,27 @@ void destroyBinaryTree(BinaryTreeNode* root);
  */
 BinaryTreeNode* arrayToCartesianTree(void** array, int len, int size, COMP_FUNC cmp);
 
-void cartesianTreeSort(void** array, int len, int size, COMP_FUNC cmp);
+/**
+ * Sorts an array using a Cartesian sort algorithm with a Cartesian tree
+ * and priority queue (heap) with the minimum value at the root
+ * @param array The array to sort
+ * @param len The length of the array
+ * @param size The size of a single element
+ * @param cmp Element comparison function
+ * @param binTreeCmp Element comparison function where the elements are stored in the value property of a binary tree node
+ */
+void cartesianTreeSort(void** array, int len, int size, COMP_FUNC cmp, COMP_FUNC binTreeCmp);
+
+/**
+ * Binary tree node element comparison function for integers;
+ * NOTE: The Cartesian tree sort algorithm requires that the priority queue
+ * hold the minimum value at the root, but the heap implementation has the
+ * maximum element at the root, so this function returns the arithmetic
+ * opposite of the standard integer comparison function
+ * @param a First binary tree node
+ * @param b Second binary tree node
+ * @return -1, 0, or 1 if the integer stored in the first node is greater than, equal to, or less than that in the second node, respectively
+ */
+int binTree_cmp_int(void** a, void** b);
 
 #endif
