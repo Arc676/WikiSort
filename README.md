@@ -26,6 +26,7 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 | [Selection sort](https://en.wikipedia.org/wiki/Selection_sort) | =Best | =Best | O(n^2) comparisons, O(n) swaps |
 | [Cycle sort](https://en.wikipedia.org/wiki/Cycle_sort) | =Best | =Best | Θ(n^2) |
 | [Heapsort](https://en.wikipedia.org/wiki/Heapsort) | =Average | O(nlogn) | O(nlogn) (distinct keys); O(n) (equal keys) |
+| [Cartesian Tree Sort](https://en.wikipedia.org/wiki/Cartesian_tree) | O(nlogk) | O(nlogn) | O(n) |
 
 ### Insertion sorts
 | Name | Worst | Average | Best |

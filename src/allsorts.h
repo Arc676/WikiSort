@@ -34,3 +34,4 @@
 #include "counting.h"
 #include "pigeonhole.h"
 #include "patience.h"
+#include "cartesian.h"
