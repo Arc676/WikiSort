@@ -16,36 +16,8 @@
 #define CARTESIAN_H
 
 #include "wikisort.h"
+#include "tree.h"
 #include "heap.h"
-
-/**
- * Binary tree structure, implemented as doubly linked nodes,
- * allowing both upward and downward traversal of the tree
- */
-typedef struct BinaryTreeNode {
-	void** value;
-	int size;
-	struct BinaryTreeNode* parent;
-	struct BinaryTreeNode* leftChild;
-	struct BinaryTreeNode* rightChild;
-} BinaryTreeNode;
-
-/**
- * Creates a new binary tree node with the given properties
- * @param value Value for the node
- * @param size Element size
- * @param parent Parent node for the new node
- * @param left Left child node for the new node
- * @param right Right child node for the new node
- * @return Pointer to the newly created tree node
- */
-BinaryTreeNode* createBinaryTreeNode(void** value, int size, BinaryTreeNode* parent, BinaryTreeNode* left, BinaryTreeNode* right);
-
-/**
- * Deallocates the memory allocated to a binary tree
- * @param root Root node of the binary tree to deallocate
- */
-void destroyBinaryTree(BinaryTreeNode* root);
 
 /**
  * Creates a Cartesian tree with the contents of a given array

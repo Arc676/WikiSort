@@ -14,27 +14,6 @@
 
 #include "cartesian.h"
 
-BinaryTreeNode* createBinaryTreeNode(void** value, int size, BinaryTreeNode* parent, BinaryTreeNode* left, BinaryTreeNode* right) {
-	BinaryTreeNode* node = malloc(sizeof(BinaryTreeNode));
-	node->value = malloc(size);
-	memcpy(node->value, value, size);
-	node->size = size;
-	node->parent = parent;
-	node->leftChild = left;
-	node->rightChild = right;
-	return node;
-}
-
-void destroyBinaryTree(BinaryTreeNode* root) {
-	if (!root) {
-		return;
-	}
-	destroyBinaryTree(root->leftChild);
-	destroyBinaryTree(root->rightChild);
-	free(root->value);
-	free(root);
-}
-
 BinaryTreeNode* arrayToCartesianTree(void** array, int len, int size, COMP_FUNC cmp) {
 	BinaryTreeNode* tree = createBinaryTreeNode(array, size, NULL, NULL, NULL);
 	BinaryTreeNode* lastProcessed = tree;

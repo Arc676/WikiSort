@@ -35,3 +35,4 @@
 #include "pigeonhole.h"
 #include "patience.h"
 #include "cartesian.h"
+#include "tree.h"
