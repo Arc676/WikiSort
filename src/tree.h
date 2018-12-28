@@ -15,6 +15,20 @@
 #ifndef TREE_H
 #define TREE_H
 
+// Tree traversal order
+#define PRE_ORDER  0
+#define IN_ORDER   1
+#define POST_ORDER 2
+
+// Tree traversal direction
+#define LTOR 0
+#define RTOL 1
+
+// Node position type
+#define ROOT  0
+#define LNODE 1
+#define RNODE 2
+
 #include "wikisort.h"
 
 /**
@@ -31,12 +45,14 @@ typedef struct BinaryTreeNode {
 
 /**
  * Adds the elements of a binary tree to a destination array
- * through an in-order traversal of the tree
+ * through a traversal of the tree
  * @param root Root node of the tree to traverse
  * @param dst Destination for the tree's contents
+ * @param mode Traversal order
+ * @param dir Traversal direction
  * @return Number of nodes traversed
  */
-int inOrderTraversal(BinaryTreeNode* root, void** dst);
+int traverse(BinaryTreeNode* root, void** dst, int mode, int dir);
 
 /**
  * Builds a binary search tree containing the elements of an array
@@ -54,6 +70,35 @@ BinaryTreeNode* arrayToBinaryTree(void** array, int len, int size, COMP_FUNC cmp
  * @param cmp Element comparison function
  */
 void binaryTree_insert(BinaryTreeNode* root, void** value, COMP_FUNC cmp);
+
+/**
+ * Removes a node from a binary tree
+ * @param node Node to remove
+ */
+void binaryTree_delete(BinaryTreeNode* node);
+
+/**
+ * Finds a value in a binary tree
+ * @param root Node from which to start searching
+ * @param value The value to search for
+ * @param cmp Element comparison function
+ * @return Node containing the searched-for value, or NULL if no such node was found
+ */
+BinaryTreeNode* binaryTree_find(BinaryTreeNode* root, void** value, COMP_FUNC cmp);
+
+/**
+ * Finds the minimum value in a binary tree
+ * @param root Node from which to start searching
+ * @return The node containing the minimum value in the tree rooted at the given node
+ */
+BinaryTreeNode* binaryTree_findMin(BinaryTreeNode* root);
+
+/**
+ * Determine what kind of position is occupied by a node in its tree
+ * @param node Node to check
+ * @return Whether the node is a root node, left child, or right child
+ */
+int binaryTree_nodePosition(BinaryTreeNode* node);
 
 /**
  * Creates a new binary tree node with the given properties

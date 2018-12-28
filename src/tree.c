@@ -14,17 +14,54 @@
 
 #include "tree.h"
 
-int inOrderTraversal(BinaryTreeNode* root, void** dst) {
+int traverse(BinaryTreeNode* root, void** dst, int mode, int dir) {
 	if (!root) {
 		return 0;
 	}
-	int spaces = inOrderTraversal(root->leftChild, dst);
-	dst = adv(dst, spaces * root->size);
+	BinaryTreeNode* child1 = dir == LTOR ? root->leftChild : root->rightChild;
+	BinaryTreeNode* child2 = dir == LTOR ? root->rightChild : root->leftChild;
+	int nodes = 0;
 
+	// traverse a child node if required by traversal mode
+	switch (mode) {
+	case PRE_ORDER:
+		break;
+	case IN_ORDER:
+	case POST_ORDER:
+	{
+		int spaces = traverse(child1, dst, mode, dir);
+		dst = adv(dst, spaces * root->size);
+		nodes += spaces;
+		if (mode == POST_ORDER) {
+			spaces = traverse(child2, dst, mode, dir);
+			dst = adv(dst, spaces * root->size);
+			nodes += spaces;
+		}
+		break;
+	}
+	}
+
+	// copy the value at the given node
 	memcpy(dst, root->value, root->size);
 	dst = adv(dst, root->size);
+	nodes++;
 
-	return spaces + 1 + inOrderTraversal(root->rightChild, dst);
+	// traverse a child node if required by traversal mode
+	switch (mode) {
+	case PRE_ORDER:
+	{
+		int spaces = traverse(child1, dst, mode, dir);
+		dst = adv(dst, spaces * root->size);
+		nodes += spaces;
+	}
+	case IN_ORDER:
+		nodes += traverse(child2, dst, mode, dir);
+		break;
+	case POST_ORDER:
+		break;
+	}
+
+	return nodes;
 }
 
 BinaryTreeNode* arrayToBinaryTree(void** array, int len, int size, COMP_FUNC cmp) {
@@ -52,6 +89,76 @@ void binaryTree_insert(BinaryTreeNode* root, void** value, COMP_FUNC cmp) {
 	}
 }
 
+void binaryTree_delete(BinaryTreeNode* node) {
+	if (!node) {
+		return;
+	}
+	// prepare for deletion
+	BinaryTreeNode* parent = node->parent;
+	BinaryTreeNode* replacement = NULL;
+
+	// check for child node presence
+	if (node->leftChild && node->rightChild) {
+		replacement = binaryTree_findMin(node->rightChild);
+		memcpy(node->value, replacement->value, node->size);
+		binaryTree_delete(replacement);
+		return;
+	} else if (node->leftChild) {
+		replacement = node->leftChild;
+	} else if (node->rightChild) {
+		replacement = node->rightChild;
+	}
+
+	// update parent node for moved node, if needed
+	if (replacement) {
+		replacement->parent = parent;
+	}
+
+	// update child reference for parent node
+	if (binaryTree_nodePosition(node) == LNODE) {
+		parent->leftChild = replacement;
+	} else if (parent) {
+		parent->rightChild = replacement;
+	}
+
+	// destroy node
+	free(node->value);
+	free(node);
+}
+
+BinaryTreeNode* binaryTree_find(BinaryTreeNode* root, void** value, COMP_FUNC cmp) {
+	if (!root) {
+		return NULL;
+	}
+	switch (cmp(root->value, value)) {
+	case -1:
+		return binaryTree_find(root->rightChild, value, cmp);
+	case 1:
+		return binaryTree_find(root->leftChild, value, cmp);
+	case 0:
+	default:
+		return root;
+	}
+}
+
+BinaryTreeNode* binaryTree_findMin(BinaryTreeNode* root) {
+	while (root->leftChild) {
+		root = root->leftChild;
+	}
+	return root;
+}
+
+int binaryTree_nodePosition(BinaryTreeNode* node) {
+	BinaryTreeNode* parent = node->parent;
+	if (parent) {
+		if (parent->leftChild == node) {
+			return LNODE;
+		}
+		return RNODE;
+	}
+	return ROOT;
+}
+
 BinaryTreeNode* createBinaryTreeNode(void** value, int size, BinaryTreeNode* parent, BinaryTreeNode* left, BinaryTreeNode* right) {
 	BinaryTreeNode* node = malloc(sizeof(BinaryTreeNode));
 	node->value = malloc(size);
@@ -75,6 +182,6 @@ void destroyBinaryTree(BinaryTreeNode* root) {
 
 void treeSort(void** array, int len, int size, COMP_FUNC cmp) {
 	BinaryTreeNode* tree = arrayToBinaryTree(array, len, size, cmp);
-	inOrderTraversal(tree, array);
+	traverse(tree, array, IN_ORDER, LTOR);
 	destroyBinaryTree(tree);
 }
