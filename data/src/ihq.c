@@ -38,7 +38,7 @@ unsigned long introTest(int arrlen) {
 	getClock(&start);
 	introSort((void**)copy, arrlen, sizeof(int), cmp_int);
 	getClock(&end);
-	return getDelta(&start, &end);;
+	return getDelta(&start, &end);
 }
 
 unsigned long heapTest(int arrlen) {
@@ -47,7 +47,7 @@ unsigned long heapTest(int arrlen) {
 	getClock(&start);
 	heapSort((void**)copy, arrlen, sizeof(int), cmp_int);
 	getClock(&end);
-	return getDelta(&start, &end);;
+	return getDelta(&start, &end);
 }
 
 unsigned long quickTest(int arrlen) {
@@ -56,7 +56,7 @@ unsigned long quickTest(int arrlen) {
 	getClock(&start);
 	quickSort((void**)copy, arrlen, sizeof(int), cmp_int);
 	getClock(&end);
-	return getDelta(&start, &end);;
+	return getDelta(&start, &end);
 }
 
 int main(int argc, char* argv[]) {

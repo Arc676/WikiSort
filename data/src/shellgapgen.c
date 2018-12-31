@@ -35,7 +35,7 @@ unsigned long gapTest(int arrlen, int seq) {
 	int* gaps = gapSeqs[seq](arrlen, &count);
 	free(gaps);
 	getClock(&end);
-	return getDelta(&start, &end);;
+	return getDelta(&start, &end);
 }
 
 unsigned long g0(int arrlen) {

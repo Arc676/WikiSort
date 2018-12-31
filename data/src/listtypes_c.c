@@ -55,7 +55,7 @@ unsigned long testRandom(int arrlen) {
 	getClock(&start);
 	cocktailSort((void**)randomGen, arrlen, sizeof(int), cmp_int);
 	getClock(&end);
-	return getDelta(&start, &end);;
+	return getDelta(&start, &end);
 }
 
 unsigned long testReversed(int arrlen) {
@@ -65,7 +65,7 @@ unsigned long testReversed(int arrlen) {
 	getClock(&start);
 	cocktailSort((void**)reversed, arrlen, sizeof(int), cmp_int);
 	getClock(&end);
-	return getDelta(&start, &end);;
+	return getDelta(&start, &end);
 }
 
 unsigned long testFewUnique(int arrlen) {
@@ -73,7 +73,7 @@ unsigned long testFewUnique(int arrlen) {
 	getClock(&start);
 	cocktailSort((void**)fewunique, arrlen, sizeof(int), cmp_int);
 	getClock(&end);
-	return getDelta(&start, &end);;
+	return getDelta(&start, &end);
 }
 
 unsigned long testKindaSorted(int arrlen) {
@@ -81,7 +81,7 @@ unsigned long testKindaSorted(int arrlen) {
 	getClock(&start);
 	cocktailSort((void**)kindasorted, arrlen, sizeof(int), cmp_int);
 	getClock(&end);
-	return getDelta(&start, &end);;
+	return getDelta(&start, &end);
 }
 
 int main(int argc, char* argv[]) {
