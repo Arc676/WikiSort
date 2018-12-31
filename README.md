@@ -3,7 +3,7 @@ A GPL C library of sorting algorithms found on Wikipedia
 
 ## Available Sorting Algorithms
 
-This table provides links to the Wikipedia pages regarding each sorting algorithm as well as the time complexity of the algorithm.
+These tables list the implemented sorting algorithms and provide their time complexities and links to their corresponding Wikipedia pages.
 
 When two cases have the same time complexity, this is indicated with `=[case]`.
 
@@ -35,6 +35,7 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 | [Shellsort](https://en.wikipedia.org/wiki/Shellsort) | O(n^2) worst known gaps, O(nlog^2n) best known gaps | depends on gaps | O(nlogn) |
 | [Patience Sorting](https://en.wikipedia.org/wiki/Patience_sorting) | =Average | O(nlogn) | O(n) |
 | [Tree sort](https://en.wikipedia.org/wiki/Tree_sort) | O(n^2) | =Best | O(nlogn) |
+| [Splaysort](https://en.wikipedia.org/wiki/Splaysort) | =Average | O(nlogn) | O(n) |
 
 ### Merge sorts
 | Name | Worst | Average | Best |

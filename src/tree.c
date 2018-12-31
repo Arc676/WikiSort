@@ -64,6 +64,13 @@ int traverse(BinaryTreeNode* root, void** dst, int mode, int dir) {
 	return nodes;
 }
 
+int binaryTree_size(BinaryTreeNode* root) {
+	if (!root) {
+		return 0;
+	}
+	return binaryTree_size(root->leftChild) + binaryTree_size(root->rightChild) + 1;
+}
+
 BinaryTreeNode* arrayToBinaryTree(void** array, int len, int size, COMP_FUNC cmp) {
 	BinaryTreeNode* tree = createBinaryTreeNode(array, size, NULL, NULL, NULL);
 	void** ptr = adv(array, size);
@@ -74,7 +81,7 @@ BinaryTreeNode* arrayToBinaryTree(void** array, int len, int size, COMP_FUNC cmp
 	return tree;
 }
 
-void binaryTree_insert(BinaryTreeNode* root, void** value, COMP_FUNC cmp) {
+BinaryTreeNode* binaryTree_insert(BinaryTreeNode* root, void** value, COMP_FUNC cmp) {
 	int res = cmp(root->value, value);
 	BinaryTreeNode* nextNode = res == -1 ? root->rightChild : root->leftChild;
 	if (nextNode) {
@@ -86,6 +93,7 @@ void binaryTree_insert(BinaryTreeNode* root, void** value, COMP_FUNC cmp) {
 		} else {
 			root->leftChild = new;
 		}
+		return new;
 	}
 }
 

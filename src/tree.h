@@ -55,6 +55,13 @@ typedef struct BinaryTreeNode {
 int traverse(BinaryTreeNode* root, void** dst, int mode, int dir);
 
 /**
+ * Determines the number of nodes in a binary tree
+ * @param root Node from which to start counting
+ * @return Number of nodes in the given tree
+ */
+int binaryTree_size(BinaryTreeNode* root);
+
+/**
  * Builds a binary search tree containing the elements of an array
  * @param array The array whose elements to insert into the tree
  * @param len The length of the array
@@ -68,8 +75,9 @@ BinaryTreeNode* arrayToBinaryTree(void** array, int len, int size, COMP_FUNC cmp
  * @param root Node from which to start searching for the insertion position
  * @param value The value to insert
  * @param cmp Element comparison function
+ * @return The newly inserted node
  */
-void binaryTree_insert(BinaryTreeNode* root, void** value, COMP_FUNC cmp);
+BinaryTreeNode* binaryTree_insert(BinaryTreeNode* root, void** value, COMP_FUNC cmp);
 
 /**
  * Removes a node from a binary tree

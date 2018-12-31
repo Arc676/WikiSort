@@ -9,7 +9,7 @@ ODIR=obj
 OBJS=wikisort.o merge.o bubble.o selection.o insertion.o quick.o shell.o \
 	oddeven.o comb.o cocktail.o gnome.o stooge.o cycle.o slow.o bogo.o \
 	heap.o intro.o tim.o radix.o counting.o bucket.o pigeonhole.o patience.o \
-	cartesian.o tree.o
+	cartesian.o tree.o splay.o
 _OBJS=$(patsubst %, $(ODIR)/%, $(OBJS))
 
 ifdef DEBUG
