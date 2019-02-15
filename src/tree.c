@@ -85,7 +85,7 @@ BinaryTreeNode* binaryTree_insert(BinaryTreeNode* root, void** value, COMP_FUNC 
 	int res = cmp(root->value, value);
 	BinaryTreeNode* nextNode = res == -1 ? root->rightChild : root->leftChild;
 	if (nextNode) {
-		binaryTree_insert(nextNode, value, cmp);
+		return binaryTree_insert(nextNode, value, cmp);
 	} else {
 		BinaryTreeNode* new = createBinaryTreeNode(value, root->size, root, NULL, NULL);
 		if (res == -1) {

@@ -20,6 +20,17 @@
 #include <string.h>
 #include <math.h>
 
+#ifdef VISUALIZER
+
+typedef void VISUALIZER_SWAP(void** a, void** b);
+
+typedef void VISUALIZER_ADV(void** ptr, int dist);
+
+extern VISUALIZER_SWAP* visualizer_itemsSwapped;
+extern VISUALIZER_ADV* visualizer_pointerAdvanced;
+
+#endif
+
 /**
  * Type definition for comparison function to be used
  * by sorting algorithms

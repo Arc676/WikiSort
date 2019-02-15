@@ -16,6 +16,10 @@ ifdef DEBUG
 	FLAGS+=-g -O0
 endif
 
+ifdef VISUALIZER
+	FLAGS+=-D VISUALIZER
+endif
+
 ifdef _32BITMODE
 	FLAGS+=-D _32BITMODE
 endif

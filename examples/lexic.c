@@ -41,8 +41,12 @@ int main(int argc, char* argv[]) {
 	printf("\n");
 	if (isSorted((void**)arr, len, sizeof(char*), cmp_str)) {
 		printf("List sorted!\n");
-		return 0;
+	} else {
+		fprintf(stderr, "Failed to sort list\n");
 	}
-	fprintf(stderr, "Failed to sort list\n");
-	return 1;
+	for (int i = 0; i < len; i++) {
+		free(arr[i]);
+	}
+	free(arr);
+	return 0;
 }

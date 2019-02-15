@@ -72,6 +72,14 @@ A `void` pointer can't be dereferenced in C and the language doesn't allow array
 
 In the `data` folder in the repository's root, there are programs and spreadsheets that generate and contain data regarding the runtimes of sorting algorithms, respectively. This information is available for use under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). The source code of those programs is still available under GPLv3. If you would like to have data regarding the runtime of sorting algorithms under your own terms, you may compile the test programs using the included Makefile and generate your own data.
 
+## Compilation
+
+Use the included `Makefile`s to compile the WikiSort library and the test programs. When compiling the library, you can define the variables `_32BITMODE` and `VISUALIZER` to enable 32 bit mode and visualization function calls, respectively. In 32 bit mode, pointers are advanced using `uint32_t` instead of `uint64_t`.
+
+In `src/wikisort.h`, there are type definitions for function pointers that are called when swapping elements or advancing pointers. These are only compiled when visualizer mode is enabled. When creating a sorting algorithm visualizer or other program that needs to be notified when elements in a list are swapped, define `VISUALIZER` when calling `make` to enable these features. During linking, appropriate functions must be defined and set.
+
+Refer to `examples/random.c` for an example of how this might be used.
+
 ## Licensing
 
 Project available under GPLv3. See `LICENSE` for full license text.

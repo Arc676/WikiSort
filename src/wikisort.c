@@ -21,11 +21,19 @@ void** adv(void** start, int dist) {
 	uint64_t ptr = (uint64_t)start;
 	#endif
 
+	#ifdef VISUALIZER
+	visualizer_pointerAdvanced(start, dist);
+	#endif
+
 	ptr += dist;
 	return (void**)ptr;
 }
 
 void swapElements(void** a, void** b, int size) {
+	#ifdef VISUALIZER
+	visualizer_itemsSwapped(a, b);
+	#endif
+
 	void** tmp = malloc(size);
 	memcpy(tmp, a, size);
 	memcpy(a, b, size);
