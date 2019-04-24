@@ -57,8 +57,8 @@ void bucketSort(void** array, int len, int size, COMP_FUNC cmp, KEY_FUNC key) {
 		return;
 	}
 	// allocate bucket memory
-	void** minVal = minValue(array, len, size, cmp);
-	void** maxVal = maxValue(array, len, size, cmp);
+	void** minVal = extremeValue(array, len, size, cmp, 0, 0);
+	void** maxVal = extremeValue(array, len, size, cmp, 1, 0);
 	int bucketCount = key(0, minVal, maxVal, 0, 0) + 1;
 	void** buckets;
 	int* bucketLengths;

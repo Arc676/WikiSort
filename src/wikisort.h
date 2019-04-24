@@ -69,24 +69,16 @@ void swapElements(void** a, void** b, int size);
 int isSorted(void** array, int len, int size, COMP_FUNC cmp);
 
 /**
- * Determines the minimum value in an array (linear search)
+ * Determines the extreme (max or min) value in an array (linear search)
  * @param array The array to search
  * @param len The length of the array
  * @param size The size of a single element
  * @param cmp Comparison function for the elements
- * @return Pointer to the minimum value as determined by the comparison function
- */
-void** minValue(void** array, int len, int size, COMP_FUNC cmp);
-
-/**
- * Determines the maximum value in an array (linear search)
- * @param array The array to search
- * @param len The length of the array
- * @param size The size of a single element
- * @param cmp Comparison function for the elements
+ * @param max Whether the maximum should be searched for (otherwise finds the minimum)
+ * @param index A pointer to an integer in which to store the index of the found element (can be NULL)
  * @return Pointer to the maximum value as determined by the comparison function
  */
-void** maxValue(void** array, int len, int size, COMP_FUNC cmp);
+void** extremeValue(void** array, int len, int size, COMP_FUNC cmp, int max, int* index);
 
 /**
  * Performs a binary search in a list for a given element

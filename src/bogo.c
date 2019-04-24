@@ -46,12 +46,18 @@ int heapsAlgorithm(int k, void** array, int len, int size, PERM_HANDLER handler,
 }
 
 void bogoSort_rand(void** array, int len, int size, COMP_FUNC cmp) {
+	if (len < 2) {
+		return;
+	}
 	while (!isSorted(array, len, size, cmp)) {
 		fisherYates(array, len, size);
 	}
 }
 
 void bogoSort_det(void** array, int len, int size, COMP_FUNC cmp) {
+	if (len < 2) {
+		return;
+	}
 	BogosortPermHandler bph = { cmp };
 	heapsAlgorithm(len, array, len, size, bogoSort_permHandler, &bph);
 }

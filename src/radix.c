@@ -18,7 +18,7 @@ void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE
 	if (len < 2) {
 		return;
 	}
-	void** maxVal = maxValue(array, len, size, cmp);
+	void** maxVal = extremeValue(array, len, size, cmp, 1, 0);
 	for (int iteration = 0; bCmp(base, iteration, maxVal); iteration++) {
 		// allocate bucket memory
 		void** buckets;
@@ -36,7 +36,7 @@ void radixSortMSDRec(void** array, int len, int size, COMP_FUNC cmp, int base, B
 	if (len < 2) {
 		return;
 	}
-	void** maxVal = maxValue(array, len, size, cmp);
+	void** maxVal = extremeValue(array, len, size, cmp, 1, 0);
 	if (!bCmp(base, iteration, maxVal)) {
 		return;
 	}

@@ -57,28 +57,23 @@ int isSorted(void** array, int len, int size, COMP_FUNC cmp) {
 	return 1;
 }
 
-void** minValue(void** array, int len, int size, COMP_FUNC cmp) {
+void** extremeValue(void** array, int len, int size, COMP_FUNC cmp, int max, int* index) {
 	void** ptr = adv(array, size);
-	void** min = array;
+	void** val = array;
+	int search = max ? 1 : -1;
+	if (index) {
+		*index = 0;
+	}
 	for (int i = 1; i < len; i++) {
-		if (cmp(ptr, min) == -1) {
-			min = ptr;
+		if (cmp(ptr, val) == search) {
+			val = ptr;
+			if (index) {
+				*index = i;
+			}
 		}
 		ptr = adv(ptr, size);
 	}
-	return min;
-}
-
-void** maxValue(void** array, int len, int size, COMP_FUNC cmp) {
-	void** ptr = adv(array, size);
-	void** max = array;
-	for (int i = 1; i < len; i++) {
-		if (cmp(ptr, max) == 1) {
-			max = ptr;
-		}
-		ptr = adv(ptr, size);
-	}
-	return max;
+	return val;
 }
 
 int binarySearch(void** array, int len, int size, COMP_FUNC cmp, void** search) {
