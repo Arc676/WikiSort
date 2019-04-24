@@ -63,6 +63,7 @@ When two cases have the same time complexity, this is indicated with `=[case]`.
 ### Other
 | Name | Worst | Average | Best |
 | --- | --- | --- | --- |
+| [Pancake sorting](https://en.wikipedia.org/wiki/Pancake_sorting) | =Average | O(n^2) | O(n) |
 
 ## Implementation
 

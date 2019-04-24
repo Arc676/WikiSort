@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2019 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -12,29 +12,11 @@
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#include "merge.h"
-#include "bubble.h"
-#include "selection.h"
-#include "insertion.h"
-#include "quick.h"
-#include "shell.h"
-#include "oddeven.h"
-#include "comb.h"
-#include "cocktail.h"
-#include "gnome.h"
-#include "stooge.h"
-#include "cycle.h"
-#include "slow.h"
-#include "bogo.h"
-#include "heap.h"
-#include "intro.h"
+#ifndef PANCAKE_H
+#define PANCAKE_H
+
 #include "tim.h"
-#include "bucket.h"
-#include "radix.h"
-#include "counting.h"
-#include "pigeonhole.h"
-#include "patience.h"
-#include "cartesian.h"
-#include "tree.h"
-#include "splay.h"
-#include "pancake.h"
+
+void pancakeSort(void** array, int len, int size, COMP_FUNC cmp);
+
+#endif
