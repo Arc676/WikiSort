@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-20 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -11,6 +11,10 @@
 
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef SHELL_H
 #define SHELL_H
@@ -33,7 +37,7 @@ typedef enum GapSequence {
 	GAP_COUNT
 } GapSequence;
 
-const int ciuraSequence[8];
+extern const int ciuraSequence[8];
 
 /**
  * Typedef for gap sequence generating functions
@@ -43,7 +47,7 @@ const int ciuraSequence[8];
  */
 typedef int* GAP_GEN(int len, int* count);
 
-GAP_GEN *gapSeqs[GAP_COUNT];
+extern GAP_GEN *gapSeqs[GAP_COUNT];
 
 /**
  * Sorts the given array using a shellsort algorithm
@@ -203,4 +207,8 @@ int* gA108870(int len, int* count);
  */
 int* gA102549(int len, int* count);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

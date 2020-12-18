@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-20 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -11,6 +11,10 @@
 
 //You should have received a copy of the GNU General Public License
 //along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef COCKTAIL_H
 #define COCKTAIL_H
@@ -26,4 +30,8 @@
  */
 void cocktailSort(void** array, int len, int size, COMP_FUNC cmp);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
