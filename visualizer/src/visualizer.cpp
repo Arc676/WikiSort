@@ -34,6 +34,13 @@ VISUALIZER_ADV* visualizer_pointerAdvanced;
 int arraySize;
 int* array = nullptr;
 
+const char* sequences_s[] = {
+	"Shell 1959", "Frank & Lazarus 1960",
+	"A168604", "A083318", "A003586", "A003462", "A036569", "A036562", "A033622",
+	"Gonnet & Baeza-Yates 1991",
+	"A108870", "A102549"
+};
+
 void swapped(void** a, void** b) {
 }
 
@@ -166,6 +173,26 @@ int main() {
 				}
 			}
 			if (ImGui::CollapsingHeader("Insertion Sorts")) {
+				if (ImGui::Button("Insertion Sort")) {
+					insertionSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+
+				static int seq = 0;
+				if (ImGui::Button("Shellsort")) {
+					shellSort((void**)array, arraySize, sizeof(int), cmp_int, (GapSequence)seq, nullptr, nullptr);
+				}
+				ImGui::SameLine();
+				ImGui::Combo("Gap Sequence", &seq, sequences_s, GAP_COUNT);
+
+				if (ImGui::Button("Patience Sort")) {
+					patienceSort((void**)array, arraySize, sizeof(int), cmp_int, geq_int);
+				}
+				if (ImGui::Button("Tree Sort")) {
+					treeSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+				if (ImGui::Button("Splay Sort")) {
+					splaySort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
 			}
 			if (ImGui::CollapsingHeader("Merge Sorts")) {
 				if (ImGui::Button("Merge Sort")) {
