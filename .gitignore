@@ -6,3 +6,4 @@ obj
 *.o
 *HPC*
 *.ini
+bin

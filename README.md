@@ -1,5 +1,6 @@
 # WikiSort
-A GPL C library of sorting algorithms found on Wikipedia
+
+A GPL C library of sorting algorithms found on Wikipedia and a sorting algorithm visualizer.
 
 ## Available Sorting Algorithms
 
@@ -81,8 +82,12 @@ In `src/wikisort.h`, there are type definitions for function pointers that are c
 
 Refer to `examples/random.c` for an example of how this might be used.
 
+## Visualizer
+
+The repository also includes a visualizer for the sorting algorithms. The visualizer uses [ImGui](https://github.com/ocornut/imgui) for its interface. A Makefile to compile the visualizer is included in the folder; the ImGui submodule must also be cloned before compilation.
+
 ## Licensing
 
-Project available under GPLv3. See `LICENSE` for full license text.
+Project available under GPLv3. See `LICENSE` for full license text. ImGui is available under the MIT license.
 
 Text obtained from Wikipedia (algorithm time complexities) available under [Creative Commons Attribution-ShareAlike 3.0](https://en.wikipedia.org/wiki/Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License) license.

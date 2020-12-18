@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include <string>
 
@@ -24,6 +25,20 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
+#include "allsorts.h"
+
+VISUALIZER_SWAP* visualizer_itemsSwapped;
+VISUALIZER_ADV* visualizer_pointerAdvanced;
+
+int arraySize;
+int* array = nullptr;
+
+void swapped(void** a, void** b) {
+}
+
+void ptrAdvanced(void** ptr, int dst) {
+}
 
 void glfwErrorCallback(int error, const char* description) {
 	fprintf(stderr, "GLFW error %d: %s\n", error, description);
@@ -60,6 +75,11 @@ int main() {
 		return 1;
 	}
 
+	srand(time(NULL));
+
+	visualizer_itemsSwapped = swapped;
+	visualizer_pointerAdvanced = ptrAdvanced;
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
@@ -76,6 +96,100 @@ int main() {
 		ImGui::SetNextWindowSize(ImVec2(700, 600), ImGuiCond_FirstUseEver);
 
 		if (ImGui::Begin("WikiSort Visualizer")) {
+			if (ImGui::CollapsingHeader("Data")) {
+				ImGui::InputInt("Array size", &arraySize);
+				if (ImGui::Button("Allocate")) {
+					array = (int*)realloc(array, arraySize);
+				}
+				static int dataMax;
+				ImGui::InputInt("Maximum element value", &dataMax);
+				if (ImGui::Button("Fill with random numbers")) {
+					for (int i = 0; i < arraySize; i++) {
+						array[i] = rand() % dataMax;
+					}
+				}
+			}
+			if (ImGui::CollapsingHeader("Exchange Sorts")) {
+				if (ImGui::Button("Bubble Sort")) {
+					bubbleSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+				if (ImGui::Button("Quicksort")) {
+					quickSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+				if (ImGui::Button("Odd-Even Sort")) {
+					oddEvenSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+
+				static float combShrink = 1.3f;
+				if (ImGui::Button("Comb Sort")) {
+					combSort((void**)array, arraySize, sizeof(int), cmp_int, combShrink);
+				}
+				ImGui::SameLine();
+				ImGui::InputFloat("Shrink Factor", &combShrink);
+
+				if (ImGui::Button("Cocktail Sort")) {
+					cocktailSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+				if (ImGui::Button("Gnome Sort")) {
+					gnomeSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+				if (ImGui::Button("Stooge Sort")) {
+					stoogeSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+				if (ImGui::Button("Slowsort")) {
+					slowSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+
+				static bool deterministic = true;
+				if (ImGui::Button("Bogosort")) {
+					if (deterministic) {
+						bogoSort_det((void**)array, arraySize, sizeof(int), cmp_int);
+					} else {
+						bogoSort_rand((void**)array, arraySize, sizeof(int), cmp_int);
+					}
+				}
+				ImGui::SameLine();
+				ImGui::Checkbox("Deterministic Sort", &deterministic);
+			}
+			if (ImGui::CollapsingHeader("Selection Sorts")) {
+				if (ImGui::Button("Selection Sort")) {
+					selectionSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+				if (ImGui::Button("Cycle Sort")) {
+					cycleSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+				if (ImGui::Button("Heapsort")) {
+					heapSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+				if (ImGui::Button("Cartesian Tree Sort")) {
+					cartesianTreeSort((void**)array, arraySize, sizeof(int), cmp_int, binTree_cmp_int);
+				}
+			}
+			if (ImGui::CollapsingHeader("Insertion Sorts")) {
+			}
+			if (ImGui::CollapsingHeader("Merge Sorts")) {
+				if (ImGui::Button("Merge Sort")) {
+					mergeSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+			}
+			if (ImGui::CollapsingHeader("Distribution Sorts")) {
+			}
+			if (ImGui::CollapsingHeader("Concurrent Sorts")) {
+				ImGui::Text("(None yet implemented)");
+			}
+			if (ImGui::CollapsingHeader("Hybrid Sorts")) {
+				if (ImGui::Button("Introsort")) {
+					introSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+				if (ImGui::Button("Timsort")) {
+					timSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+			}
+			if (ImGui::CollapsingHeader("Other Sorts")) {
+				if (ImGui::Button("Pancake Sort")) {
+					pancakeSort((void**)array, arraySize, sizeof(int), cmp_int);
+				}
+			}
 			if (ImGui::Button("Exit")) {
 				break;
 			}
@@ -96,6 +210,10 @@ int main() {
 	ImGui::DestroyContext();
 	glfwDestroyWindow(window);
 	glfwTerminate();
+
+	if (array) {
+		free(array);
+	}
 
 	return 0;
 }

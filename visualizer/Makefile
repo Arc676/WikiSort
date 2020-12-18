@@ -3,8 +3,8 @@ SDIR=src
 BDIR=bin
 
 CC=g++
-FLAGS=-std=c++11 -I imgui -I imgui/backends
-LIB=-lm -l glfw -l GLEW
+FLAGS=-std=c++11 -I imgui -I imgui/backends -I ../src -D VISUALIZER
+LIB=-L .. -lm -l glfw -l GLEW -l wikisort
 
 ifdef MAC
 LIB+=-framework OpenGL
