@@ -34,6 +34,8 @@ VISUALIZER_ADV* visualizer_pointerAdvanced;
 int arraySize;
 int* array = nullptr;
 
+unsigned int visualizerTexture;
+
 const char* sequences_s[] = {
 	"Shell 1959", "Frank & Lazarus 1960",
 	"A168604", "A083318", "A003586", "A003462", "A036569", "A036562", "A033622",
@@ -41,10 +43,31 @@ const char* sequences_s[] = {
 	"A108870", "A102549"
 };
 
+void renderVisualizer() {
+	unsigned int fbo;
+	glGenFramebuffers(1, &fbo);
+	glGenTextures(1, &visualizerTexture);
+	glBindTexture(GL_TEXTURE_2D, visualizerTexture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 600, 700, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, visualizerTexture, 0);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDeleteFramebuffers(1, &fbo);
+}
+
 void swapped(void** a, void** b) {
+	renderVisualizer();
 }
 
 void ptrAdvanced(void** ptr, int dst) {
+	renderVisualizer();
 }
 
 void glfwErrorCallback(int error, const char* description) {
@@ -71,7 +94,7 @@ int main() {
 
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	GLFWwindow* window = glfwCreateWindow(700, 600, "WikiSort Visualizer", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(700, 1200, "WikiSort Visualizer", NULL, NULL);
 	if (!window) {
 		return 1;
 	}
@@ -102,7 +125,7 @@ int main() {
 		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
 		ImGui::SetNextWindowSize(ImVec2(700, 600), ImGuiCond_FirstUseEver);
 
-		if (ImGui::Begin("WikiSort Visualizer")) {
+		if (ImGui::Begin("Control Panel")) {
 			if (ImGui::CollapsingHeader("Data")) {
 				ImGui::InputInt("Array size", &arraySize);
 				if (ImGui::Button("Allocate")) {
@@ -221,6 +244,20 @@ int main() {
 				break;
 			}
 		}
+		ImGui::End();
+
+		ImGui::SetNextWindowPos(ImVec2(600, 0), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(700, 600), ImGuiCond_FirstUseEver);
+
+		if (ImGui::Begin("Visualizer")) {
+			ImGui::BeginChild("ArrayRender");
+			ImVec2 size = ImGui::GetWindowSize();
+
+			renderVisualizer();
+			ImGui::Image((ImTextureID)&visualizerTexture, size, ImVec2(0, 1), ImVec2(1, 0));
+			ImGui::EndChild();
+		}
+
 		ImGui::End();
 		ImGui::Render();
 		int displayW, displayH;
