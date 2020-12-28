@@ -230,7 +230,7 @@ int main(int argc, char* argv[]) {
 		ImGui::NewFrame();
 
 		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowSize(ImVec2(600, 700), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(600, 500), ImGuiCond_FirstUseEver);
 
 		if (ImGui::Begin("Control Panel")) {
 			if (ImGui::CollapsingHeader("Data")) {
@@ -356,6 +356,18 @@ int main(int argc, char* argv[]) {
 			}
 			if (ImGui::Button("Exit")) {
 				break;
+			}
+		}
+		ImGui::End();
+
+		ImGui::SetNextWindowPos(ImVec2(0, 500), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(600, 200), ImGuiCond_FirstUseEver);
+
+		if (ImGui::Begin("Settings")) {
+			ImGui::InputText("Vertex Shader", vertexShader, FNAME_SIZE);
+			ImGui::InputText("Fragment Shader", fragmentShader, FNAME_SIZE);
+			if (ImGui::Button("Compile Shaders")) {
+				compileShaders();
 			}
 		}
 		ImGui::End();
