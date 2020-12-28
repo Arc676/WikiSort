@@ -44,7 +44,7 @@ makedir:
 	mkdir -p $(ODIR)
 	mkdir -p $(BDIR)
 
-$(ODIR)/%.o: $(SDIR)/%.cpp
+$(ODIR)/%.o: $(SDIR)/%.cpp $(SDIR)/%.h
 	$(CC) -c $(FLAGS) -o $@ $<
 
 clean:
