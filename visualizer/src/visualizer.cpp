@@ -31,10 +31,13 @@
 VISUALIZER_SWAP* visualizer_itemsSwapped;
 VISUALIZER_ADV* visualizer_pointerAdvanced;
 
-int arraySize;
+int arraySize = 0;
 int* array = nullptr;
 
-unsigned int visualizerTexture;
+int dataMax = 100;
+unsigned int shaderProg, vis_tex, vis_vao, vis_ebo, vis_fbo;
+float* vis_vertices;
+unsigned int* vis_indices;
 
 const char* sequences_s[] = {
 	"Shell 1959", "Frank & Lazarus 1960",
@@ -44,22 +47,62 @@ const char* sequences_s[] = {
 };
 
 void renderVisualizer() {
-	unsigned int fbo;
-	glGenFramebuffers(1, &fbo);
-	glGenTextures(1, &visualizerTexture);
-	glBindTexture(GL_TEXTURE_2D, visualizerTexture);
+}
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 600, 700, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+int initGL() {
+	// Set up vertex shader
+	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	const char *vertexSrc = "#version 330 core\n"
+	    "layout (location = 0) in vec3 aPos;\n"
+	        "void main()\n"
+		    "{\n"
+		        "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+			    "}\0";
+	glShaderSource(vertexShader, 1, &vertexSrc, NULL);
+	glCompileShader(vertexShader);
 
+	// Set up fragment shader
+	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	const char* fragmentSrc = "#version 330 core\n"
+	"out vec4 FragColor;\n"
+	"void main(){\n"
+	    "FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);\n"
+	    "}\0";
+	glShaderSource(fragmentShader, 1, &fragmentSrc, NULL);
+	glCompileShader(fragmentShader);
+
+	// Set up shader program
+	shaderProg = glCreateProgram();
+	glAttachShader(shaderProg, vertexShader);
+	glAttachShader(shaderProg, fragmentShader);
+	glLinkProgram(shaderProg);
+
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
+
+	// Set up VAO, EBO
+	glGenVertexArrays(1, &vis_vao);
+	glGenBuffers(1, &vis_ebo);
+
+	// Set up framebuffer
+	glGenFramebuffers(1, &vis_fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, vis_fbo);
+
+	glGenTextures(1, &vis_tex);
+	glBindTexture(GL_TEXTURE_2D, vis_tex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 600, 700, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, vis_tex, 0);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, visualizerTexture, 0);
-
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		fprintf(stderr, "Framebuffer incomplete\n");
+		return 1;
+	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glDeleteFramebuffers(1, &fbo);
+
+	return 0;
 }
 
 void swapped(void** a, void** b) {
@@ -94,7 +137,7 @@ int main() {
 
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	GLFWwindow* window = glfwCreateWindow(700, 1200, "WikiSort Visualizer", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1200, 700, "WikiSort Visualizer", NULL, NULL);
 	if (!window) {
 		return 1;
 	}
@@ -110,6 +153,11 @@ int main() {
 	visualizer_itemsSwapped = swapped;
 	visualizer_pointerAdvanced = ptrAdvanced;
 
+	int gl = initGL();
+	if (gl != 0) {
+		return gl;
+	}
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
@@ -123,20 +171,40 @@ int main() {
 		ImGui::NewFrame();
 
 		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowSize(ImVec2(700, 600), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(600, 700), ImGuiCond_FirstUseEver);
 
 		if (ImGui::Begin("Control Panel")) {
 			if (ImGui::CollapsingHeader("Data")) {
-				ImGui::InputInt("Array size", &arraySize);
+				static int newSize = 100;
+				ImGui::InputInt("Array size", &newSize);
 				if (ImGui::Button("Allocate")) {
-					array = (int*)realloc(array, arraySize);
+					array = (int*)realloc(array, newSize * sizeof(int));
+					vis_vertices = (float*)realloc(vis_vertices, newSize * 12 * sizeof(float));
+					if (newSize > arraySize) {
+						vis_indices = (unsigned int*)realloc(vis_indices, newSize * 6 * sizeof(float));
+						for (int i = arraySize; i < newSize; i++) {
+							int idx = i * 6;
+							int vShift = i * 4;
+							vis_indices[idx] = vShift;
+							vis_indices[1 + idx] = vis_indices[3 + idx] = 1 + vShift;
+							vis_indices[2 + idx] = vis_indices[5 + idx] = 3 + vShift;
+							vis_indices[4 + idx] = 2 + vShift;
+						}
+						// reload EBO
+						glBindVertexArray(vis_vao);
+						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vis_ebo);
+						glBufferData(GL_ELEMENT_ARRAY_BUFFER, newSize * 6 * sizeof(float), vis_indices, GL_DYNAMIC_DRAW);
+						glBindVertexArray(0);
+					}
+					arraySize = newSize;
+					renderVisualizer();
 				}
-				static int dataMax;
 				ImGui::InputInt("Maximum element value", &dataMax);
 				if (ImGui::Button("Fill with random numbers")) {
 					for (int i = 0; i < arraySize; i++) {
 						array[i] = rand() % dataMax;
 					}
+					renderVisualizer();
 				}
 			}
 			if (ImGui::CollapsingHeader("Exchange Sorts")) {
@@ -247,18 +315,17 @@ int main() {
 		ImGui::End();
 
 		ImGui::SetNextWindowPos(ImVec2(600, 0), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowSize(ImVec2(700, 600), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(600, 700), ImGuiCond_FirstUseEver);
 
 		if (ImGui::Begin("Visualizer")) {
 			ImGui::BeginChild("ArrayRender");
 			ImVec2 size = ImGui::GetWindowSize();
 
-			renderVisualizer();
-			ImGui::Image((ImTextureID)&visualizerTexture, size, ImVec2(0, 1), ImVec2(1, 0));
+			ImGui::Image((ImTextureID)(intptr_t)vis_tex, size, ImVec2(0, 1), ImVec2(1, 0));
 			ImGui::EndChild();
 		}
-
 		ImGui::End();
+
 		ImGui::Render();
 		int displayW, displayH;
 		glfwGetFramebufferSize(window, &displayW, &displayH);
@@ -269,6 +336,11 @@ int main() {
 		glfwSwapBuffers(window);
 	}
 
+	glDeleteFramebuffers(1, &vis_fbo);
+	glDeleteVertexArrays(1, &vis_vao);
+	glDeleteBuffers(1, &vis_ebo);
+	glDeleteProgram(shaderProg);
+
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
@@ -277,6 +349,8 @@ int main() {
 
 	if (array) {
 		free(array);
+		free(vis_vertices);
+		free(vis_indices);
 	}
 
 	return 0;
