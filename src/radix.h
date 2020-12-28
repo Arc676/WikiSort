@@ -37,7 +37,7 @@ typedef int BASE_CMP(int base, int iteration, void** value);
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Element comparison element
+ * @param cmp Element comparison function
  * @param base The base for the radix sort (number of possible digits)
  * @param bCmp Base comparison function
  * @param digExt Digit extraction function
@@ -49,7 +49,7 @@ void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE
  * @param array The array to sort
  * @param len The length of the array
  * @param size The size of a single element
- * @param cmp Element comparison element
+ * @param cmp Element comparison function
  * @param base The base for the radix sort (number of possible digits)
  * @param bCmp Base comparison function
  * @param digExt Digit extraction function

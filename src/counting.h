@@ -28,7 +28,7 @@ extern "C" {
  * @param len The length of the array
  * @param size The size of a single element
  * @param key Key function for the elements
- * @param keyCount The total number of possible keys (maximum key minus 1)
+ * @param keyCount The total number of possible keys (maximum key plus 1, if 0-indexed)
  */
 void countingSort(void** array, int len, int size, KEY_FUNC key, int keyCount);
 

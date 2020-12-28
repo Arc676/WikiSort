@@ -250,7 +250,7 @@ int main(int argc, char* argv[]) {
 				ImGui::InputInt("Maximum element value", &dataMax);
 				if (ImGui::Button("Fill with random numbers")) {
 					for (int i = 0; i < arraySize; i++) {
-						array[i] = rand() % dataMax;
+						array[i] = rand() % (dataMax + 1);
 					}
 					renderVisualizer();
 				}
@@ -339,6 +339,18 @@ int main(int argc, char* argv[]) {
 				}
 			}
 			if (ImGui::CollapsingHeader("Distribution Sorts")) {
+				if (ImGui::Button("Radix Sort (LSD)")) {
+					radixSortLSD((void**)array, arraySize, sizeof(int), cmp_int, 10, int_base_cmp_LSD, int_base_dig_LSD);
+				}
+				if (ImGui::Button("Counting Sort")) {
+					countingSort((void**)array, arraySize, sizeof(int), key_int, dataMax + 1);
+				}
+				if (ImGui::Button("Bucket Sort")) {
+					bucketSort((void**)array, arraySize, sizeof(int), cmp_int, key_intranges);
+				}
+				if (ImGui::Button("Pigeonhole Sort")) {
+					pigeonholeSort((void**)array, arraySize, sizeof(int), key_int, dataMax + 1);
+				}
 			}
 			if (ImGui::CollapsingHeader("Concurrent Sorts")) {
 				ImGui::Text("(None yet implemented)");
