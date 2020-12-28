@@ -83,7 +83,7 @@ int initGL() {
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
-	// Set up VAO, EBO
+	// Generate VAO, EBO
 	glGenVertexArrays(1, &vis_vao);
 	glGenBuffers(1, &vis_ebo);
 
@@ -100,12 +100,29 @@ int initGL() {
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, vis_tex, 0);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		fprintf(stderr, "Framebuffer incomplete\n");
+		std::cerr << "Framebuffer incomplete" << std::endl;
 		return 1;
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	return 0;
+}
+
+void rebuildEBO(int newSize) {
+	const size_t INDEX_LIST_SIZE = newSize * 6 * sizeof(float);
+	vis_indices = (unsigned int*)realloc(vis_indices, INDEX_LIST_SIZE);
+	for (int i = arraySize; i < newSize; i++) {
+		int idx = i * 6;
+		int vShift = i * 4;
+		vis_indices[idx] = vShift;
+		vis_indices[1 + idx] = vis_indices[3 + idx] = 1 + vShift;
+		vis_indices[2 + idx] = vis_indices[5 + idx] = 3 + vShift;
+		vis_indices[4 + idx] = 2 + vShift;
+	}
+	glBindVertexArray(vis_vao);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vis_ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, INDEX_LIST_SIZE, vis_indices, GL_DYNAMIC_DRAW);
+	glBindVertexArray(0);
 }
 
 void swapped(void** a, void** b) {
@@ -117,7 +134,7 @@ void ptrAdvanced(void** ptr, int dst) {
 }
 
 void glfwErrorCallback(int error, const char* description) {
-	fprintf(stderr, "GLFW error %d: %s\n", error, description);
+	std::cerr << "GLFW error " << error << ": " << description << std::endl;
 }
 
 int main() {
@@ -147,7 +164,7 @@ int main() {
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
 	if (glewInit() != GLEW_OK) {
-		fprintf(stderr, "Failed to initialize OpenGL loader\n");
+		std::cerr << "Failed to initialize OpenGL loader" << std::endl;
 		return 1;
 	}
 
@@ -184,20 +201,7 @@ int main() {
 					array = (int*)realloc(array, newSize * sizeof(int));
 					vis_vertices = (float*)realloc(vis_vertices, newSize * 12 * sizeof(float));
 					if (newSize > arraySize) {
-						vis_indices = (unsigned int*)realloc(vis_indices, newSize * 6 * sizeof(float));
-						for (int i = arraySize; i < newSize; i++) {
-							int idx = i * 6;
-							int vShift = i * 4;
-							vis_indices[idx] = vShift;
-							vis_indices[1 + idx] = vis_indices[3 + idx] = 1 + vShift;
-							vis_indices[2 + idx] = vis_indices[5 + idx] = 3 + vShift;
-							vis_indices[4 + idx] = 2 + vShift;
-						}
-						// reload EBO
-						glBindVertexArray(vis_vao);
-						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vis_ebo);
-						glBufferData(GL_ELEMENT_ARRAY_BUFFER, newSize * 6 * sizeof(float), vis_indices, GL_DYNAMIC_DRAW);
-						glBindVertexArray(0);
+						rebuildEBO(newSize);
 					}
 					arraySize = newSize;
 					renderVisualizer();
