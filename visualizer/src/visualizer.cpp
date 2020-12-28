@@ -52,36 +52,56 @@ void renderVisualizer() {
 	glDeleteBuffers(1, &vbo);
 }
 
-int initGL() {
+int compileShaders() {
+	std::ifstream file;
+	std::stringstream stream;
+	std::string src;
+
 	// Set up vertex shader
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	const char *vertexSrc = "#version 330 core\n"
-	    "layout (location = 0) in vec3 aPos;\n"
-	        "void main()\n"
-		    "{\n"
-		        "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-			    "}\0";
-	glShaderSource(vertexShader, 1, &vertexSrc, NULL);
-	glCompileShader(vertexShader);
+	unsigned int vShader = glCreateShader(GL_VERTEX_SHADER);
+	file.open(vertexShader);
+	if (!file.is_open()) {
+		return 1;
+	}
+	stream << file.rdbuf();
+	file.close();
+	src = stream.str();
+	const char* vertexSrc = src.c_str();
+	glShaderSource(vShader, 1, &vertexSrc, NULL);
+	glCompileShader(vShader);
+
+	stream.str(std::string());
 
 	// Set up fragment shader
-	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	const char* fragmentSrc = "#version 330 core\n"
-	"out vec4 FragColor;\n"
-	"void main(){\n"
-	    "FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);\n"
-	    "}\0";
-	glShaderSource(fragmentShader, 1, &fragmentSrc, NULL);
-	glCompileShader(fragmentShader);
+	unsigned int fShader = glCreateShader(GL_FRAGMENT_SHADER);
+	file.open(fragmentShader);
+	if (!file.is_open()) {
+		return 1;
+	}
+	stream << file.rdbuf();
+	file.close();
+	src = stream.str();
+	const char* fragmentSrc = src.c_str();
+	glShaderSource(fShader, 1, &fragmentSrc, NULL);
+	glCompileShader(fShader);
 
 	// Set up shader program
 	shaderProg = glCreateProgram();
-	glAttachShader(shaderProg, vertexShader);
-	glAttachShader(shaderProg, fragmentShader);
+	glAttachShader(shaderProg, vShader);
+	glAttachShader(shaderProg, fShader);
 	glLinkProgram(shaderProg);
 
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	glDeleteShader(vShader);
+	glDeleteShader(fShader);
+
+	return 0;
+}
+
+int initGL() {
+	int ret = compileShaders();
+	if (ret != 0) {
+		return ret;
+	}
 
 	// Generate VAO, EBO
 	glGenVertexArrays(1, &vis_vao);
@@ -137,7 +157,26 @@ void glfwErrorCallback(int error, const char* description) {
 	std::cerr << "GLFW error " << error << ": " << description << std::endl;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
+	// Default shader programs
+	sprintf(fragmentShader, "fragment.glsl");
+	sprintf(vertexShader, "vertex.glsl");
+
+	int opt;
+	while ((opt = getopt(argc, argv, "f:v:")) != -1) {
+		switch (opt) {
+		case 'f':
+			snprintf(fragmentShader, FNAME_SIZE, "%s", optarg);
+			break;
+		case 'v':
+			snprintf(vertexShader, FNAME_SIZE, "%s", optarg);
+			break;
+		default:
+			std::cerr << "Invalid argument " << opt << std::endl;
+			return 1;
+		}
+	}
+
 	glfwSetErrorCallback(glfwErrorCallback);
 	if (!glfwInit()) {
 		return 1;

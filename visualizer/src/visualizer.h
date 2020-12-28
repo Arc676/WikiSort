@@ -18,8 +18,11 @@
 
 #include <cstdlib>
 #include <ctime>
+#include <unistd.h>
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 
 #include "imgui.h"
@@ -31,17 +34,24 @@
 
 #include "allsorts.h"
 
+// Visualizer update calls
 VISUALIZER_SWAP* visualizer_itemsSwapped;
 VISUALIZER_ADV* visualizer_pointerAdvanced;
 
+// Array parameters
 int arraySize = 0;
 int* array = nullptr;
-
 int dataMax = 100;
+
+// OpenGL
 unsigned int shaderProg, vis_tex, vis_vao, vis_ebo, vis_fbo;
 float* vis_vertices;
 unsigned int* vis_indices;
 
+#define FNAME_SIZE 200
+char fragmentShader[FNAME_SIZE], vertexShader[FNAME_SIZE];
+
+// UI text
 const char* sequences_s[] = {
 	"Shell 1959", "Frank & Lazarus 1960",
 	"A168604", "A083318", "A003586", "A003462", "A036569", "A036562", "A033622",
