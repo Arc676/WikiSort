@@ -34,6 +34,12 @@
 
 #include "allsorts.h"
 
+// Exit and return codes
+#define EXIT_BAD_ARGS 1
+#define EXIT_OPENGL_ERROR 2
+
+#define SHADER_NOT_FOUND -1
+
 // Visualizer update calls
 VISUALIZER_SWAP* visualizer_itemsSwapped;
 VISUALIZER_ADV* visualizer_pointerAdvanced;
@@ -44,6 +50,7 @@ int* array = nullptr;
 int dataMax = 100;
 
 // OpenGL
+bool shadersCompiled = false;
 unsigned int shaderProg, vis_tex, vis_vao, vis_ebo, vis_fbo;
 float* vis_vertices;
 unsigned int* vis_indices;

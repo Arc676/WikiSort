@@ -16,6 +16,10 @@
 #include "visualizer.h"
 
 void renderVisualizer() {
+	if (!shadersCompiled) {
+		return;
+	}
+
 	float vertices[12];
 	memset(vertices, 0, sizeof(vertices));
 	vertices[4] = vertices[7] = -1;
@@ -61,7 +65,8 @@ int compileShaders() {
 	unsigned int vShader = glCreateShader(GL_VERTEX_SHADER);
 	file.open(vertexShader);
 	if (!file.is_open()) {
-		return 1;
+		shadersCompiled = false;
+		return SHADER_NOT_FOUND;
 	}
 	stream << file.rdbuf();
 	file.close();
@@ -76,7 +81,8 @@ int compileShaders() {
 	unsigned int fShader = glCreateShader(GL_FRAGMENT_SHADER);
 	file.open(fragmentShader);
 	if (!file.is_open()) {
-		return 1;
+		shadersCompiled = false;
+		return SHADER_NOT_FOUND;
 	}
 	stream << file.rdbuf();
 	file.close();
@@ -94,15 +100,11 @@ int compileShaders() {
 	glDeleteShader(vShader);
 	glDeleteShader(fShader);
 
-	return 0;
+	shadersCompiled = true;
+	return EXIT_SUCCESS;
 }
 
 int initGL() {
-	int ret = compileShaders();
-	if (ret != 0) {
-		return ret;
-	}
-
 	// Generate VAO, EBO
 	glGenVertexArrays(1, &vis_vao);
 	glGenBuffers(1, &vis_ebo);
@@ -121,11 +123,11 @@ int initGL() {
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		std::cerr << "Framebuffer incomplete" << std::endl;
-		return 1;
+		return EXIT_OPENGL_ERROR;
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	return 0;
+	return compileShaders();
 }
 
 void rebuildEBO(int newSize) {
@@ -173,13 +175,13 @@ int main(int argc, char* argv[]) {
 			break;
 		default:
 			std::cerr << "Invalid argument " << opt << std::endl;
-			return 1;
+			return EXIT_BAD_ARGS;
 		}
 	}
 
 	glfwSetErrorCallback(glfwErrorCallback);
 	if (!glfwInit()) {
-		return 1;
+		return EXIT_OPENGL_ERROR;
 	}
 	#ifdef __APPLE__
 	const char* glslVersion = "#version 150";
@@ -198,13 +200,13 @@ int main(int argc, char* argv[]) {
 
 	GLFWwindow* window = glfwCreateWindow(1200, 700, "WikiSort Visualizer", NULL, NULL);
 	if (!window) {
-		return 1;
+		return EXIT_OPENGL_ERROR;
 	}
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
 	if (glewInit() != GLEW_OK) {
 		std::cerr << "Failed to initialize OpenGL loader" << std::endl;
-		return 1;
+		return EXIT_OPENGL_ERROR;
 	}
 
 	srand(time(NULL));
@@ -213,7 +215,7 @@ int main(int argc, char* argv[]) {
 	visualizer_pointerAdvanced = ptrAdvanced;
 
 	int gl = initGL();
-	if (gl != 0) {
+	if (gl > 0) {
 		return gl;
 	}
 
@@ -369,6 +371,9 @@ int main(int argc, char* argv[]) {
 			if (ImGui::Button("Compile Shaders")) {
 				compileShaders();
 			}
+			if (ImGui::Button("Refresh Visualizer")) {
+				renderVisualizer();
+			}
 		}
 		ImGui::End();
 
@@ -376,11 +381,15 @@ int main(int argc, char* argv[]) {
 		ImGui::SetNextWindowSize(ImVec2(700, 700), ImGuiCond_FirstUseEver);
 
 		if (ImGui::Begin("Visualizer")) {
-			ImGui::BeginChild("ArrayRender");
-			ImVec2 size = ImGui::GetWindowSize();
+			if (shadersCompiled) {
+				ImGui::BeginChild("ArrayRender");
+				ImVec2 size = ImGui::GetWindowSize();
 
-			ImGui::Image((ImTextureID)(intptr_t)vis_tex, size, ImVec2(0, 1), ImVec2(1, 0));
-			ImGui::EndChild();
+				ImGui::Image((ImTextureID)(intptr_t)vis_tex, size, ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::EndChild();
+			} else {
+				ImGui::Text("Please choose and compile shaders to enable visualizer.");
+			}
 		}
 		ImGui::End();
 
@@ -411,5 +420,5 @@ int main(int argc, char* argv[]) {
 		free(vis_indices);
 	}
 
-	return 0;
+	return EXIT_SUCCESS;
 }
