@@ -47,6 +47,40 @@ const char* sequences_s[] = {
 };
 
 void renderVisualizer() {
+	float vertices[12];
+	memset(vertices, 0, sizeof(vertices));
+	vertices[4] = vertices[7] = -1;
+	float w = 2.f / arraySize;
+	for (int i = 0; i < arraySize; i++) {
+		float x = w * i - 1;
+		float h = (float)array[i] * 2 / dataMax;
+		vertices[0] = vertices[3] = x + w;
+		vertices[6] = vertices[9] = x;
+		vertices[1] = vertices[10] = h - 1;
+		memcpy(vis_vertices + i * 12, vertices, sizeof(vertices));
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, vis_fbo);
+	glViewport(0, 0, 1200, 700);
+	glClearColor(0.f, 0.f, 0.f, 1.f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glUseProgram(shaderProg);
+
+	glBindVertexArray(vis_vao);
+	unsigned int vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, 12 * arraySize * sizeof(float), vis_vertices, GL_DYNAMIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glDrawElements(GL_TRIANGLES, 6 * arraySize, GL_UNSIGNED_INT, 0);
+
+	glBindVertexArray(0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glDeleteBuffers(1, &vbo);
 }
 
 int initGL() {
@@ -90,7 +124,7 @@ int initGL() {
 
 	glGenTextures(1, &vis_tex);
 	glBindTexture(GL_TEXTURE_2D, vis_tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 600, 700, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1200, 700, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -315,7 +349,7 @@ int main() {
 		ImGui::End();
 
 		ImGui::SetNextWindowPos(ImVec2(600, 0), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowSize(ImVec2(600, 700), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(700, 700), ImGuiCond_FirstUseEver);
 
 		if (ImGui::Begin("Visualizer")) {
 			ImGui::BeginChild("ArrayRender");
