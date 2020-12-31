@@ -454,6 +454,9 @@ int main(int argc, char* argv[]) {
 				if (ImGui::Button("Patience Sort")) {
 					sort(PATIENCE);
 				}
+				ImGui::SameLine();
+				ImGui::Text("(No visualizer)");
+
 				if (ImGui::Button("Tree Sort")) {
 					sort(TREE);
 				}
@@ -465,20 +468,33 @@ int main(int argc, char* argv[]) {
 				if (ImGui::Button("Merge Sort")) {
 					sort(MERGE);
 				}
+				ImGui::SameLine();
+				ImGui::Text("(No visualizer)");
 			}
 			if (ImGui::CollapsingHeader("Distribution Sorts")) {
 				if (ImGui::Button("Radix Sort (LSD)")) {
 					sort(RADIX);
 				}
+				ImGui::SameLine();
+				ImGui::Text("(No visualizer)");
+
 				if (ImGui::Button("Counting Sort")) {
 					sort(COUNTING);
 				}
+				ImGui::SameLine();
+				ImGui::Text("(No visualizer)");
+
 				if (ImGui::Button("Bucket Sort")) {
 					sort(BUCKET);
 				}
+				ImGui::SameLine();
+				ImGui::Text("(No visualizer)");
+
 				if (ImGui::Button("Pigeonhole Sort")) {
 					sort(PIGEONHOLE);
 				}
+				ImGui::SameLine();
+				ImGui::Text("(No visualizer)");
 			}
 			if (ImGui::CollapsingHeader("Concurrent Sorts")) {
 				ImGui::Text("(None yet implemented)");
@@ -490,6 +506,8 @@ int main(int argc, char* argv[]) {
 				if (ImGui::Button("Timsort")) {
 					sort(TIM);
 				}
+				ImGui::SameLine();
+				ImGui::Text("(No visualizer)");
 			}
 			if (ImGui::CollapsingHeader("Other Sorts")) {
 				if (ImGui::Button("Pancake Sort")) {
