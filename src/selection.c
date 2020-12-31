@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -15,6 +15,9 @@
 #include "selection.h"
 
 void selectionSort(void** array, int len, int size, COMP_FUNC cmp) {
+	if (len < 2) {
+		return;
+	}
 	for (int i = 0; i < len - 1; i++) {
 		void** a = adv(array, (i + 1) * size);
 		void** b = adv(array, i * size);
@@ -29,6 +32,10 @@ void selectionSort(void** array, int len, int size, COMP_FUNC cmp) {
 		if (minIndex != i) {
 			a = adv(array, i * size);
 			swapElements(a, b, size);
+
+			#ifdef VISUALIZER
+			visualizer_updateArray(a, minIndex - i + 1, size);
+			#endif
 		}
 	}
 }

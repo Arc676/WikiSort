@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -43,6 +43,11 @@ int traverse(BinaryTreeNode* root, void** dst, int mode, int dir) {
 
 	// copy the value at the given node
 	memcpy(dst, root->value, root->size);
+
+	#ifdef VISUALIZER
+	visualizer_updateArray(dst, 1, root->size);
+	#endif
+
 	dst = adv(dst, root->size);
 	nodes++;
 

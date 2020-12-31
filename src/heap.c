@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -200,6 +200,11 @@ void heapSort(void** array, int len, int size, COMP_FUNC cmp) {
 		void** obj = heap_pop(heap);
 		memcpy(dst, obj, size);
 		free(obj);
+
+		#ifdef VISUALIZER
+		visualizer_updateArray(dst, 1, size);
+		#endif
+
 		dst = adv(dst, -size);
 	}
 	heap_destroy(heap);

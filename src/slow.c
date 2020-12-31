@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -26,6 +26,10 @@ void slowSort(void** array, int len, int size, COMP_FUNC cmp) {
 	void** b = adv(array, (len - 1) * size);
 	if (cmp(a, b) == 1) {
 		swapElements(a, b, size);
+
+		#ifdef VISUALIZER
+		visualizer_updateArray(a, 2, size);
+		#endif
 	}
 
 	slowSort(array, len - 1, size, cmp);

@@ -1,4 +1,4 @@
-//Copyright (C) 2018-20 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -27,11 +27,12 @@ extern "C" {
 #ifdef VISUALIZER
 
 typedef void VISUALIZER_SWAP(void** a, void** b);
-
 typedef void VISUALIZER_ADV(void** ptr, int dist);
+typedef void VISUALIZER_UPDATE(void** arr, int len, int size);
 
 extern VISUALIZER_SWAP* visualizer_itemsSwapped;
 extern VISUALIZER_ADV* visualizer_pointerAdvanced;
+extern VISUALIZER_UPDATE* visualizer_updateArray;
 
 #endif
 

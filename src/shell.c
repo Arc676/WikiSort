@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -57,10 +57,18 @@ void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq, 
 					break;
 				}
 				memcpy(dst, src, size);
+
+				#ifdef VISUALIZER
+				visualizer_updateArray(src, gap + 1, size);
+				#endif
 			}
 			dst = adv(array, k * size);
 			memcpy(dst, toInsert, size);
 			free(toInsert);
+
+			#ifdef VISUALIZER
+			visualizer_updateArray(array, len, size);
+			#endif
 		}
 	}
 	// if the caller wanted memoization enabled AND

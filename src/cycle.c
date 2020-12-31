@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -46,5 +46,9 @@ void performCycle(void** array, int len, int size, COMP_FUNC cmp, void** item, i
 			}
 		}
 		swapElements(item, toSwap, size);
+
+		#ifdef VISUALIZER
+		visualizer_updateArray(item, toSwap - item + 1, size);
+		#endif
 	}
 }

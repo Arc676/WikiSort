@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -21,7 +21,12 @@ void stoogeSort(void** array, int len, int size, COMP_FUNC cmp) {
 	void** b = adv(array, (len - 1) * size);
 	if (cmp(array, b) == 1) {
 		swapElements(array, b, size);
+
+		#ifdef VISUALIZER
+		visualizer_updateArray(array, len, size);
+		#endif
 	}
+
 	if (len > 2) {
 		// obtain 1/3 the length of the list
 		int _13len = len / 3;

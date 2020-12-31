@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -30,7 +30,16 @@ void introSort_rec(void** array, int len, int size, COMP_FUNC cmp, int depth) {
 	} else {
 		introSort_rec(array, pivot, size, cmp, depth - 1);
 
+		#ifdef VISUALIZER
+		visualizer_updateArray(array, pivot, size);
+		#endif
+
 		void** right = adv(array, (pivot + equals) * size);
-		introSort_rec(right, len - pivot - equals, size, cmp, depth - 1);
+		int rLength = len - pivot - equals;
+		introSort_rec(right, rLength, size, cmp, depth - 1);
+
+		#ifdef VISUALIZER
+		visualizer_updateArray(right, rLength, size);
+		#endif
 	}
 }

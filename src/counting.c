@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -43,7 +43,13 @@ void countingSort(void** array, int len, int size, KEY_FUNC key, int keyCount) {
 	ptr = arrCopy;
 	for (int i = 0; i < len; i++) {
 		int keyVal = key(ptr, 0, 0, 0, 0);
-		memcpy(adv(array, count[keyVal] * size), ptr, size);
+		void** dst = adv(array, count[keyVal] * size);
+		memcpy(dst, ptr, size);
+
+		#ifdef VISUALIZER
+		visualizer_updateArray(dst, 1, size);
+		#endif
+
 		count[keyVal]++;
 		ptr = adv(ptr, size);
 	}

@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -28,6 +28,10 @@ void oddEvenSort(void** array, int len, int size, COMP_FUNC cmp) {
 				swapElements(a, b, size);
 				sorted = 0;
 			}
+
+			#ifdef VISUALIZER
+			visualizer_updateArray(a, 2, size);
+			#endif
 		}
 		for (int i = 0; i < len - 1; i += 2) {
 			void** a = adv(array, i * size);
@@ -36,6 +40,10 @@ void oddEvenSort(void** array, int len, int size, COMP_FUNC cmp) {
 				swapElements(a, b, size);
 				sorted = 0;
 			}
+
+			#ifdef VISUALIZER
+			visualizer_updateArray(a, 2, size);
+			#endif
 		}
 
 	}

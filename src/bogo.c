@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -35,8 +35,16 @@ int heapsAlgorithm(int k, void** array, int len, int size, PERM_HANDLER handler,
 		if (k % 2 == 0) {
 			void** a = adv(array, i * size);
 			swapElements(a, b, size);
+
+			#ifdef VISUALIZER
+			visualizer_updateArray(a, k - i, size);
+			#endif
 		} else {
 			swapElements(array, b, size);
+
+			#ifdef VISUALIZER
+			visualizer_updateArray(array, k, size);
+			#endif
 		}
 		if (heapsAlgorithm(k - 1, array, len, size, handler, handlerArg)) {
 			return 1;
@@ -51,6 +59,10 @@ void bogoSort_rand(void** array, int len, int size, COMP_FUNC cmp) {
 	}
 	while (!isSorted(array, len, size, cmp)) {
 		fisherYates(array, len, size);
+
+		#ifdef VISUALIZER
+		visualizer_updateArray(array, len, size);
+		#endif
 	}
 }
 

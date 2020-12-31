@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -22,6 +22,10 @@ void quickSort(void** array, int len, int size, COMP_FUNC cmp) {
 	// partition the array
 	int equals;
 	int pivot = partition(array, len, size, cmp, &equals);
+
+	#ifdef VISUALIZER
+	visualizer_updateArray(array, len, size);
+	#endif
 
 	// sort the elements smaller than the pivot
 	quickSort(array, pivot, size, cmp);

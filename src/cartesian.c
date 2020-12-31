@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -50,6 +50,11 @@ void cartesianTreeSort(void** array, int len, int size, COMP_FUNC cmp, COMP_FUNC
 	for (int i = 0; i < len; i++) {
 		BinaryTreeNode* next = (BinaryTreeNode*)heap_pop(queue);
 		memcpy(ptr, next->value, size);
+
+		#ifdef VISUALIZER
+		visualizer_updateArray(ptr, 1, size);
+		#endif
+
 		if (next->leftChild) {
 			heap_push(queue, (void**)next->leftChild);
 		}

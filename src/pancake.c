@@ -1,4 +1,4 @@
-//Copyright (C) 2019 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2019-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -29,7 +29,16 @@ void pancakeSort(void** array, int len, int size, COMP_FUNC cmp) {
 		}
 		if (maxpos != 0) {
 			reverse(array, maxpos + 1, size);
+
+			#ifdef VISUALIZER
+			visualizer_updateArray(array, maxpos + 1, size);
+			#endif
 		}
+
 		reverse(array, i, size);
+
+		#ifdef VISUALIZER
+		visualizer_updateArray(array, i, size);
+		#endif
 	}
 }
