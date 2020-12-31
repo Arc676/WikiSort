@@ -4,7 +4,7 @@ BDIR=bin
 
 CC=g++
 FLAGS=-std=c++11 -I imgui -I imgui/backends -I ../src -D VISUALIZER
-LIB=-L .. -lm -l glfw -l GLEW -l wikisort
+LIB=-L .. -lm -l glfw -l GLEW -l wikisort -pthread
 
 ifdef MAC
 LIB+=-framework OpenGL

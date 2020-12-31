@@ -25,6 +25,10 @@
 #include <sstream>
 #include <string>
 
+#include <thread>
+#include <chrono>
+#include <mutex>
+
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -40,9 +44,28 @@
 
 #define SHADER_NOT_FOUND -1
 
+enum SortAlgo {
+	BUBBLE, QUICK, ODD_EVEN, COMB, COCKTAIL, GNOME, STOOGE, SLOW, BOGO_R, BOGO_D,
+	SELECTION, CYCLE, HEAP, CARTESIAN_TREE,
+	INSERTION, SHELL, PATIENCE, TREE, SPLAY,
+	MERGE,
+	RADIX, COUNTING, BUCKET, PIGEONHOLE,
+	INTRO, TIM,
+	PANCAKE
+};
+
 // Visualizer update calls
 VISUALIZER_SWAP* visualizer_itemsSwapped;
 VISUALIZER_ADV* visualizer_pointerAdvanced;
+
+VISUALIZER_UPDATE* visualizer_updateArray;
+
+// Concurrency
+using Lock = std::lock_guard<std::mutex>;
+std::mutex mutex;
+std::thread sortingThread;
+int* renderArray = nullptr;
+bool arrayChanged = false;
 
 // Array parameters
 int arraySize = 0;
@@ -57,6 +80,9 @@ unsigned int* vis_indices;
 
 #define FNAME_SIZE 200
 char fragmentShader[FNAME_SIZE], vertexShader[FNAME_SIZE];
+
+// Render settings
+int sleepTime = 500, lastSleepTime;
 
 // UI text
 const char* sequences_s[] = {

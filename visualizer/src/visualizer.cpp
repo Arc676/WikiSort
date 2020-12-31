@@ -20,13 +20,18 @@ void renderVisualizer() {
 		return;
 	}
 
+	Lock lock{mutex};
+	if (!arrayChanged) {
+		return;
+	}
+
 	float vertices[12];
 	memset(vertices, 0, sizeof(vertices));
 	vertices[4] = vertices[7] = -1;
 	float w = 2.f / arraySize;
 	for (int i = 0; i < arraySize; i++) {
 		float x = w * i - 1;
-		float h = (float)array[i] * 2 / dataMax;
+		float h = (float)renderArray[i] * 2 / dataMax;
 		vertices[0] = vertices[3] = x + w;
 		vertices[6] = vertices[9] = x;
 		vertices[1] = vertices[10] = h - 1;
@@ -54,6 +59,8 @@ void renderVisualizer() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glDeleteBuffers(1, &vbo);
+
+	arrayChanged = false;
 }
 
 int compileShaders() {
@@ -147,12 +154,130 @@ void rebuildEBO(int newSize) {
 	glBindVertexArray(0);
 }
 
+void forceUpdateArray(int* updated) {
+	Lock lock{mutex};
+	arrayChanged = true;
+	memcpy(renderArray, updated, arraySize * sizeof(int));
+}
+
+void updateArray(void** updated, int len, int size) {
+	{
+		Lock lock{mutex};
+		int* newArr = (int*)updated;
+		size_t offset = newArr - array;
+		arrayChanged = false;
+		for (int i = offset; i < offset + len; i++) {
+			if (newArr[i] != renderArray[i]) {
+				arrayChanged = true;
+				break;
+			}
+		}
+		if (arrayChanged) {
+			memcpy(renderArray + offset, newArr, len * sizeof(int));
+		}
+	}
+	std::this_thread::sleep_for(std::chrono::microseconds(lastSleepTime));
+}
+
 void swapped(void** a, void** b) {
-	renderVisualizer();
 }
 
 void ptrAdvanced(void** ptr, int dst) {
-	renderVisualizer();
+}
+
+void sort(SortAlgo algo, float combShrink = 1.3f, GapSequence shellSeq = Shell_1959) {
+	if (sortingThread.joinable()) {
+		sortingThread.join();
+	}
+	lastSleepTime = sleepTime;
+	sortingThread = std::thread([algo, combShrink, shellSeq]{
+		switch (algo) {
+		case BUBBLE:
+			bubbleSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case QUICK:
+			quickSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case ODD_EVEN:
+			oddEvenSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case COCKTAIL:
+			cocktailSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case GNOME:
+			gnomeSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case STOOGE:
+			stoogeSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case SLOW:
+			slowSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case BOGO_R:
+			bogoSort_rand((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case BOGO_D:
+			bogoSort_det((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case SELECTION:
+			selectionSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case CYCLE:
+			cycleSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case HEAP:
+			heapSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case CARTESIAN_TREE:
+			cartesianTreeSort((void**)array, arraySize, sizeof(int), cmp_int, binTree_cmp_int);
+			break;
+		case INSERTION:
+			insertionSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case PATIENCE:
+			patienceSort((void**)array, arraySize, sizeof(int), cmp_int, geq_int);
+			break;
+		case TREE:
+			treeSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case SPLAY:
+			splaySort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case MERGE:
+			mergeSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case RADIX:
+			radixSortLSD((void**)array, arraySize, sizeof(int), cmp_int, 10, int_base_cmp_LSD, int_base_dig_LSD);
+			break;
+		case COUNTING:
+			countingSort((void**)array, arraySize, sizeof(int), key_int, dataMax + 1);
+			break;
+		case BUCKET:
+			bucketSort((void**)array, arraySize, sizeof(int), cmp_int, key_intranges);
+			break;
+		case PIGEONHOLE:
+			pigeonholeSort((void**)array, arraySize, sizeof(int), key_int, dataMax + 1);
+			break;
+		case INTRO:
+			introSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case TIM:
+			timSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case PANCAKE:
+			pancakeSort((void**)array, arraySize, sizeof(int), cmp_int);
+			break;
+		case COMB:
+			combSort((void**)array, arraySize, sizeof(int), cmp_int, combShrink);
+			break;
+		case SHELL:
+			shellSort((void**)array, arraySize, sizeof(int), cmp_int, shellSeq, nullptr, nullptr);
+			break;
+		default:
+			break;
+		}
+		forceUpdateArray(array);
+	});
 }
 
 void glfwErrorCallback(int error, const char* description) {
@@ -213,6 +338,7 @@ int main(int argc, char* argv[]) {
 
 	visualizer_itemsSwapped = swapped;
 	visualizer_pointerAdvanced = ptrAdvanced;
+	visualizer_updateArray = updateArray;
 
 	int gl = initGL();
 	if (gl > 0) {
@@ -240,6 +366,11 @@ int main(int argc, char* argv[]) {
 				ImGui::InputInt("Array size", &newSize);
 				if (ImGui::Button("Allocate")) {
 					array = (int*)realloc(array, newSize * sizeof(int));
+					{
+						Lock lock{mutex};
+						renderArray = (int*)realloc(renderArray, newSize * sizeof(int));
+					}
+					forceUpdateArray(array);
 					vis_vertices = (float*)realloc(vis_vertices, newSize * 12 * sizeof(float));
 					if (newSize > arraySize) {
 						rebuildEBO(newSize);
@@ -252,104 +383,101 @@ int main(int argc, char* argv[]) {
 					for (int i = 0; i < arraySize; i++) {
 						array[i] = rand() % (dataMax + 1);
 					}
+					forceUpdateArray(array);
 					renderVisualizer();
 				}
 			}
 			if (ImGui::CollapsingHeader("Exchange Sorts")) {
 				if (ImGui::Button("Bubble Sort")) {
-					bubbleSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(BUBBLE);
 				}
 				if (ImGui::Button("Quicksort")) {
-					quickSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(QUICK);
 				}
 				if (ImGui::Button("Odd-Even Sort")) {
-					oddEvenSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(ODD_EVEN);
 				}
 
 				static float combShrink = 1.3f;
 				if (ImGui::Button("Comb Sort")) {
-					combSort((void**)array, arraySize, sizeof(int), cmp_int, combShrink);
+					sort(COMB, combShrink);
 				}
 				ImGui::SameLine();
 				ImGui::InputFloat("Shrink Factor", &combShrink);
 
 				if (ImGui::Button("Cocktail Sort")) {
-					cocktailSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(COCKTAIL);
 				}
 				if (ImGui::Button("Gnome Sort")) {
-					gnomeSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(GNOME);
 				}
 				if (ImGui::Button("Stooge Sort")) {
-					stoogeSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(STOOGE);
 				}
 				if (ImGui::Button("Slowsort")) {
-					slowSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(SLOW);
 				}
 
 				static bool deterministic = true;
 				if (ImGui::Button("Bogosort")) {
-					if (deterministic) {
-						bogoSort_det((void**)array, arraySize, sizeof(int), cmp_int);
-					} else {
-						bogoSort_rand((void**)array, arraySize, sizeof(int), cmp_int);
-					}
+					sort(deterministic ? BOGO_D : BOGO_R);
 				}
 				ImGui::SameLine();
 				ImGui::Checkbox("Deterministic Sort", &deterministic);
 			}
 			if (ImGui::CollapsingHeader("Selection Sorts")) {
 				if (ImGui::Button("Selection Sort")) {
-					selectionSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(SELECTION);
 				}
 				if (ImGui::Button("Cycle Sort")) {
-					cycleSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(CYCLE);
 				}
 				if (ImGui::Button("Heapsort")) {
-					heapSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(HEAP);
 				}
 				if (ImGui::Button("Cartesian Tree Sort")) {
-					cartesianTreeSort((void**)array, arraySize, sizeof(int), cmp_int, binTree_cmp_int);
+					sort(CARTESIAN_TREE);
 				}
 			}
 			if (ImGui::CollapsingHeader("Insertion Sorts")) {
 				if (ImGui::Button("Insertion Sort")) {
-					insertionSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(INSERTION);
 				}
 
 				static int seq = 0;
 				if (ImGui::Button("Shellsort")) {
-					shellSort((void**)array, arraySize, sizeof(int), cmp_int, (GapSequence)seq, nullptr, nullptr);
+					sort(SHELL, (GapSequence)seq);
 				}
 				ImGui::SameLine();
 				ImGui::Combo("Gap Sequence", &seq, sequences_s, GAP_COUNT);
 
 				if (ImGui::Button("Patience Sort")) {
-					patienceSort((void**)array, arraySize, sizeof(int), cmp_int, geq_int);
+					sort(PATIENCE);
 				}
 				if (ImGui::Button("Tree Sort")) {
-					treeSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(TREE);
 				}
 				if (ImGui::Button("Splay Sort")) {
-					splaySort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(SPLAY);
 				}
 			}
 			if (ImGui::CollapsingHeader("Merge Sorts")) {
 				if (ImGui::Button("Merge Sort")) {
-					mergeSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(MERGE);
 				}
 			}
 			if (ImGui::CollapsingHeader("Distribution Sorts")) {
 				if (ImGui::Button("Radix Sort (LSD)")) {
-					radixSortLSD((void**)array, arraySize, sizeof(int), cmp_int, 10, int_base_cmp_LSD, int_base_dig_LSD);
+					sort(RADIX);
 				}
 				if (ImGui::Button("Counting Sort")) {
-					countingSort((void**)array, arraySize, sizeof(int), key_int, dataMax + 1);
+					sort(COUNTING);
 				}
 				if (ImGui::Button("Bucket Sort")) {
-					bucketSort((void**)array, arraySize, sizeof(int), cmp_int, key_intranges);
+					sort(BUCKET);
 				}
 				if (ImGui::Button("Pigeonhole Sort")) {
-					pigeonholeSort((void**)array, arraySize, sizeof(int), key_int, dataMax + 1);
+					sort(PIGEONHOLE);
 				}
 			}
 			if (ImGui::CollapsingHeader("Concurrent Sorts")) {
@@ -357,15 +485,15 @@ int main(int argc, char* argv[]) {
 			}
 			if (ImGui::CollapsingHeader("Hybrid Sorts")) {
 				if (ImGui::Button("Introsort")) {
-					introSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(INTRO);
 				}
 				if (ImGui::Button("Timsort")) {
-					timSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(TIM);
 				}
 			}
 			if (ImGui::CollapsingHeader("Other Sorts")) {
 				if (ImGui::Button("Pancake Sort")) {
-					pancakeSort((void**)array, arraySize, sizeof(int), cmp_int);
+					sort(PANCAKE);
 				}
 			}
 			if (ImGui::Button("Exit")) {
@@ -384,8 +512,14 @@ int main(int argc, char* argv[]) {
 				compileShaders();
 			}
 			if (ImGui::Button("Refresh Visualizer")) {
+				if (sortingThread.joinable()) {
+					sortingThread.join();
+				}
+				forceUpdateArray(array);
+				arrayChanged = true;
 				renderVisualizer();
 			}
+			ImGui::InputInt("Array update sleep time", &sleepTime);
 		}
 		ImGui::End();
 
@@ -397,6 +531,7 @@ int main(int argc, char* argv[]) {
 				ImGui::BeginChild("ArrayRender");
 				ImVec2 size = ImGui::GetWindowSize();
 
+				renderVisualizer();
 				ImGui::Image((ImTextureID)(intptr_t)vis_tex, size, ImVec2(0, 1), ImVec2(1, 0));
 				ImGui::EndChild();
 			} else {
@@ -430,6 +565,9 @@ int main(int argc, char* argv[]) {
 		free(array);
 		free(vis_vertices);
 		free(vis_indices);
+	}
+	if (sortingThread.joinable()) {
+		sortingThread.join();
 	}
 
 	return EXIT_SUCCESS;
