@@ -15,6 +15,17 @@
 
 #include "visualizer.h"
 
+void* safe_realloc(void* ptr, size_t size) {
+	void* newPtr = realloc(ptr, size);
+	if (newPtr) {
+		return newPtr;
+	}
+	free(ptr);
+
+	newPtr = malloc(size);
+	return newPtr;
+}
+
 void renderVisualizer() {
 	if (!shadersCompiled) {
 		return;
@@ -139,7 +150,7 @@ int initGL() {
 
 void rebuildEBO(int newSize) {
 	const size_t INDEX_LIST_SIZE = newSize * 6 * sizeof(float);
-	vis_indices = (unsigned int*)realloc(vis_indices, INDEX_LIST_SIZE);
+	vis_indices = (unsigned int*)safe_realloc(vis_indices, INDEX_LIST_SIZE);
 	for (int i = arraySize; i < newSize; i++) {
 		int idx = i * 6;
 		int vShift = i * 4;
@@ -365,17 +376,17 @@ int main(int argc, char* argv[]) {
 				static int newSize = 100;
 				ImGui::InputInt("Array size", &newSize);
 				if (ImGui::Button("Allocate")) {
-					array = (int*)realloc(array, newSize * sizeof(int));
+					array = (int*)safe_realloc(array, newSize * sizeof(int));
 					{
 						Lock lock{mutex};
-						renderArray = (int*)realloc(renderArray, newSize * sizeof(int));
+						renderArray = (int*)safe_realloc(renderArray, newSize * sizeof(int));
 					}
-					forceUpdateArray(array);
-					vis_vertices = (float*)realloc(vis_vertices, newSize * 12 * sizeof(float));
+					vis_vertices = (float*)safe_realloc(vis_vertices, newSize * 12 * sizeof(float));
 					if (newSize > arraySize) {
 						rebuildEBO(newSize);
 					}
 					arraySize = newSize;
+					forceUpdateArray(array);
 					renderVisualizer();
 				}
 				ImGui::InputInt("Maximum element value", &dataMax);
