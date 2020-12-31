@@ -18,6 +18,13 @@ int traverse(BinaryTreeNode* root, void** dst, int mode, int dir) {
 	if (!root) {
 		return 0;
 	}
+
+	#ifdef VISUALIZER
+	if (visualizer_abortRequested()) {
+		return 0;
+	}
+	#endif
+
 	BinaryTreeNode* child1 = dir == LTOR ? root->leftChild : root->rightChild;
 	BinaryTreeNode* child2 = dir == LTOR ? root->rightChild : root->leftChild;
 	int nodes = 0;

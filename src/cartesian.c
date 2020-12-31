@@ -53,6 +53,10 @@ void cartesianTreeSort(void** array, int len, int size, COMP_FUNC cmp, COMP_FUNC
 
 		#ifdef VISUALIZER
 		visualizer_updateArray(ptr, 1, size);
+
+		if (visualizer_abortRequested()) {
+			i = len;
+		}
 		#endif
 
 		if (next->leftChild) {

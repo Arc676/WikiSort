@@ -59,6 +59,7 @@ VISUALIZER_SWAP* visualizer_itemsSwapped;
 VISUALIZER_ADV* visualizer_pointerAdvanced;
 
 VISUALIZER_UPDATE* visualizer_updateArray;
+VISUALIZER_ABORT_REQ* visualizer_abortRequested;
 
 // Concurrency
 using Lock = std::lock_guard<std::mutex>;
@@ -66,6 +67,7 @@ std::mutex mutex;
 std::thread sortingThread;
 int* renderArray = nullptr;
 bool arrayChanged = false;
+bool abortRequested = false;
 
 // Array parameters
 int arraySize = 0;

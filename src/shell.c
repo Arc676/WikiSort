@@ -68,9 +68,14 @@ void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq, 
 
 			#ifdef VISUALIZER
 			visualizer_updateArray(array, len, size);
+
+			if (visualizer_abortRequested()) {
+				goto shellSortEnd;
+			}
 			#endif
 		}
 	}
+shellSortEnd:
 	// if the caller wanted memoization enabled AND
 	// didn't provide pre-calculated gap sequences,
 	// update the gap sequence

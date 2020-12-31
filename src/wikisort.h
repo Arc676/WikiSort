@@ -29,10 +29,12 @@ extern "C" {
 typedef void VISUALIZER_SWAP(void** a, void** b);
 typedef void VISUALIZER_ADV(void** ptr, int dist);
 typedef void VISUALIZER_UPDATE(void** arr, int len, int size);
+typedef int VISUALIZER_ABORT_REQ();
 
 extern VISUALIZER_SWAP* visualizer_itemsSwapped;
 extern VISUALIZER_ADV* visualizer_pointerAdvanced;
 extern VISUALIZER_UPDATE* visualizer_updateArray;
+extern VISUALIZER_ABORT_REQ* visualizer_abortRequested;
 
 #endif
 

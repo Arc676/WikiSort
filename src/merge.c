@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -18,6 +18,12 @@ void mergeSort(void** array, int len, int size, COMP_FUNC cmp) {
 	if (len < 2) {
 		return;
 	}
+
+	#ifdef VISUALIZER
+	if (visualizer_abortRequested()) {
+		return;
+	}
+	#endif
 
 	int len1 = len / 2;
 	int len2 = len - len1;

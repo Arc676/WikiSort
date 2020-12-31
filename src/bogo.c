@@ -49,6 +49,12 @@ int heapsAlgorithm(int k, void** array, int len, int size, PERM_HANDLER handler,
 		if (heapsAlgorithm(k - 1, array, len, size, handler, handlerArg)) {
 			return 1;
 		}
+
+		#ifdef VISUALIZER
+		if (visualizer_abortRequested()) {
+			return 1;
+		}
+		#endif
 	}
 	return 0;
 }
@@ -62,6 +68,10 @@ void bogoSort_rand(void** array, int len, int size, COMP_FUNC cmp) {
 
 		#ifdef VISUALIZER
 		visualizer_updateArray(array, len, size);
+
+		if (visualizer_abortRequested()) {
+			return;
+		}
 		#endif
 	}
 }

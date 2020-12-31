@@ -190,6 +190,11 @@ void updateArray(void** updated, int len, int size) {
 	std::this_thread::sleep_for(std::chrono::microseconds(lastSleepTime));
 }
 
+int userAborted() {
+	Lock lock{mutex};
+	return (int)abortRequested;
+}
+
 void swapped(void** a, void** b) {
 }
 
@@ -288,6 +293,10 @@ void sort(SortAlgo algo, float combShrink = 1.3f, GapSequence shellSeq = Shell_1
 			break;
 		}
 		forceUpdateArray(array);
+		{
+			Lock lock{mutex};
+			abortRequested = false;
+		}
 	});
 }
 
@@ -350,6 +359,7 @@ int main(int argc, char* argv[]) {
 	visualizer_itemsSwapped = swapped;
 	visualizer_pointerAdvanced = ptrAdvanced;
 	visualizer_updateArray = updateArray;
+	visualizer_abortRequested = userAborted;
 
 	int gl = initGL();
 	if (gl > 0) {
@@ -492,8 +502,6 @@ int main(int argc, char* argv[]) {
 				if (ImGui::Button("Counting Sort")) {
 					sort(COUNTING);
 				}
-				ImGui::SameLine();
-				ImGui::Text("(No visualizer)");
 
 				if (ImGui::Button("Bucket Sort")) {
 					sort(BUCKET);
@@ -549,6 +557,15 @@ int main(int argc, char* argv[]) {
 				renderVisualizer();
 			}
 			ImGui::InputInt("Array update sleep time", &sleepTime);
+			if (ImGui::Button("Abort Sort")) {
+				if (sortingThread.joinable()) {
+					{
+						Lock lock{mutex};
+						abortRequested = true;
+					}
+					sortingThread.join();
+				}
+			}
 		}
 		ImGui::End();
 

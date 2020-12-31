@@ -27,6 +27,10 @@ void insertionSort(void** array, int len, int size, COMP_FUNC cmp) {
 
 			#ifdef VISUALIZER
 			visualizer_updateArray(b, 2, size);
+
+			if (visualizer_abortRequested()) {
+				return;
+			}
 			#endif
 
 			a = b;

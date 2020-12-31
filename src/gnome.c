@@ -38,5 +38,11 @@ void gnomeSort(void** array, int len, int size, COMP_FUNC cmp) {
 				pos++;
 			}
 		}
+
+		#ifdef VISUALIZER
+		if (visualizer_abortRequested()) {
+			return;
+		}
+		#endif
 	}
 }

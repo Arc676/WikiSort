@@ -22,6 +22,12 @@ void cycleSort(void** array, int len, int size, COMP_FUNC cmp) {
 		while (pos != i) {
 			pos = i;
 			performCycle(array, len, size, cmp, item, &pos);
+
+			#ifdef VISUALIZER
+			if (visualizer_abortRequested()) {
+				return;
+			}
+			#endif
 		}
 	}
 }

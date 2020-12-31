@@ -28,6 +28,12 @@ void selectionSort(void** array, int len, int size, COMP_FUNC cmp) {
 				b = a;
 			}
 			a = adv(a, size);
+
+			#ifdef VISUALIZER
+			if (visualizer_abortRequested()) {
+				return;
+			}
+			#endif
 		}
 		if (minIndex != i) {
 			a = adv(array, i * size);

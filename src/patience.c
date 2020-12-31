@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -44,11 +44,23 @@ void patienceSort(void** array, int len, int size, COMP_FUNC cmp, COMP_FUNC geq)
 
 		// move to next element in array
 		element = adv(element, size);
+
+		#ifdef VISUALIZER
+		if (visualizer_abortRequested()) {
+			break;
+		}
+		#endif
 	}
 
 	// reverse piles
 	for (int i = 0; i < pileCount; i++) {
 		reverse(piles[i], pileSizes[i], size);
+
+		#ifdef VISUALIZER
+		if (visualizer_abortRequested()) {
+			break;
+		}
+		#endif
 	}
 
 	kWayMerge(array, len, piles, pileCount, pileSizes, size, cmp);

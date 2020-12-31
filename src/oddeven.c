@@ -31,6 +31,10 @@ void oddEvenSort(void** array, int len, int size, COMP_FUNC cmp) {
 
 			#ifdef VISUALIZER
 			visualizer_updateArray(a, 2, size);
+
+			if (visualizer_abortRequested()) {
+				return;
+			}
 			#endif
 		}
 		for (int i = 0; i < len - 1; i += 2) {
@@ -43,6 +47,10 @@ void oddEvenSort(void** array, int len, int size, COMP_FUNC cmp) {
 
 			#ifdef VISUALIZER
 			visualizer_updateArray(a, 2, size);
+
+			if (visualizer_abortRequested()) {
+				return;
+			}
 			#endif
 		}
 

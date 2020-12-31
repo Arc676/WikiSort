@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -32,6 +32,12 @@ void pigeonholeSort(void** array, int len, int size, KEY_FUNC key, int keyCount)
 		void** dstHole = adv(pigeonholes[holeIdx], idx * size);
 		memcpy(dstHole, ptr, size);
 		ptr = adv(ptr, size);
+
+		#ifdef VISUALIZER
+		if (visualizer_abortRequested()) {
+			break;
+		}
+		#endif
 	}
 
 	bucketsToList(array, pigeonholes, pigeonholeCounts, size, keyCount, 1);

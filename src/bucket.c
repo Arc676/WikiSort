@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -40,6 +40,11 @@ void bucketsToList(void** dst, void** buckets, int* bucketLengths, int size, int
 	void** ptr = dst;
 	for (int i = 0; i < bucketCount; i++) {
 		for (int j = 0; j < bucketLengths[i]; j++) {
+			#ifdef VISUALIZER
+			if (visualizer_abortRequested()) {
+				break;
+			}
+			#endif
 			void** val = adv(buckets[i], j * size);
 			memcpy(ptr, val, size);
 			ptr = adv(ptr, size);
@@ -70,6 +75,11 @@ void bucketSort(void** array, int len, int size, COMP_FUNC cmp, KEY_FUNC key) {
 	// sort buckets using quicksort
 	void** bucket = buckets;
 	for (int i = 0; i < bucketCount; i++) {
+		#ifdef VISUALIZER
+		if (visualizer_abortRequested()) {
+			break;
+		}
+		#endif
 		quickSort(*bucket, bucketLengths[i], size, cmp);
 		bucket++;
 	}
@@ -86,6 +96,12 @@ void distributeToBuckets(void** array, int len, void** buckets, int* bucketLengt
 		void** dstBucket = adv(buckets[bucketIdx], idx * size);
 		memcpy(dstBucket, ptr, size);
 		ptr = adv(ptr, size);
+
+		#ifdef VISUALIZER
+		if (visualizer_abortRequested()) {
+			return;
+		}
+		#endif
 	}
 }
 

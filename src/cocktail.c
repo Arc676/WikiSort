@@ -30,9 +30,19 @@ void cocktailSort(void** array, int len, int size, COMP_FUNC cmp) {
 			if (cmp(a, b) == 1) {
 				swapElements(a, b, size);
 				sorted = 0;
+
+				#ifdef VISUALIZER
+				visualizer_updateArray(a, 2, size);
+				#endif
 			}
 			a = b;
 			b = adv(b, size);
+
+			#ifdef VISUALIZER
+			if (visualizer_abortRequested()) {
+				return;
+			}
+			#endif
 		}
 		if (sorted) {
 			break;
@@ -50,6 +60,12 @@ void cocktailSort(void** array, int len, int size, COMP_FUNC cmp) {
 			}
 			b = a;
 			a = adv(a, -size);
+
+			#ifdef VISUALIZER
+			if (visualizer_abortRequested()) {
+				return;
+			}
+			#endif
 		}
 		passes++;
 	} while (!sorted);

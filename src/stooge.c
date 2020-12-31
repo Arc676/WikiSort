@@ -18,6 +18,13 @@ void stoogeSort(void** array, int len, int size, COMP_FUNC cmp) {
 	if (len < 2) {
 		return;
 	}
+
+	#ifdef VISUALIZER
+	if (visualizer_abortRequested()) {
+		return;
+	}
+	#endif
+
 	void** b = adv(array, (len - 1) * size);
 	if (cmp(array, b) == 1) {
 		swapElements(array, b, size);

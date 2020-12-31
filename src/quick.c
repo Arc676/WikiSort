@@ -25,6 +25,10 @@ void quickSort(void** array, int len, int size, COMP_FUNC cmp) {
 
 	#ifdef VISUALIZER
 	visualizer_updateArray(array, len, size);
+
+	if (visualizer_abortRequested()) {
+		return;
+	}
 	#endif
 
 	// sort the elements smaller than the pivot

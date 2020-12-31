@@ -35,6 +35,12 @@ void bubbleSort(void** array, int len, int size, COMP_FUNC cmp) {
 			}
 			a = b;
 			b = adv(b, size);
+
+			#ifdef VISUALIZER
+			if (visualizer_abortRequested()) {
+				return;
+			}
+			#endif
 		}
 	} while (!sorted);
 }

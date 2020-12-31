@@ -48,6 +48,10 @@ void countingSort(void** array, int len, int size, KEY_FUNC key, int keyCount) {
 
 		#ifdef VISUALIZER
 		visualizer_updateArray(dst, 1, size);
+
+		if (visualizer_abortRequested()) {
+			break;
+		}
 		#endif
 
 		count[keyVal]++;

@@ -39,6 +39,10 @@ void pancakeSort(void** array, int len, int size, COMP_FUNC cmp) {
 
 		#ifdef VISUALIZER
 		visualizer_updateArray(array, i, size);
+
+		if (visualizer_abortRequested()) {
+			return;
+		}
 		#endif
 	}
 }

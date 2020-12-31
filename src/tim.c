@@ -85,6 +85,12 @@ void timSort(void** array, int len, int size, COMP_FUNC cmp) {
 		}
 		prev = current;
 		current = adv(current, size);
+
+		#ifdef VISUALIZER
+		if (visualizer_abortRequested()) {
+			return;
+		}
+		#endif
 	}
 	// check final run
 	int rlen = i - start;
@@ -107,8 +113,7 @@ void timSort(void** array, int len, int size, COMP_FUNC cmp) {
 		int len2 = runs[runCount - 2][1];
 
 		// copy the array further to the left into temporary space
-		void** temp;
-		temp = malloc(len2 * size);
+		void** temp = malloc(len2 * size);
 		memcpy(temp, arr2, len2 * size);
 		arr2 = temp;
 
@@ -124,5 +129,11 @@ void timSort(void** array, int len, int size, COMP_FUNC cmp) {
 		// update references to runs
 		runs[runCount - 2][1] += runs[runCount - 1][1];
 		runCount--;
+
+		#ifdef VISUALIZER
+		if (visualizer_abortRequested()) {
+			return;
+		}
+		#endif
 	}
 }

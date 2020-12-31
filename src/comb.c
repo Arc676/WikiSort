@@ -44,6 +44,13 @@ void combSort(void** array, int len, int size, COMP_FUNC cmp, float shrink) {
 			}
 			a = adv(a, size);
 			b = adv(b, size);
+
+			#ifdef VISUALIZER
+			if (visualizer_abortRequested()) {
+				sorted = 1;
+				break;
+			}
+			#endif
 		}
 	}
 	free(gaps);

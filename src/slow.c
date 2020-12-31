@@ -18,6 +18,13 @@ void slowSort(void** array, int len, int size, COMP_FUNC cmp) {
 	if (len < 2) {
 		return;
 	}
+
+	#ifdef VISUALIZER
+	if (visualizer_abortRequested()) {
+		return;
+	}
+	#endif
+
 	int half = len / 2;
 	slowSort(array, half, size, cmp);
 	slowSort(adv(array, half * size), len - half, size, cmp);

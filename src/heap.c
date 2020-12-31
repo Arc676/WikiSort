@@ -203,6 +203,10 @@ void heapSort(void** array, int len, int size, COMP_FUNC cmp) {
 
 		#ifdef VISUALIZER
 		visualizer_updateArray(dst, 1, size);
+
+		if (visualizer_abortRequested()) {
+			break;
+		}
 		#endif
 
 		dst = adv(dst, -size);

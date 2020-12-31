@@ -23,6 +23,13 @@ void introSort_rec(void** array, int len, int size, COMP_FUNC cmp, int depth) {
 	if (len < 2) {
 		return;
 	}
+
+	#ifdef VISUALIZER
+	if (visualizer_abortRequested()) {
+		return;
+	}
+	#endif
+
 	int equals;
 	int pivot = partition(array, len, size, cmp, &equals);
 	if (depth == 0) {
