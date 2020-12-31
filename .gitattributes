@@ -1,1 +1,6 @@
-*.h linguist-language=C
+src/*.h linguist-language=C
+data/src/* linguist-language=C
+examples/*.c linguist-language=C
+visualizer/src/* linguist-language=C++
+visualizer/imgui/* linguist-vendored
+visualizer/shaders/* linguist-language=GLSL
