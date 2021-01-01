@@ -1,4 +1,4 @@
-// Copyright (C) 2020 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+// Copyright (C) 2020-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -201,12 +201,25 @@ void swapped(void** a, void** b) {
 void ptrAdvanced(void** ptr, int dst) {
 }
 
+bool getSIP() {
+	Lock lock{mutex};
+	return sortInProgress;
+}
+
 void sort(SortAlgo algo, float combShrink = 1.3f, GapSequence shellSeq = Shell_1959) {
+	if (getSIP()) {
+		showSIPDialog = true;
+		return;
+	}
 	if (sortingThread.joinable()) {
 		sortingThread.join();
 	}
 	lastSleepTime = sleepTime;
 	sortingThread = std::thread([algo, combShrink, shellSeq]{
+		{
+			Lock lock{mutex};
+			sortInProgress = true;
+		}
 		switch (algo) {
 		case BUBBLE:
 			bubbleSort((void**)array, arraySize, sizeof(int), cmp_int);
@@ -296,6 +309,7 @@ void sort(SortAlgo algo, float combShrink = 1.3f, GapSequence shellSeq = Shell_1
 		{
 			Lock lock{mutex};
 			abortRequested = false;
+			sortInProgress = false;
 		}
 	});
 }
@@ -382,30 +396,39 @@ int main(int argc, char* argv[]) {
 		ImGui::SetNextWindowSize(ImVec2(600, 500), ImGuiCond_FirstUseEver);
 
 		if (ImGui::Begin("Control Panel")) {
+			bool SIP = getSIP();
 			if (ImGui::CollapsingHeader("Data")) {
 				static int newSize = 100;
 				ImGui::InputInt("Array size", &newSize);
 				if (ImGui::Button("Allocate")) {
-					array = (int*)safe_realloc(array, newSize * sizeof(int));
-					{
-						Lock lock{mutex};
-						renderArray = (int*)safe_realloc(renderArray, newSize * sizeof(int));
+					if (SIP) {
+						showSIPDialog = true;
+					} else {
+						array = (int*)safe_realloc(array, newSize * sizeof(int));
+						{
+							Lock lock{mutex};
+							renderArray = (int*)safe_realloc(renderArray, newSize * sizeof(int));
+						}
+						vis_vertices = (float*)safe_realloc(vis_vertices, newSize * 12 * sizeof(float));
+						if (newSize > arraySize) {
+							rebuildEBO(newSize);
+						}
+						arraySize = newSize;
+						forceUpdateArray(array);
+						renderVisualizer();
 					}
-					vis_vertices = (float*)safe_realloc(vis_vertices, newSize * 12 * sizeof(float));
-					if (newSize > arraySize) {
-						rebuildEBO(newSize);
-					}
-					arraySize = newSize;
-					forceUpdateArray(array);
-					renderVisualizer();
 				}
 				ImGui::InputInt("Maximum element value", &dataMax);
 				if (ImGui::Button("Fill with random numbers")) {
-					for (int i = 0; i < arraySize; i++) {
-						array[i] = rand() % (dataMax + 1);
+					if (SIP) {
+						showSIPDialog = true;
+					} else {
+						for (int i = 0; i < arraySize; i++) {
+							array[i] = rand() % (dataMax + 1);
+						}
+						forceUpdateArray(array);
+						renderVisualizer();
 					}
-					forceUpdateArray(array);
-					renderVisualizer();
 				}
 			}
 			if (ImGui::CollapsingHeader("Exchange Sorts")) {
@@ -533,6 +556,17 @@ int main(int argc, char* argv[]) {
 					sort(PANCAKE);
 				}
 			}
+
+			if (showSIPDialog) {
+				ImGui::OpenPopup("SortInProgress");
+				showSIPDialog = false;
+			}
+			if (ImGui::BeginPopup("SortInProgress")) {
+				ImGui::Text("This action cannot be performed while a sort is in progress. Abort the sort first from the Settings panel if necessary.");
+				ImGui::EndPopup();
+			}
+
+
 			if (ImGui::Button("Exit")) {
 				break;
 			}
@@ -558,7 +592,7 @@ int main(int argc, char* argv[]) {
 			}
 			ImGui::InputInt("Array update sleep time", &sleepTime);
 			if (ImGui::Button("Abort Sort")) {
-				if (sortingThread.joinable()) {
+				if (getSIP() && sortingThread.joinable()) {
 					{
 						Lock lock{mutex};
 						abortRequested = true;

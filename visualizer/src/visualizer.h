@@ -1,4 +1,4 @@
-// Copyright (C) 2020 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+// Copyright (C) 2020-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -67,7 +67,8 @@ std::mutex mutex;
 std::thread sortingThread;
 int* renderArray = nullptr;
 bool arrayChanged = false;
-bool abortRequested = false;
+bool abortRequested = false, sortInProgress = false;
+bool showSIPDialog = false;
 
 // Array parameters
 int arraySize = 0;
