@@ -43,6 +43,11 @@ void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq, 
 	//	if the gap sequence is non-null, use those as the gap sequence
 	//	if the gap sequence is null, calculate the gap sequence and memoize it at the end of the function
 	int* gaps = (memoized && (gapSeq && *gapSeq)) ? *gapSeq : gapSeqs[seq](len, &gapCount);
+
+	#ifdef VISUALIZER
+	int aborted = 0;
+	#endif
+
 	for (int i = 0; i < gapCount; i++) {
 		int gap = gaps[i];
 		for (int j = gap; j < len; j++) {
@@ -70,12 +75,18 @@ void shellSort(void** array, int len, int size, COMP_FUNC cmp, GapSequence seq, 
 			visualizer_updateArray(array, len, size);
 
 			if (visualizer_abortRequested()) {
-				goto shellSortEnd;
+				aborted = 1;
+				break;
 			}
 			#endif
 		}
+
+		#ifdef VISUALIZER
+		if (aborted) {
+			break;
+		}
+		#endif
 	}
-shellSortEnd:
 	// if the caller wanted memoization enabled AND
 	// didn't provide pre-calculated gap sequences,
 	// update the gap sequence
