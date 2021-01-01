@@ -44,9 +44,18 @@ void performCycle(void** array, int len, int size, COMP_FUNC cmp, void** item, i
 	// if it needs to be moved
 	if (*pos != start) {
 		void** toSwap = adv(array, *pos * size);
+
+		#ifdef VISUALIZER
+		int swapLen = *pos - start + 1;
+		#endif
+
 		while (1) {
 			if (!cmp(item, toSwap)) {
 				toSwap = adv(toSwap, size);
+
+				#ifdef VISUALIZER
+				swapLen++;
+				#endif
 			} else {
 				break;
 			}
@@ -54,7 +63,7 @@ void performCycle(void** array, int len, int size, COMP_FUNC cmp, void** item, i
 		swapElements(item, toSwap, size);
 
 		#ifdef VISUALIZER
-		visualizer_updateArray(item, toSwap - item + 1, size);
+		visualizer_updateArray(item, swapLen, size);
 		#endif
 	}
 }
