@@ -1,6 +1,6 @@
 CC=gcc
 FLAGS=-std=c11 -I ../src -L ..
-LD=-l wikisort
+LD=-l wikisort -lm
 FILE=
 OUT=$(patsubst %.c, %.ignore, $(FILE))
 

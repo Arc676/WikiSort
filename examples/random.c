@@ -1,4 +1,4 @@
-//Copyright (C) 2019 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2019-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -26,6 +26,14 @@
 
 VISUALIZER_SWAP* visualizer_itemsSwapped;
 VISUALIZER_ADV* visualizer_pointerAdvanced;
+VISUALIZER_ABORT_REQ* visualizer_abortRequested;
+VISUALIZER_UPDATE* visualizer_updateArray;
+
+int abortReq() {
+	return 0;
+}
+
+void update(void** arr, int len, int size) {}
 
 void swapped(void** a, void** b) {
 	printf("Swapped elements at %p and %p\n", a, b);
@@ -38,6 +46,11 @@ void advanced(void** ptr, int dist) {
 int main(int argc, char* argv[]) {
 	visualizer_itemsSwapped = swapped;
 	visualizer_pointerAdvanced = advanced;
+
+	// Unused visualizer calls
+	visualizer_abortRequested = abortReq;
+	visualizer_updateArray = update;
+
 	if (argc != 2) {
 		return 1;
 	}
