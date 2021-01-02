@@ -176,9 +176,14 @@ void updateArray(void** updated, int len, int size) {
 		Lock lock{mutex};
 		int* newArr = (int*)updated;
 		size_t offset = newArr - array;
+		// Check that the updated section really is within the original array
+		// and not in some temporary space for a utility or non-in-place sort
+		if (offset >= arraySize) {
+			return;
+		}
 		arrayChanged = false;
 		for (int i = offset; i < offset + len; i++) {
-			if (newArr[i] != renderArray[i]) {
+			if (newArr[i - offset] != renderArray[i]) {
 				arrayChanged = true;
 				break;
 			}
@@ -643,6 +648,7 @@ int main(int argc, char* argv[]) {
 
 	if (array) {
 		free(array);
+		free(renderArray);
 		free(vis_vertices);
 		free(vis_indices);
 	}
