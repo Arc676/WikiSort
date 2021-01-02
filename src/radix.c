@@ -1,4 +1,4 @@
-//Copyright (C) 2018-9 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
+//Copyright (C) 2018-21 Arc676/Alessandro Vinciguerra <alesvinciguerra@gmail.com>
 
 //This program is free software: you can redistribute it and/or modify
 //it under the terms of the GNU General Public License as published by
@@ -18,8 +18,10 @@ void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE
 	if (len < 2) {
 		return;
 	}
+	void** max = malloc(size);
 	void** maxVal = extremeValue(array, len, size, cmp, 1, 0);
-	for (int iteration = 0; bCmp(base, iteration, maxVal); iteration++) {
+	memcpy(max, maxVal, size);
+	for (int iteration = 0; bCmp(base, iteration, max); iteration++) {
 		// allocate bucket memory
 		void** buckets;
 		int* bucketLengths;
@@ -30,6 +32,7 @@ void radixSortLSD(void** array, int len, int size, COMP_FUNC cmp, int base, BASE
 
 		bucketsToList(array, buckets, bucketLengths, size, base, 1);
 	}
+	free(max);
 }
 
 void radixSortMSDRec(void** array, int len, int size, COMP_FUNC cmp, int base, BASE_CMP bCmp, KEY_FUNC digExt, int iteration) {
