@@ -37,6 +37,7 @@
 #include <GLFW/glfw3.h>
 
 #include "allsorts.h"
+#include "glrecorder.h"
 
 // Exit and return codes
 #define EXIT_BAD_ARGS 1
@@ -85,7 +86,15 @@ unsigned int* vis_indices;
 char fragmentShader[FNAME_SIZE], vertexShader[FNAME_SIZE];
 
 // Render settings
+#define VIS_WIDTH 1200
+#define VIS_HEIGHT 700
 int sleepTime = 500, lastSleepTime;
+
+// Recording
+RecorderParameters* recParams;
+EncoderState recState = SUCCESS, lastRecState = SUCCESS;
+bool recording = false;
+char recFilename[FNAME_SIZE];
 
 // UI text
 const char* sequences_s[] = {

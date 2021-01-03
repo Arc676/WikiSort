@@ -3,8 +3,8 @@ SDIR=src
 BDIR=bin
 
 CC=g++
-FLAGS=-std=c++11 -I imgui -I imgui/backends -I ../src -D VISUALIZER
-LIB=-L .. -lm -l glfw -l GLEW -l wikisort -pthread
+FLAGS=-std=c++11 -I imgui -I imgui/backends -I ../src -I OpenGLRecorder/src -D VISUALIZER
+LIB=-L .. -L OpenGLRecorder -lm -l glfw -l GLEW -l wikisort -l openglrecorder -l avcodec -l swscale -l avutil -pthread
 
 ifdef MAC
 LIB+=-framework OpenGL

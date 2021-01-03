@@ -50,7 +50,7 @@ void renderVisualizer() {
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, vis_fbo);
-	glViewport(0, 0, 1200, 700);
+	glViewport(0, 0, VIS_WIDTH, VIS_HEIGHT);
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(shaderProg);
@@ -65,6 +65,11 @@ void renderVisualizer() {
 	glEnableVertexAttribArray(0);
 
 	glDrawElements(GL_TRIANGLES, 6 * arraySize, GL_UNSIGNED_INT, 0);
+
+	if (recording) {
+		glFlush();
+		recState = glrecorder_recordFrame(recParams);
+	}
 
 	glBindVertexArray(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -133,7 +138,7 @@ int initGL() {
 
 	glGenTextures(1, &vis_tex);
 	glBindTexture(GL_TEXTURE_2D, vis_tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1200, 700, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, VIS_WIDTH, VIS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -380,6 +385,8 @@ int main(int argc, char* argv[]) {
 	visualizer_updateArray = updateArray;
 	visualizer_abortRequested = userAborted;
 
+	recParams = glrecorder_initParams(VIS_WIDTH, VIS_HEIGHT);
+
 	int gl = initGL();
 	if (gl > 0) {
 		return gl;
@@ -605,6 +612,30 @@ int main(int argc, char* argv[]) {
 					sortingThread.join();
 				}
 			}
+
+			static char currentState[200] = "Encoder working fine";
+			static bool isRecording;
+			{
+				Lock lock{mutex};
+				isRecording = recording;
+				if (recState != lastRecState) {
+					lastRecState = recState;
+					sprintf(currentState, "%s", glrecorder_stateToString(recState));
+				}
+			}
+			ImGui::InputText("Recorder Output", recFilename, FNAME_SIZE);
+			ImGui::Text("Recorder state: %s", isRecording ? "recording" : "not recording");
+			ImGui::Text("Encoder state: %s", currentState);
+			if (ImGui::Button("Start Recording")) {
+				Lock lock{mutex};
+				recState = glrecorder_startEncoder(recParams, recFilename, AV_CODEC_ID_MPEG1VIDEO, 25);
+				recording = true;
+			}
+			if (ImGui::Button("Stop Recording")) {
+				Lock lock{mutex};
+				recState = glrecorder_stopEncoder(recParams);
+				recording = false;
+			}
 		}
 		ImGui::End();
 
@@ -645,6 +676,8 @@ int main(int argc, char* argv[]) {
 	ImGui::DestroyContext();
 	glfwDestroyWindow(window);
 	glfwTerminate();
+
+	glrecorder_freeParams(recParams);
 
 	if (array) {
 		free(array);

@@ -84,7 +84,7 @@ Refer to `examples/random.c` for an example of how this might be used.
 
 ## Visualizer
 
-The repository also includes a visualizer for the sorting algorithms. The visualizer uses [ImGui](https://github.com/ocornut/imgui) for its interface. A Makefile to compile the visualizer is included in the folder; the ImGui submodule must also be cloned before compilation.
+The repository also includes a visualizer for the sorting algorithms. The visualizer uses [ImGui](https://github.com/ocornut/imgui) for its interface. The visualizer output can also be recorded to video files (MPEG, `.mpg`) using the [OpenGL recorder library](https://github.com/Arc676/OpenGLRecorder) available under GPLv3. A Makefile to compile the visualizer is included in the folder; the submodules must also be cloned before compilation.
 
 ## Licensing
 
